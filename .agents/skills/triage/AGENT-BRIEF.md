@@ -11,7 +11,7 @@ The brief states **what the agent should do**, which stretches to both surfaces:
 The issue may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the brief so it stays useful even as files are renamed, moved, or refactored.
 
 - **Do** describe interfaces, types, and behavioral contracts
-- **Do** name specific types, function signatures, or config shapes that the agent should look for or modify
+- **Do** name specific types, function signatures, or app shapes that the agent should look for or modify
 - **Don't** reference file paths: they go stale
 - **Don't** reference line numbers
 - **Don't** assume the current implementation structure will remain the same

@@ -77,7 +77,7 @@ Confirm:
 
 ### Minimise
 
-Once it's red, shrink the repro to the **smallest scenario that still goes red**. Cut inputs, callers, config, data, and steps **one at a time**, re-running the loop after each cut, and keep only what's load-bearing for the failure.
+Once it's red, shrink the repro to the **smallest scenario that still goes red**. Cut inputs, callers, app, data, and steps **one at a time**, re-running the loop after each cut, and keep only what's load-bearing for the failure.
 
 Why bother: a minimal repro shrinks the hypothesis space in Phase 3 (fewer moving parts left to suspect) and becomes the clean regression test in Phase 5.
 
