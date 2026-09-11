@@ -27,6 +27,7 @@ public class User {
     private Set<String> roles = new HashSet<>();
 
     public User() {
+
     }
 
     public User(Long id, String email, String password, String phoneNumber, Set<String> roles) {
