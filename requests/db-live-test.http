@@ -14,8 +14,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}"
+  "email": "frededv@test.dk",
+  "password": "1234"
 }
 
 > {% client.global.set("db_live_user_id", response.body.id); %}
@@ -26,8 +26,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}"
+  "email": "frededv@test.dk",
+  "password": "1234"
 }
 
 > {% client.global.set("db_live_token", response.body.token); %}
