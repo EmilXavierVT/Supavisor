@@ -1,0 +1,111 @@
+@baseUrl = http://localhost:7070/api
+@email = db-live-{{$timestamp}}@example.com
+@password = secret-password
+@newPassword = changed-secret-password
+@phoneNumber = 12345678
+
+### 1. Check app is running
+GET {{baseUrl}}/health
+Accept: application/json
+
+### 2. Register a user in the live database
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("db_live_user_id", response.body.id); %}
+
+### 3. Login and store USER token
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("db_live_token", response.body.token); %}
+
+### 4. Read the inserted user by generated id
+GET {{baseUrl}}/user/{{db_live_user_id}}
+Accept: application/json
+Authorization: Bearer {{db_live_token}}
+
+### 5. List users to verify the row exists in the database
+GET {{baseUrl}}/user/all
+Accept: application/json
+Authorization: Bearer {{db_live_token}}
+
+### 6. Update persisted fields and promote this test user to ADMIN
+PUT {{baseUrl}}/user/{{db_live_user_id}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_token}}
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "phoneNumber": "{{phoneNumber}}",
+  "roles": ["ADMIN"]
+}
+
+### 7. Login again and store refreshed ADMIN token
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("db_live_admin_token", response.body.token); %}
+
+### 8. Verify ADMIN-only role endpoint writes to user_roles
+PUT {{baseUrl}}/user/{{db_live_user_id}}/employee
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+### 9. Promote back to ADMIN for cleanup
+PUT {{baseUrl}}/user/{{db_live_user_id}}/admin
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+### 10. Change password and verify auth data persisted
+PUT {{baseUrl}}/auth/change-password
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+{
+  "currentPassword": "{{password}}",
+  "newPassword": "{{newPassword}}"
+}
+
+### 11. Login with changed password
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{newPassword}}"
+}
+
+> {% client.global.set("db_live_admin_token", response.body.token); %}
+
+### 12. Delete the live-test row
+DELETE {{baseUrl}}/user/{{db_live_user_id}}
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+### 13. Confirm row is gone, expect 404
+GET {{baseUrl}}/user/{{db_live_user_id}}
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}

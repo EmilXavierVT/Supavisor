@@ -1,0 +1,43 @@
+@baseUrl = http://localhost:7070/api
+@email = smoke-test@example.com
+@password = secret-password
+
+### Health check
+GET {{baseUrl}}/health
+Accept: application/json
+
+### Root check
+GET {{baseUrl}}/
+Accept: application/json
+
+### Register user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Login user and store token
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+### Protected auth route
+GET {{baseUrl}}/auth/protected
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+### List users
+GET {{baseUrl}}/user/all
+Accept: application/json
+Authorization: Bearer {{auth_token}}
