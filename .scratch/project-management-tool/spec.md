@@ -94,6 +94,7 @@ Expenses support reusable templates and editable entries connected to projects, 
 70. As a maintainer, I want automated backend, frontend, integration, and end-to-end checks in GitHub Actions, so that changes are evaluated consistently before merging.
 71. As a maintainer, I want local development services to run through Docker Compose while production connects to the existing PostgreSQL server, so that environments match deployment constraints.
 72. As a maintainer, I want Hibernate to validate the production schema without modifying it, so that accidental runtime schema changes cannot damage operational data.
+73. As a administrator, I wish to be able to change the colors on the board.
 
 ## Implementation Decisions
 
