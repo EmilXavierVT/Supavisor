@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="app.dto.UserDTOTest" time="0.002" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="app.services.dtoConverter.EconomicCustomerMapperTest" time="0.001" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="26"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -44,7 +44,9 @@
     <property name="java.vendor.version" value="Homebrew"/>
     <property name="localRepository" value="/Users/emilthorsen/.m2/repository"/>
     <property name="java.vendor.url.bug" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="jetty.git.hash" value="88ca559572b1c8858b3c5684bb0293fa64e5e90f"/>
     <property name="java.io.tmpdir" value="/var/folders/cd/w0ls132s6kg79pj2xbv07pqr0000gn/T/"/>
+    <property name="com.zaxxer.hikari.pool_number" value="3"/>
     <property name="java.version" value="26.0.1"/>
     <property name="user.dir" value="/Users/emilthorsen/Desktop/SupaVisor"/>
     <property name="os.arch" value="aarch64"/>
@@ -60,6 +62,5 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="70.0"/>
   </properties>
-  <testcase name="defaultConstructorStartsWithEmptyRoles" classname="app.dto.UserDTOTest" time="0.001"/>
-  <testcase name="constructorCopiesRolesDefensively" classname="app.dto.UserDTOTest" time="0.001"/>
+  <testcase name="mapsCreateRequestEntityEconomicRequestAndResponseExplicitly" classname="app.services.dtoConverter.EconomicCustomerMapperTest" time="0.001"/>
 </testsuite>

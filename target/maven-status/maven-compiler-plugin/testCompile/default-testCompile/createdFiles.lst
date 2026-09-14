@@ -1,4 +1,10 @@
-app/dto/UserDTOTest.class
+app/services/dtoConverter/EconomicCustomerMapperTest.class
+app/dto/EconomicCustomerDTOTest.class
+app/services/economic/EconomicCustomerClientTest.class
 app/config/ApplicationConfigIntegrationTest.class
-app/config/TestEntityManagerFactory.class
 app/dao/UserDAOIntegrationTest.class
+app/dao/CustomerDAOIntegrationTest.class
+app/services/entityServices/EconomicCustomerServiceTest.class
+app/dto/UserDTOTest.class
+app/services/entityServices/EconomicCustomerServiceTest$FakeClient.class
+app/config/TestEntityManagerFactory.class

@@ -1,0 +1,15 @@
+app/dao/CustomerDAO.class
+app/dto/EconomicCustomerRequest.class
+app/dto/CreateCustomerRequest.class
+app/services/routeSecurity/routes/EconomicCustomerRoutes.class
+app/services/economic/EconomicCustomerClient.class
+app/entities/Customer.class
+app/dto/EconomicCustomerRequest$VatZone.class
+app/services/entityServices/EconomicCustomerService.class
+app/dto/EconomicCustomerRequest$CustomerGroup.class
+app/dto/CustomerResponse.class
+app/dto/EconomicCustomerListResponse.class
+app/services/dtoConverter/EconomicCustomerMapper.class
+app/dto/EconomicCustomerRequest$PaymentTerms.class
+app/dto/EconomicApiErrorResponse.class
+app/dto/EconomicCustomerResponse.class

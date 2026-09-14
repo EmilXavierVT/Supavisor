@@ -32,6 +32,7 @@ public class Routes {
     public EndpointGroup getRoutes() {
 
         UserRoutes userRoutes = new UserRoutes(emf);
+        EconomicCustomerRoutes economicCustomerRoutes = new EconomicCustomerRoutes(emf);
 
         SystemController systemController = new SystemController();
 
@@ -52,6 +53,15 @@ public class Routes {
                 put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
                 put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
                 put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
+            });
+
+            path("/economic/customers", () -> {
+                get("/", economicCustomerRoutes::listEconomicCustomers, Role.ADMIN);
+                get("/{customerNumber}", economicCustomerRoutes::getEconomicCustomer, Role.ADMIN);
+            });
+
+            path("/customers", () -> {
+                post("/", economicCustomerRoutes::createCustomer, Role.ADMIN);
             });
 
         };
