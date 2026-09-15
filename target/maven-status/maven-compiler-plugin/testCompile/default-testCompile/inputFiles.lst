@@ -1,9 +1,15 @@
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/config/ApplicationConfigIntegrationTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/config/TestEntityManagerFactory.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dao/CustomerDAOIntegrationTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dao/ProductDAOIntegrationTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dao/UserDAOIntegrationTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dto/EconomicCustomerDTOTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dto/UserDTOTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/dtoConverter/EconomicCustomerMapperTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/dtoConverter/EconomicProductMapperTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/economic/EconomicCustomerClientIntegrationTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/economic/EconomicCustomerClientTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/economic/EconomicProductClientIntegrationTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/economic/EconomicProductClientTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/entityServices/EconomicCustomerServiceTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/entityServices/EconomicProductServiceTest.java

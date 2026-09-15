@@ -33,6 +33,7 @@ public class Routes {
 
         UserRoutes userRoutes = new UserRoutes(emf);
         EconomicCustomerRoutes economicCustomerRoutes = new EconomicCustomerRoutes(emf);
+        EconomicProductRoutes economicProductRoutes = new EconomicProductRoutes(emf);
 
         SystemController systemController = new SystemController();
 
@@ -62,6 +63,13 @@ public class Routes {
 
             path("/customers", () -> {
                 post("/", economicCustomerRoutes::createCustomer, Role.ADMIN);
+            });
+
+            path("/products", () -> {
+                get("/", economicProductRoutes::listProducts, Role.ADMIN);
+                get("/{productNumber}", economicProductRoutes::getProduct, Role.ADMIN);
+                post("/", economicProductRoutes::createProduct, Role.ADMIN);
+                put("/{productNumber}", economicProductRoutes::updateProduct, Role.ADMIN);
             });
 
         };
