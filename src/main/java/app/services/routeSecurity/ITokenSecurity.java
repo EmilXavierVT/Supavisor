@@ -13,6 +13,8 @@ public interface ITokenSecurity {
 
     boolean tokenNotExpired(String var1) throws ParseException;
 
+    boolean tokenExpiredWithin(String var1, long var2) throws ParseException;
+
     int timeToExpire(String var1) throws ParseException;
 
     String createToken(UserDTO var1, String var2, String var3, String var4) throws TokenCreationException;

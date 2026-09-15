@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SecurityController implements ISecurityController{
+    private static final String REFRESHED_TOKEN_HEADER = "X-Refresh-Token";
+    private static final String DEFAULT_TOKEN_REFRESH_GRACE_TIME = "1800000";
     private ISecurityDAO userDAO;
 
     public SecurityController() {
@@ -184,21 +186,32 @@ public class SecurityController implements ISecurityController{
     }
     private UserDTO validateAndGetUserFromToken(Context ctx) {
         String token = getToken(ctx);
-        UserDTO verifiedTokenUser = verifyToken(token);
+        UserDTO verifiedTokenUser = verifyToken(token, ctx);
         if (verifiedTokenUser == null) {
             throw new UnauthorizedResponse("Invalid user or token"); // UnauthorizedResponse is javalin 6 specific but response is not json!
         }
         return verifiedTokenUser;
     }
-    private UserDTO verifyToken(String token) {
+    private UserDTO verifyToken(String token, Context ctx) {
         String SECRET = getConfigValue("SECRET_KEY");
 
         try {
-            if (tokenSecurity.tokenIsValid(token, SECRET) && tokenSecurity.tokenNotExpired(token)) {
-                return tokenSecurity.getUserWithRolesFromToken(token);
-            } else {
+            if (!tokenSecurity.tokenIsValid(token, SECRET)) {
                 throw new ApiException(403, "Token is not valid");
             }
+
+            UserDTO tokenUser = tokenSecurity.getUserWithRolesFromToken(token);
+            if (tokenSecurity.tokenNotExpired(token)) {
+                return tokenUser;
+            }
+
+            long refreshGraceTime = Long.parseLong(getOptionalConfigValue("TOKEN_REFRESH_GRACE_TIME", DEFAULT_TOKEN_REFRESH_GRACE_TIME));
+            if (tokenSecurity.tokenExpiredWithin(token, refreshGraceTime)) {
+                ctx.header(REFRESHED_TOKEN_HEADER, createToken(tokenUser));
+                return tokenUser;
+            }
+
+            throw new ApiException(403, "Token is expired");
         } catch (ParseException | ApiException e) {
 //            logger.error("Could not create token", e);
             throw new ApiException(HttpStatus.UNAUTHORIZED.getCode(), "Unauthorized. Could not verify token");
@@ -222,6 +235,18 @@ public class SecurityController implements ISecurityController{
             return envValue.trim();
         }
         return Utils.getPropertyValue(key, "config.properties");
+    }
+
+    private String getOptionalConfigValue(String key, String defaultValue) {
+        try {
+            String value = getConfigValue(key);
+            if (value != null && !value.isBlank()) {
+                return value;
+            }
+        } catch (RuntimeException e) {
+            return defaultValue;
+        }
+        return defaultValue;
     }
 
     private String requireEnv(String key) {

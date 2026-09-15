@@ -61,6 +61,7 @@ public class ApplicationConfig {
             config.bundledPlugins.enableCors(cors ->
                     cors.addRule(rule -> {
                         rule.anyHost();
+                        rule.exposeHeader("X-Refresh-Token");
                     })
             );
             config.bundledPlugins.enableHttpAllowedMethodsOnRoutes();
