@@ -109,7 +109,7 @@ public class SecurityController implements ISecurityController{
             verifyToken(token,ctx);
             ctx.status(200).json(objectMapper.createObjectNode()
                     .put("msg", "Token is valid"));
-        } catch (Exception e) {
+        } catch (ApiException e) {
             ctx.status(401).json(objectMapper.createObjectNode()
                     .put("msg", "Token is invalid"));
 
