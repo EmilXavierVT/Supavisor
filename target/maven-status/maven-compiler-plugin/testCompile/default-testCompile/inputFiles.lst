@@ -2,3 +2,4 @@
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/config/TestEntityManagerFactory.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dao/UserDAOIntegrationTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dto/UserDTOTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/routeSecurity/TokenSecurityTest.java
