@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="added new endpoint for token validation" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="150" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;EmilXavierVT&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/EmilXavierVT/Supavisor.git",
+    "accountId": "d529687c-2198-42f1-a77e-46dc5596888e"
+  },
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
+    },
+    "owner": "EmilXavierVT",
+    "repository": "Supavisor"
+  }
+}]]></component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="3J5hcMoCunTZFe8jqaTnbVH8gtf" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
+    "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
+    "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/app" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/java/app/config" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="HTTP Request.db-live-test | 3. Login and store USER token">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="app.Main" />
+      <module name="SupaVisor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="app.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="db-live-test | 1. Check app is running" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="1. Check app is running" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 2. Register a user in the live database" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database" index="2" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="3" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SupaVisor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="app.services.economic.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="app.services.economic" />
+      <option name="MAIN_CLASS_NAME" value="app.services.economic.EconomicProductClientIntegrationTest" />
+      <option name="METHOD_NAME" value="retrievesProductsFromEconomicApi" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" />
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database" />
+        <item itemvalue="HTTP Request.db-live-test | 1. Check app is running" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="" />
+      <created>1788956915058</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1788956915058</updated>
+      <workItem from="1788956916085" duration="114000" />
+      <workItem from="1788957196744" duration="60824000" />
+    </task>
+    <task id="LOCAL-00001" summary="first initial setup of the user entity. Full DAO and DTO setup up for the user">
+      <option name="closed" value="true" />
+      <created>1788964475628</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1788964475628</updated>
+    </task>
+    <task id="LOCAL-00002" summary="setup for CI using dockerHUB files touched include docker-compose and Dockerfile">
+      <option name="closed" value="true" />
+      <created>1789120432940</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1789120432940</updated>
+    </task>
+    <task id="LOCAL-00003" summary="setup for CI using dockerHUB files touched include docker-compose and Dockerfile">
+      <option name="closed" value="true" />
+      <created>1789120485146</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1789120485146</updated>
+    </task>
+    <task id="LOCAL-00004" summary="setup for CI using dockerHUB files touched include docker-compose and Dockerfile">
+      <option name="closed" value="true" />
+      <created>1789120979112</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1789120979112</updated>
+    </task>
+    <task id="LOCAL-00005" summary="setup for CI using dockerHUB files touched include docker-compose and Dockerfile -- added unversioned files">
+      <option name="closed" value="true" />
+      <created>1789121174702</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1789121174702</updated>
+    </task>
+    <task id="LOCAL-00006" summary="new branch for intergration of tokens since we had the code at hand already - simple fix of types">
+      <option name="closed" value="true" />
+      <created>1789124540220</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1789124540220</updated>
+    </task>
+    <task id="LOCAL-00007" summary="url test change">
+      <option name="closed" value="true" />
+      <created>1789125397325</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1789125397325</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added the product entity with dto and daos and endpoints">
+      <option name="closed" value="true" />
+      <created>1789498286160</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1789498286160</updated>
+    </task>
+    <task id="LOCAL-00009" summary="added the product entity with dto and daos and endpoints">
+      <option name="closed" value="true" />
+      <created>1789498356584</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1789498356584</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Add JWT refresh grace window">
+      <option name="closed" value="true" />
+      <created>1789500123665</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1789500123665</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added new endpoint for token validation">
+      <option name="closed" value="true" />
+      <created>1789553305732</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1789553305732</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first initial setup of the user entity. Full DAO and DTO setup up for the user" />
+    <MESSAGE value="setup for CI using dockerHUB files touched include docker-compose and Dockerfile" />
+    <MESSAGE value="setup for CI using dockerHUB files touched include docker-compose and Dockerfile -- added unversioned files" />
+    <MESSAGE value="new branch for intergration of tokens since we had the code at hand already - simple fix of types" />
+    <MESSAGE value="url test change" />
+    <MESSAGE value="added the product entity with dto and daos and endpoints" />
+    <MESSAGE value="Add JWT refresh grace window" />
+    <MESSAGE value="added new endpoint for token validation" />
+    <option name="LAST_COMMIT_MESSAGE" value="added new endpoint for token validation" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
+          <line>107</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
+          <line>102</line>
+          <properties class="app.services.routeSecurity.SecurityController" method="createToken">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
