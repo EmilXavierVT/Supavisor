@@ -68,11 +68,12 @@ public class Routes {
 //
             case "auth" -> () -> path("auth", () -> {
                 ObjectNode on = objectMapper.createObjectNode();
-                on.put("msg","HELLO FROM THHE RESTRICTED AREA");
+                on.put("msg","HELLO FROM THE RESTRICTED AREA");
                 post("register", securityController::register );
                 post("login", securityController::login );
                 put("change-password", securityController::changePassword, Role.USER, Role.ADMIN, Role.EMPLOYEE, Role.CLEANING_STAFF, Role.CLEANING_CLIENT, Role.SUBSCRIBER, Role.FLEX);
                 get("protected",ctx->ctx.json(on).status(200),Role.USER);
+                post("token-validation", securityController::sendVerifiedTokenResponse);
             });
             default -> throw new IllegalArgumentException("Unknown resource name: " + resourceName);
         };

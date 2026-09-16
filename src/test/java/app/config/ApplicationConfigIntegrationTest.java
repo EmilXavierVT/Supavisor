@@ -1,6 +1,8 @@
 package app.config;
 
 import app.services.routeSecurity.routes.Routes;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
@@ -30,6 +32,7 @@ class ApplicationConfigIntegrationTest {
     private static ApplicationConfig applicationConfig;
     private static Javalin app;
     private static HttpClient httpClient;
+    private static ObjectMapper objectMapper;
 
     @BeforeAll
     static void setUp() {
@@ -46,6 +49,7 @@ class ApplicationConfigIntegrationTest {
                 .route(routes.getRouteResource("auth"))
                 .start(0);
         httpClient = HttpClient.newHttpClient();
+        objectMapper = new ObjectMapper();
     }
 
     @AfterAll
@@ -80,6 +84,48 @@ class ApplicationConfigIntegrationTest {
         assertEquals(201, response.statusCode());
         assertTrue(response.body().contains("\"msg\":\"register success\""));
         assertTrue(response.body().contains("\"id\":"));
+    }
+
+    @Test
+    void authTokenValidationAcceptsValidBearerToken() throws Exception {
+        String email = "token-validation-test@example.com";
+        String password = "secret-password";
+        register(email, password);
+        String token = loginAndGetToken(email, password);
+
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/token-validation"))
+                .header("Authorization", "Bearer " + token)
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(200, response.statusCode());
+        assertEquals("{\"msg\":\"Token is valid\"}", response.body());
+    }
+
+    private static void register(String email, String password) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/register"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}"))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(201, response.statusCode());
+    }
+
+    private static String loginAndGetToken(String email, String password) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/login"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}"))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(200, response.statusCode());
+        JsonNode body = objectMapper.readTree(response.body());
+        return body.get("token").asText();
     }
 
     private static URI uri(String path) {

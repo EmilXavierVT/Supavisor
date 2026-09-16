@@ -102,6 +102,22 @@ public class SecurityController implements ISecurityController{
         ctx.json(node).status(200);
     }
 
+    @Override
+    public void sendVerifiedTokenResponse(Context ctx) {
+        try {
+            String token = getToken(ctx);
+            verifyToken(token,ctx);
+            ctx.status(200).json(objectMapper.createObjectNode()
+                    .put("msg", "Token is valid"));
+        } catch (ApiException e) {
+            ctx.status(401).json(objectMapper.createObjectNode()
+                    .put("msg", "Token is invalid"));
+
+        }
+
+
+    }
+
     private String createToken(UserDTO user) {
         try {
             String ISSUER = getConfigValue("ISSUER");
@@ -192,6 +208,8 @@ public class SecurityController implements ISecurityController{
         }
         return verifiedTokenUser;
     }
+
+
     private UserDTO verifyToken(String token, Context ctx) {
         String SECRET = getConfigValue("SECRET_KEY");
 

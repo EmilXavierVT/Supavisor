@@ -1,6 +1,7 @@
 package app.services.routeSecurity;
 
 import io.javalin.http.Context;
+import org.jetbrains.annotations.NotNull;
 
 public interface ISecurityController {
     void login(Context ctx); // to get a token
@@ -8,4 +9,6 @@ public interface ISecurityController {
     void authenticate(Context ctx); // to verify roles inside token
     void authorize(Context ctx);
     void changePassword(Context ctx);
+
+    void sendVerifiedTokenResponse(Context ctx);
 }
