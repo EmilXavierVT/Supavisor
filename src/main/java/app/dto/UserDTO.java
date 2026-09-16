@@ -8,17 +8,23 @@ public class UserDTO {
     private String email;
     private String password;
     private String phoneNumber;
+    private Long tenantId;
     private Set<String> roles = new HashSet<>();
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String email, String password, String phoneNumber, Set<String> roles) {
+    public UserDTO(Long id, String email, String password, String phoneNumber, Long tenantId, Set<String> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.tenantId = tenantId;
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
+    public UserDTO(Long id, String email, String password, String phoneNumber, Set<String> roles) {
+        this(id, email, password, phoneNumber, null, roles);
     }
 
     public UserDTO(String email, Set<String> roles) {
@@ -56,6 +62,14 @@ public class UserDTO {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Long getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
     }
 
     public Set<String> getRoles() {

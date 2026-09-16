@@ -18,6 +18,7 @@ public class UserMapper {
                 user.getEmail(),
                 null,
                 user.getPhoneNumber(),
+                user.getTenantId(),
                 new HashSet<>(user.getRoles())
         );
     }
@@ -29,6 +30,7 @@ public class UserMapper {
                 dto.getEmail(),
                 dto.getPassword(),
                 dto.getPhoneNumber(),
+                dto.getTenantId(),
                 dto.getRoles() == null ? new HashSet<>() : new HashSet<>(dto.getRoles())
         );
     }

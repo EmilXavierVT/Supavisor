@@ -60,6 +60,7 @@ public class UserDAO implements ISecurityDAO {
             em.getTransaction().begin();
             existing.setEmail(user.getEmail());
             existing.setPhoneNumber(user.getPhoneNumber());
+            existing.setTenantId(user.getTenantId());
             if (user.getPassword() != null && !user.getPassword().isBlank()) {
                 existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
             }
