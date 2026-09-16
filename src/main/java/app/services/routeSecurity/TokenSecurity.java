@@ -42,6 +42,11 @@ public class TokenSecurity implements ITokenSecurity {
         return this.timeToExpire(token) > 0;
     }
 
+    public boolean tokenExpiredWithin(String token, long refreshGraceTime) throws ParseException {
+        int timeToExpire = this.timeToExpire(token);
+        return timeToExpire <= 0 && Math.abs((long) timeToExpire) <= refreshGraceTime;
+    }
+
     public int timeToExpire(String token) throws ParseException {
         SignedJWT jwt = SignedJWT.parse(token);
         return (int)(jwt.getJWTClaimsSet().getExpirationTime().getTime() - (new Date()).getTime());

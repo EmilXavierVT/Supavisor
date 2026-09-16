@@ -1,4 +1,5 @@
 app/dto/UserDTOTest.class
 app/config/ApplicationConfigIntegrationTest.class
+app/services/routeSecurity/TokenSecurityTest.class
 app/config/TestEntityManagerFactory.class
 app/dao/UserDAOIntegrationTest.class
