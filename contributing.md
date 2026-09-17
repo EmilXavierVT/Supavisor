@@ -102,7 +102,7 @@ PUT    /api/users/{id}
 DELETE /api/users/{id}
 ```
 
-Undgå verbs i endpoint-navne, hvis handlingen allerede kan beskrives gennem HTTP-metoden.
+Undgå udsagnsord i endpoint-navne, hvis handlingen allerede kan beskrives gennem HTTP-metoden.
 
 Foretræk eksempelvis:
 
