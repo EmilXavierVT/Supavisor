@@ -25,6 +25,10 @@ public class UserService {
         return userDAO.getByEmail(email);
     }
 
+    public List<User> getByTenantId(Long tenantId) {
+        return userDAO.getByTenantId(tenantId);
+    }
+
     public User create(User user) {
         return userDAO.create(user);
     }

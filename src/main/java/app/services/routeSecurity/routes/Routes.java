@@ -44,6 +44,7 @@ public class Routes {
             path("/user", () -> {
                 get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
                 post("/", userRoutes::create, Role.ADMIN);
+                get("/tenant/{tenantId}", userRoutes::getByTenantId, Role.USER, Role.ADMIN);
                 get("/{id}", userRoutes::getById, Role.USER, Role.ADMIN);
                 put("/{id}", userRoutes::update, Role.USER, Role.ADMIN);
                 delete("/{id}", userRoutes::delete, Role.ADMIN);

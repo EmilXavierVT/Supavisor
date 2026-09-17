@@ -40,6 +40,14 @@ public class UserDAO implements ISecurityDAO {
         }
     }
 
+    public List<User> getByTenantId(Long tenantId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT u FROM User u WHERE u.tenantId = :tenantId ORDER BY u.id", User.class)
+                    .setParameter("tenantId", tenantId)
+                    .getResultList();
+        }
+    }
+
     public User create(User user) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();

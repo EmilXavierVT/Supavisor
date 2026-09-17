@@ -42,6 +42,15 @@ public class UserRoutes {
         ctx.json(userMapper.toDto(user));
     }
 
+    public void getByTenantId(Context ctx) {
+        Long tenantId = ctx.pathParamAsClass("tenantId", Long.class).get();
+        List<UserDTO> dtos = new ArrayList<>();
+        for (User user : userService.getByTenantId(tenantId)) {
+            dtos.add(userMapper.toDto(user));
+        }
+        ctx.json(dtos);
+    }
+
     public void create(Context ctx) {
         logger.info("Creating user");
         debugLogger.info("Creating user");
