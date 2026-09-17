@@ -1,0 +1,48 @@
+### 0. Login to get token
+# @name login
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "1@1.dk",
+  "password": "123"
+}
+### Store the token from the response
+@authToken = {{login.response.body.token}}
+
+
+### 1. Get All Assignment Types (with Token)
+GET http://localhost:7070/api/assignment-types/all
+Authorization: Bearer {{authToken}}
+
+
+### 2. Create a new Assignment Type
+POST http://localhost:7070/api/assignment-types
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Homework",
+  "isActive": true
+}
+
+
+### 3. Update Assignment Type
+PUT http://localhost:7070/api/assignment-types/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Updated Homework Name",
+  "isActive": true
+}
+
+
+### 4. Deactivate Assignment Type
+PATCH http://localhost:7070/api/assignment-types/1/deactivate
+Authorization: Bearer {{authToken}}
+
+
+### 5. Hard Delete Assignment Type
+DELETE http://localhost:7070/api/assignment-types/1
+Authorization: Bearer {{authToken}}

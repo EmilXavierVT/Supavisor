@@ -10,5 +10,6 @@ final class EntityRegistry {
     static void registerEntities(Configuration configuration) {
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Tenant.class);
+        configuration.addAnnotatedClass(AssignmentType.class);
     }
 }
