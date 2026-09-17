@@ -1,0 +1,6 @@
+app/services/routeSecurity/routes/TenantRoutes.class
+app/services/entityServices/TenantService.class
+app/services/dtoConverter/TenantMapper.class
+app/entities/Tenant.class
+app/dto/TenantDTO.class
+app/dao/TenantDAO.class

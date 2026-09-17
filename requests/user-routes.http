@@ -3,6 +3,7 @@
 @password = secret-password
 @phoneNumber = 12345678
 @userId = 1
+@tenantId = 1
 
 ### Register user
 POST {{baseUrl}}/auth/register
@@ -33,6 +34,11 @@ Authorization: Bearer {{auth_token}}
 
 ### Get user by id
 GET {{baseUrl}}/user/{{userId}}
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+### Get users by tenant id
+GET {{baseUrl}}/user/tenant/{{tenantId}}
 Accept: application/json
 Authorization: Bearer {{auth_token}}
 

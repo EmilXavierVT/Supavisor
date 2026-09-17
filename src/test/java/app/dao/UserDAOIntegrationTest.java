@@ -12,6 +12,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,5 +63,17 @@ class UserDAOIntegrationTest {
         assertEquals("employee@example.com", fetched.getEmail());
         assertEquals(Set.of("USER"), fetched.getRoles());
         assertTrue(userDAO.getVerifiedUser("employee@example.com", "secret-password").getRoles().contains("USER"));
+    }
+
+    @Test
+    void userDaoCanFetchUsersByTenantId() {
+        UserDAO userDAO = new UserDAO(emf);
+
+        User created = userDAO.create(new User(null, "tenant-user@example.com", "secret-password", null, 42L, Set.of("USER")));
+        List<User> users = userDAO.getByTenantId(42L);
+
+        assertEquals(1, users.size());
+        assertEquals(created.getId(), users.get(0).getId());
+        assertEquals(42L, users.get(0).getTenantId());
     }
 }
