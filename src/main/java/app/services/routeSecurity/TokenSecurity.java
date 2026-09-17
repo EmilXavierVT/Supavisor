@@ -59,6 +59,7 @@ public class TokenSecurity implements ITokenSecurity {
                     .issuer(ISSUER)
                     .claim("email", user.getEmail())
                     .claim("roles", user.getRoles().stream().reduce((s1, s2) -> s1 + "," + s2).get())
+                    .claim("tenantId",user.getTenantId())
                     .expirationTime(new Date(new Date().getTime() + Long.parseLong(TOKEN_EXPIRE_TIME)))
                     .build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);

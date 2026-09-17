@@ -4,28 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="Implemented tenant support without changing the existing project structure.&#10;Changed:&#10;- Added Tenant entity, TenantDTO, TenantDAO, TenantService, TenantMapper, and TenantRoutes.&#10;- Added tenantId to User and UserDTO.&#10;- Updated UserMapper and UserDAO.update() to preserve tenantId.&#10;- Registered Tenant in EntityRegistry.&#10;- Added tenant CRUD endpoints under /api/tenant:&#10;- GET /tenant/all&#10;- POST /tenant/&#10;- GET /tenant/{id}&#10;- PUT /tenant/{id}&#10;- DELETE /tenant/{id}">
-      <change beforePath="$PROJECT_DIR$/requests/user-routes.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/user-routes.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/app/dao/UserDAOIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/app/dao/UserDAOIntegrationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/entities/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/dtoConverter/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/dtoConverter/UserMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dao.UserDAOIntegrationTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dao.UserDAOIntegrationTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/app.dao.UserDAOIntegrationTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/app.dao.UserDAOIntegrationTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/app/dao/UserDAOIntegrationTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/app/dao/UserDAOIntegrationTest.class" afterDir="false" />
+    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/TokenSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/TokenSecurity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +85,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "user-handling",
+    "git-widget-placeholder": "#102 on user-handling",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -128,9 +109,19 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId">
-    <configuration name="db-live-test | 1. Check app is running" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="1. Check app is running" runType="Run single request">
-      <method v="2" />
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="app.Main" />
+      <module name="SupaVisor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="app.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="db-live-test | 2. Register a user in the live database" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database" index="2" runType="Run single request">
       <method v="2" />
@@ -172,11 +163,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" />
         <item itemvalue="JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" />
         <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
         <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database" />
-        <item itemvalue="HTTP Request.db-live-test | 1. Check app is running" />
       </list>
     </recent_temporary>
   </component>
@@ -294,7 +285,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789558742241</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="created endpoint + helper methods to retrieve user based on tenantId">
+      <option name="closed" value="true" />
+      <created>1789637677841</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1789637677841</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -310,7 +309,8 @@
     <MESSAGE value="Add JWT refresh grace window" />
     <MESSAGE value="added new endpoint for token validation" />
     <MESSAGE value="Implemented tenant support without changing the existing project structure.&#10;Changed:&#10;- Added Tenant entity, TenantDTO, TenantDAO, TenantService, TenantMapper, and TenantRoutes.&#10;- Added tenantId to User and UserDTO.&#10;- Updated UserMapper and UserDAO.update() to preserve tenantId.&#10;- Registered Tenant in EntityRegistry.&#10;- Added tenant CRUD endpoints under /api/tenant:&#10;- GET /tenant/all&#10;- POST /tenant/&#10;- GET /tenant/{id}&#10;- PUT /tenant/{id}&#10;- DELETE /tenant/{id}" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented tenant support without changing the existing project structure.&#10;Changed:&#10;- Added Tenant entity, TenantDTO, TenantDAO, TenantService, TenantMapper, and TenantRoutes.&#10;- Added tenantId to User and UserDTO.&#10;- Updated UserMapper and UserDAO.update() to preserve tenantId.&#10;- Registered Tenant in EntityRegistry.&#10;- Added tenant CRUD endpoints under /api/tenant:&#10;- GET /tenant/all&#10;- POST /tenant/&#10;- GET /tenant/{id}&#10;- PUT /tenant/{id}&#10;- DELETE /tenant/{id}" />
+    <MESSAGE value="created endpoint + helper methods to retrieve user based on tenantId" />
+    <option name="LAST_COMMIT_MESSAGE" value="created endpoint + helper methods to retrieve user based on tenantId" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
