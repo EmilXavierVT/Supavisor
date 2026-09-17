@@ -4,22 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="added the product entity with dto and daos and endpoints">
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/ApplicationConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/ITokenSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/ITokenSecurity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/TokenSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/TokenSecurity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/config/ApplicationConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/ApplicationConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/ITokenSecurity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/ITokenSecurity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/TokenSecurity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/TokenSecurity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.config.ApplicationConfigIntegrationTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.config.ApplicationConfigIntegrationTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dao.UserDAOIntegrationTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dao.UserDAOIntegrationTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dto.UserDTOTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dto.UserDTOTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/app.config.ApplicationConfigIntegrationTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/app.config.ApplicationConfigIntegrationTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/app.dao.UserDAOIntegrationTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/app.dao.UserDAOIntegrationTest.txt" afterDir="false" />
+    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="added new endpoint for token validation">
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/EntityRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +88,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "token-refresh",
+    "git-widget-placeholder": "User-crud",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -186,7 +177,7 @@
       <option name="presentableId" value="Default" />
       <updated>1788956915058</updated>
       <workItem from="1788956916085" duration="114000" />
-      <workItem from="1788957196744" duration="52818000" />
+      <workItem from="1788957196744" duration="60824000" />
     </task>
     <task id="LOCAL-00001" summary="first initial setup of the user entity. Full DAO and DTO setup up for the user">
       <option name="closed" value="true" />
@@ -260,7 +251,23 @@
       <option name="project" value="LOCAL" />
       <updated>1789498356584</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Add JWT refresh grace window">
+      <option name="closed" value="true" />
+      <created>1789500123665</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1789500123665</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added new endpoint for token validation">
+      <option name="closed" value="true" />
+      <created>1789553305732</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1789553305732</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -273,20 +280,22 @@
     <MESSAGE value="new branch for intergration of tokens since we had the code at hand already - simple fix of types" />
     <MESSAGE value="url test change" />
     <MESSAGE value="added the product entity with dto and daos and endpoints" />
-    <option name="LAST_COMMIT_MESSAGE" value="added the product entity with dto and daos and endpoints" />
+    <MESSAGE value="Add JWT refresh grace window" />
+    <MESSAGE value="added new endpoint for token validation" />
+    <option name="LAST_COMMIT_MESSAGE" value="added new endpoint for token validation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>109</line>
+          <line>107</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>104</line>
-          <properties class="app.services.routeSecurity.SecurityController" method="createToken">
+          <line>102</line>
+          <properties class="app.services.routeSecurity.SecurityController">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>

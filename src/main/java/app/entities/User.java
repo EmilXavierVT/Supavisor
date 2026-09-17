@@ -21,6 +21,9 @@ public class User {
 
     private String phoneNumber;
 
+    @Column(name = "tenant_id")
+    private Long tenantId;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role", nullable = false)
@@ -30,12 +33,17 @@ public class User {
 
     }
 
-    public User(Long id, String email, String password, String phoneNumber, Set<String> roles) {
+    public User(Long id, String email, String password, String phoneNumber, Long tenantId, Set<String> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.tenantId = tenantId;
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
+    public User(Long id, String email, String password, String phoneNumber, Set<String> roles) {
+        this(id, email, password, phoneNumber, null, roles);
     }
 
     public Long getId() {
@@ -68,6 +76,14 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Long getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
     }
 
     public Set<String> getRoles() {

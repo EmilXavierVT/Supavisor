@@ -32,6 +32,7 @@ public class Routes {
     public EndpointGroup getRoutes() {
 
         UserRoutes userRoutes = new UserRoutes(emf);
+        TenantRoutes tenantRoutes = new TenantRoutes(emf);
 
         SystemController systemController = new SystemController();
 
@@ -52,6 +53,14 @@ public class Routes {
                 put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
                 put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
                 put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
+            });
+
+            path("/tenant", () -> {
+                get("/all", tenantRoutes::getAll, Role.ADMIN, Role.USER);
+                post("/", tenantRoutes::create, Role.ADMIN);
+                get("/{id}", tenantRoutes::getById, Role.USER, Role.ADMIN);
+                put("/{id}", tenantRoutes::update, Role.ADMIN);
+                delete("/{id}", tenantRoutes::delete, Role.ADMIN);
             });
 
         };
