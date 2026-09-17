@@ -1,6 +1,5 @@
 package app.services.routeSecurity.routes;
 
-
 import app.config.HibernateConfig;
 import app.controller.SystemController;
 import app.services.routeSecurity.ISecurityController;
@@ -22,7 +21,6 @@ public class Routes {
         this(HibernateConfig.getEntityManagerFactory());
     }
 
-
     public Routes(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.emf = emf;
@@ -33,13 +31,13 @@ public class Routes {
 
         UserRoutes userRoutes = new UserRoutes(emf);
         TenantRoutes tenantRoutes = new TenantRoutes(emf);
+        AssignmentTypeRoutes assignmentTypeRoutes = new AssignmentTypeRoutes(emf);
 
         SystemController systemController = new SystemController();
 
         return () -> {
             get("/", ctx -> ctx.result("Hello Javalin World!"));
             get("/health", systemController::health, Role.ANYONE);
-
 
             path("/user", () -> {
                 get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
@@ -64,6 +62,14 @@ public class Routes {
                 delete("/{id}", tenantRoutes::delete, Role.ADMIN);
             });
 
+            path("/assignment-types", () -> {
+                get("/all", assignmentTypeRoutes::getAll, Role.ADMIN, Role.USER);
+                post("/", assignmentTypeRoutes::create, Role.ADMIN);
+                put("/{id}", assignmentTypeRoutes::update, Role.ADMIN);
+                delete("/{id}", assignmentTypeRoutes::delete, Role.ADMIN);
+                patch("/{id}/deactivate", assignmentTypeRoutes::deactivate, Role.ADMIN);
+            });
+
         };
     }
 
@@ -75,7 +81,7 @@ public class Routes {
                 get("hello", ctx -> ctx.json(on));
                 post("echo", ctx -> ctx.result(ctx.body()));
             });
-//
+
             case "auth" -> () -> path("auth", () -> {
                 ObjectNode on = objectMapper.createObjectNode();
                 on.put("msg","HELLO FROM THE RESTRICTED AREA");

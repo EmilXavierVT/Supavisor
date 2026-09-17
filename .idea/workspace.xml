@@ -5,8 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/controller/AssignmentTypeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/dao/AssignmentTypeDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/dto/AssignmentTypeDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/AssignmentType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/AssignmentTypeMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/entityServices/AssignmentTypeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/AssignmentTypeRoutes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/http/dev.http" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/http/http-client.env.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/TokenSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/TokenSecurity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/EntityRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/config/ApplicationConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/ApplicationConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/entities/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/dtoConverter/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/dtoConverter/UserMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,13 +43,14 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="HTTP Private Environment File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="testing" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,22 +61,29 @@
     &quot;assignee&quot;: &quot;EmilXavierVT&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/EmilXavierVT/Supavisor.git",
-    "accountId": "d529687c-2198-42f1-a77e-46dc5596888e"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/EmilXavierVT/Supavisor&quot;,
+    &quot;accountId&quot;: &quot;ce5b9cec-6726-4d33-90fc-1b18021aec65&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "EmilXavierVT",
-    "repository": "Supavisor"
+    &quot;owner&quot;: &quot;EmilXavierVT&quot;,
+    &quot;repository&quot;: &quot;Supavisor&quot;
   }
-}]]></component>
+}</component>
+  <component name="HttpClientSelectedEnvironments">
+    <file url="file://$PROJECT_DIR$/src/main/resources/http/dev.http" environment="dev" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -69,40 +99,55 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
-    "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
-    "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
-    "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
-    "JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "#102 on user-handling",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 1. Check app is running.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 3. Login and store USER token.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.dev | 1. Create a new Assignment Type.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.dev | 1. Get All Assignment Types (with Token).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.dev | 1. Get All Assignment Types.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.dev | 2. Get All Assignment Types (Active &amp; Inactive).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.dev | 3. Create New Assignment Type.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.dev | login (1).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.dev | login.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;11.As-an-administrator,-I-want-to-create-and-manage-assignment-types,-so-…ified&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/khnda/IdeaProjects/4. Semester/Supavisor/src/main/resources/http&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;rest.client.default.execution.environment&quot;: &quot;dev&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\khnda\IdeaProjects\4. Semester\Supavisor\src\main\resources\http" />
       <recent name="$PROJECT_DIR$/src/main/java/app" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/java/app/config" />
@@ -123,62 +168,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="db-live-test | 2. Register a user in the live database" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database" index="2" runType="Run single request">
+    <configuration name="dev | login" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/http/dev.http" requestIdentifier="login" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="3" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="SupaVisor" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="app.services.economic.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="app.services.economic" />
-      <option name="MAIN_CLASS_NAME" value="app.services.economic.EconomicProductClientIntegrationTest" />
-      <option name="METHOD_NAME" value="retrievesProductsFromEconomicApi" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="SupaVisor" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="app.dao.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="app.dao" />
-      <option name="MAIN_CLASS_NAME" value="app.dao.UserDAOIntegrationTest" />
-      <option name="METHOD_NAME" value="userDaoCanFetchUsersByTenantId" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="HTTP Request.dev | login" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" />
-        <item itemvalue="JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" />
-        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database" />
+        <item itemvalue="HTTP Request.dev | login" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="" />
@@ -188,6 +200,7 @@
       <updated>1788956915058</updated>
       <workItem from="1788956916085" duration="114000" />
       <workItem from="1788957196744" duration="60824000" />
+      <workItem from="1789653888943" duration="6648000" />
     </task>
     <task id="LOCAL-00001" summary="first initial setup of the user entity. Full DAO and DTO setup up for the user">
       <option name="closed" value="true" />
