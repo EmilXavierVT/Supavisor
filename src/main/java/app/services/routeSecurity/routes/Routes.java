@@ -32,39 +32,44 @@ public class Routes {
     public EndpointGroup getRoutes() {
 
         UserRoutes userRoutes = new UserRoutes(emf);
-        TenantRoutes tenantRoutes = new TenantRoutes(emf);
+            TenantRoutes tenantRoutes = new TenantRoutes(emf);
+            RoleRoutes roleRoutes = new RoleRoutes(emf);
 
-        SystemController systemController = new SystemController();
+            SystemController systemController = new SystemController();
 
-        return () -> {
-            get("/", ctx -> ctx.result("Hello Javalin World!"));
-            get("/health", systemController::health, Role.ANYONE);
+            return () -> {
+                get("/", ctx -> ctx.result("Hello Javalin World!"));
+                get("/health", systemController::health, Role.ANYONE);
 
+                path("/user", () -> {
+                    get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
+                    post("/", userRoutes::create, Role.ADMIN);
+                    get("/tenant/{tenantId}", userRoutes::getByTenantId, Role.USER, Role.ADMIN);
+                    get("/{id}", userRoutes::getById, Role.USER, Role.ADMIN);
+                    put("/{id}", userRoutes::update, Role.USER, Role.ADMIN);
+                    delete("/{id}", userRoutes::delete, Role.ADMIN);
+                    put("/{id}/admin", userRoutes::setAdmin, Role.ADMIN);
+                    put("/{id}/employee", userRoutes::setEmployee, Role.ADMIN);
+                    put("/{id}/cleaning-staff", userRoutes::setCleaningStaff, Role.ADMIN);
+                    put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
+                    put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
+                    put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
+                });
 
-            path("/user", () -> {
-                get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
-                post("/", userRoutes::create, Role.ADMIN);
-                get("/tenant/{tenantId}", userRoutes::getByTenantId, Role.USER, Role.ADMIN);
-                get("/{id}", userRoutes::getById, Role.USER, Role.ADMIN);
-                put("/{id}", userRoutes::update, Role.USER, Role.ADMIN);
-                delete("/{id}", userRoutes::delete, Role.ADMIN);
-                put("/{id}/admin", userRoutes::setAdmin, Role.ADMIN);
-                put("/{id}/employee", userRoutes::setEmployee, Role.ADMIN);
-                put("/{id}/cleaning-staff", userRoutes::setCleaningStaff, Role.ADMIN);
-                put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
-                put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
-                put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
-            });
+                path("/tenant", () -> {
+                    get("/all", tenantRoutes::getAll, Role.ADMIN, Role.USER);
+                    post("/", tenantRoutes::create, Role.ADMIN);
+                    get("/{id}", tenantRoutes::getById, Role.USER, Role.ADMIN);
+                    put("/{id}", tenantRoutes::update, Role.ADMIN);
+                    delete("/{id}", tenantRoutes::delete, Role.ADMIN);
+                });
 
-            path("/tenant", () -> {
-                get("/all", tenantRoutes::getAll, Role.ADMIN, Role.USER);
-                post("/", tenantRoutes::create, Role.ADMIN);
-                get("/{id}", tenantRoutes::getById, Role.USER, Role.ADMIN);
-                put("/{id}", tenantRoutes::update, Role.ADMIN);
-                delete("/{id}", tenantRoutes::delete, Role.ADMIN);
-            });
-
-        };
+                path("/role", () -> {
+                    get("/tenant/{tenantId}", roleRoutes::getRolesByTenant, Role.USER, Role.ADMIN);
+                    post("/", roleRoutes::createRole, Role.ADMIN);
+                    delete("/{id}", roleRoutes::deleteRole, Role.ADMIN);
+                });
+            };
     }
 
     public EndpointGroup getRouteResource(String resourceName) {
