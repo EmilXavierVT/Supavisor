@@ -86,6 +86,7 @@ public class Routes {
                 post("/", assignmentRoutes::create, Role.ADMIN);
                 put("/{id}", assignmentRoutes::update, Role.ADMIN);
                 patch("/{id}/deactivate", assignmentRoutes::deactivate, Role.ADMIN);
+                patch("/{id}/activate", assignmentRoutes::activate, Role.ADMIN);
                 delete("/{id}", assignmentRoutes::delete, Role.ADMIN);
             });
         };

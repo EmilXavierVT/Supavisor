@@ -1,11 +1,17 @@
 package app.dto;
 
+import java.math.BigDecimal;
+
 public class AssignmentDTO {
 
     private Long id;
     private String name;
     private Long tenantId;
     private Boolean isActive;
+    private String address;
+    private Integer estimatedMinutes;
+    private BigDecimal cost;
+    private Long assignedEmployeeId;
 
     public AssignmentDTO() {}
 
@@ -28,4 +34,16 @@ public class AssignmentDTO {
 
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean active) { isActive = active; }
+
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+
+    public Integer getEstimatedMinutes() { return estimatedMinutes; }
+    public void setEstimatedMinutes(Integer estimatedMinutes) { this.estimatedMinutes = estimatedMinutes; }
+
+    public BigDecimal getCost() { return cost; }
+    public void setCost(BigDecimal cost) { this.cost = cost; }
+
+    public Long getAssignedEmployeeId() { return assignedEmployeeId; }
+    public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
 }

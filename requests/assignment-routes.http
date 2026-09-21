@@ -27,7 +27,7 @@ Authorization: Bearer {{admin_token}}
 
 { "name": "Assignment Tester", "email": "{{userEmail}}", "roles": ["USER"] }
 
-> {% client.global.set("user_password", response.body.temporaryPassword); %}
+> {% client.global.set("user_password", response.body.temporaryPassword); client.global.set("user_id", response.body.user.id); %}
 
 ### 0c. Login as that user                                     -> 200, token saved
 POST {{baseUrl}}/auth/login
@@ -40,12 +40,19 @@ Content-Type: application/json
 
 ### ---------------------------------------------------------------- CREATE
 
-### 1. Create "Cleaning"                                       -> 201, isActive true, id saved
+### 1. Create "Cleaning at Main Street 1" with all details     -> 201, isActive true, id saved
+# An assignment is a template: name + optional address, estimatedMinutes, cost and one assigned employee.
 POST {{baseUrl}}/assignment
 Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
-{ "name": "Cleaning" }
+{
+  "name": "Cleaning at Main Street 1",
+  "address": "Main Street 1, 8000 Aarhus",
+  "estimatedMinutes": 90,
+  "cost": 1250.50,
+  "assignedEmployeeId": {{user_id}}
+}
 
 > {% client.global.set("assignment_id", response.body.id); %}
 
@@ -63,14 +70,14 @@ POST {{baseUrl}}/assignment
 Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
-{ "name": "Cleaning" }
+{ "name": "Cleaning at Main Street 1" }
 
 ### 4. Same name, different case and spaces                    -> 409
 POST {{baseUrl}}/assignment
 Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
-{ "name": "  cLEANING  " }
+{ "name": "  cLEANING AT main street 1  " }
 
 ### 5a. Missing name                                           -> 400 "name is required"
 POST {{baseUrl}}/assignment
@@ -100,6 +107,41 @@ Authorization: Bearer {{admin_token}}
 
 { "name": "Tenant in body is ignored", "tenantId": 999999 }
 
+### 5e. Negative cost                                          -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad cost", "cost": -5 }
+
+### 5f. Cost with more than 2 decimals                         -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad cost", "cost": 10.005 }
+
+### 5g. Estimated time of 0 minutes                            -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad time", "estimatedMinutes": 0 }
+
+### 5h. Employee that does not exist (or is in another company) -> 400 "Employee not found"
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad employee", "assignedEmployeeId": 999999 }
+
+### 5i. Only the name is required                              -> 201, other fields null
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Just a name" }
+
 
 ### ---------------------------------------------------------------- READ
 
@@ -107,7 +149,7 @@ Authorization: Bearer {{admin_token}}
 GET {{baseUrl}}/assignment/all
 Authorization: Bearer {{admin_token}}
 
-### 7. Read one                                               -> 200 "Cleaning"
+### 7. Read one                                               -> 200, with address, estimatedMinutes, cost, assignedEmployeeId
 GET {{baseUrl}}/assignment/{{assignment_id}}
 Authorization: Bearer {{admin_token}}
 
@@ -118,19 +160,33 @@ Authorization: Bearer {{admin_token}}
 
 ### ---------------------------------------------------------------- UPDATE
 
-### 9. Rename                                                 -> 200 "Deep cleaning"
+### 9. Change name and details                                -> 200 "Deep cleaning", new address/time/cost
+# PUT replaces ALL details: a detail you leave out or set to null is cleared (see 9b).
 PUT {{baseUrl}}/assignment/{{assignment_id}}
 Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
-{ "name": "Deep cleaning" }
+{
+  "name": "Deep cleaning at Main Street 1",
+  "address": "Second Street 2, 8000 Aarhus",
+  "estimatedMinutes": 120,
+  "cost": 2000,
+  "assignedEmployeeId": {{user_id}}
+}
+
+### 9b. Send only the name                                     -> 200, address/time/cost/employee are now null
+PUT {{baseUrl}}/assignment/{{kitchen_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Kitchen" }
 
 ### 10. Rename to a name that is taken                         -> 409
 PUT {{baseUrl}}/assignment/{{assignment_id}}
 Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
-{ "name": "kitchen" }
+{ "name": "kitchen", "address": "Second Street 2" }
 
 ### 11. Rename to blank                                        -> 400
 PUT {{baseUrl}}/assignment/{{assignment_id}}
@@ -161,12 +217,9 @@ Authorization: Bearer {{admin_token}}
 GET {{baseUrl}}/assignment/all
 Authorization: Bearer {{admin_token}}
 
-### 16. Reactivate through update                              -> 200, isActive true
-PUT {{baseUrl}}/assignment/{{assignment_id}}
-Content-Type: application/json
+### 16. Activate again                                        -> 200, isActive true (details untouched)
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
 Authorization: Bearer {{admin_token}}
-
-{ "name": "Deep cleaning", "isActive": true }
 
 
 ### ---------------------------------------------------------------- PERMISSIONS
@@ -198,6 +251,10 @@ Authorization: Bearer {{user_token}}
 
 ### 20c. Normal user tries to deactivate                      -> 403
 PATCH {{baseUrl}}/assignment/{{assignment_id}}/deactivate
+Authorization: Bearer {{user_token}}
+
+### 20c2. Normal user tries to activate                       -> 403
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
 Authorization: Bearer {{user_token}}
 
 ### 20d. Normal user tries to delete                          -> 403
@@ -242,6 +299,10 @@ Content-Type: application/json
 Authorization: Bearer {{otherTenantAdminToken}}
 
 { "name": "Hacked" }
+
+###
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
+Authorization: Bearer {{otherTenantAdminToken}}
 
 ###
 DELETE {{baseUrl}}/assignment/{{assignment_id}}

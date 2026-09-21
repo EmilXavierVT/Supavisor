@@ -1,7 +1,9 @@
 package app.services.entityServices;
 
 import app.config.TestEntityManagerFactory;
+import app.dao.UserDAO;
 import app.dto.AssignmentDTO;
+import app.entities.User;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,12 +14,15 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -212,6 +217,151 @@ class AssignmentServiceIntegrationTest {
         assertEquals(0, dbCount(created.getId()));
     }
 
+    // ---- details: address, estimated time, cost, employee
+
+    @Test
+    void createStoresAddressEstimatedTimeCostAndEmployeeInTheDatabase() {
+        Long tenant = newTenantId();
+        User employee = newEmployee(tenant, true);
+
+        AssignmentDTO created = service.create(
+                details("Cleaning at Main Street", "  Main Street 1, Aarhus ", 90, "1250.5", employee.getId()), tenant);
+
+        assertEquals("Main Street 1, Aarhus", created.getAddress());
+        assertEquals(90, created.getEstimatedMinutes());
+        assertEquals(0, new BigDecimal("1250.50").compareTo(created.getCost()));
+        assertEquals(employee.getId(), created.getAssignedEmployeeId());
+        Object[] row = dbDetails(created.getId());
+        assertEquals("Main Street 1, Aarhus", row[0]);
+        assertEquals(90, ((Number) row[1]).intValue());
+        assertEquals(0, new BigDecimal("1250.50").compareTo((BigDecimal) row[2]));
+        assertEquals(employee.getId(), ((Number) row[3]).longValue());
+        assertEquals(employee.getId(), service.getById(created.getId(), tenant, false).getAssignedEmployeeId());
+    }
+
+    @Test
+    void detailsAreOptional() {
+        Long tenant = newTenantId();
+
+        AssignmentDTO created = service.create(details("Bare", "   ", null, null, null), tenant);
+
+        assertNull(created.getAddress());
+        assertNull(created.getEstimatedMinutes());
+        assertNull(created.getCost());
+        assertNull(created.getAssignedEmployeeId());
+    }
+
+    @Test
+    void invalidDetailsAreRejectedAndNothingIsStored() {
+        Long tenant = newTenantId();
+
+        assertEquals(400, code(() -> service.create(details("A", null, 0, null, null), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", null, -5, null, null), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", null, 525_601, null, null), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", null, null, "-1", null), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", null, null, "1.005", null), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", null, null, "10000000000", null), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", "x".repeat(256), null, null, null), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", "line1\nline2", null, null, null), tenant)));
+        assertTrue(service.getAll(tenant, false).isEmpty());
+    }
+
+    @Test
+    void zeroCostIsAllowed() {
+        assertEquals(0, BigDecimal.ZERO.compareTo(
+                service.create(details("Free", null, null, "0", null), newTenantId()).getCost()));
+    }
+
+    @Test
+    void employeeMustBeAnActiveUserOfTheSameTenant() {
+        Long tenant = newTenantId();
+        User ofAnotherTenant = newEmployee(newTenantId(), true);
+        User deactivated = newEmployee(tenant, false);
+
+        assertEquals(400, code(() -> service.create(details("A", null, null, null, ofAnotherTenant.getId()), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", null, null, null, -1L), tenant)));
+        assertEquals(400, code(() -> service.create(details("A", null, null, null, deactivated.getId()), tenant)));
+        assertTrue(service.getAll(tenant, false).isEmpty());
+    }
+
+    @Test
+    void anEmployeeDeactivatedLaterStaysLinkedWhileOtherDetailsAreEdited() {
+        Long tenant = newTenantId();
+        User employee = newEmployee(tenant, true);
+        AssignmentDTO created = service.create(details("Cleaning", null, 60, null, employee.getId()), tenant);
+        new UserDAO(emf).reversActivation(employee.getId());
+
+        AssignmentDTO updated = service.update(
+                created.getId(), details("Cleaning", "New address 2", 60, null, employee.getId()), tenant);
+
+        assertEquals(employee.getId(), updated.getAssignedEmployeeId());
+        assertEquals("New address 2", updated.getAddress());
+    }
+
+    @Test
+    void updateReplacesAllDetailsAndNullClearsThem() {
+        Long tenant = newTenantId();
+        User first = newEmployee(tenant, true);
+        User second = newEmployee(tenant, true);
+        AssignmentDTO created = service.create(details("Cleaning", "Old street 1", 30, "100", first.getId()), tenant);
+
+        AssignmentDTO changed = service.update(
+                created.getId(), details("Cleaning", "New street 2", 120, "250.75", second.getId()), tenant);
+        assertEquals("New street 2", changed.getAddress());
+        assertEquals(120, changed.getEstimatedMinutes());
+        assertEquals(second.getId(), changed.getAssignedEmployeeId());
+        assertEquals("New street 2", dbDetails(created.getId())[0]);
+
+        AssignmentDTO cleared = service.update(created.getId(), dto("Cleaning"), tenant);
+        assertNull(cleared.getAddress());
+        assertNull(cleared.getEstimatedMinutes());
+        assertNull(cleared.getCost());
+        assertNull(cleared.getAssignedEmployeeId());
+        Object[] row = dbDetails(created.getId());
+        assertNull(row[0]);
+        assertNull(row[1]);
+        assertNull(row[2]);
+        assertNull(row[3]);
+    }
+
+    @Test
+    void invalidDetailsOnUpdateLeaveTheRowUntouched() {
+        Long tenant = newTenantId();
+        AssignmentDTO created = service.create(details("Cleaning", "Street 1", 30, "100", null), tenant);
+
+        assertEquals(400, code(() -> service.update(created.getId(), details("Renamed", "Street 2", 30, "-1", null), tenant)));
+
+        assertEquals("Cleaning", dbRow(created.getId())[0]);
+        assertEquals("Street 1", dbDetails(created.getId())[0]);
+    }
+
+    @Test
+    void deletingTheLinkedEmployeeKeepsTheAssignmentButUnassignsIt() {
+        Long tenant = newTenantId();
+        User employee = newEmployee(tenant, true);
+        AssignmentDTO created = service.create(details("Cleaning", null, null, null, employee.getId()), tenant);
+
+        new UserDAO(emf).delete(employee.getId());
+
+        AssignmentDTO after = service.getById(created.getId(), tenant, false);
+        assertEquals("Cleaning", after.getName());
+        assertNull(after.getAssignedEmployeeId());
+        assertNull(dbDetails(created.getId())[3]);
+    }
+
+    @Test
+    void activateBringsADeactivatedAssignmentBack() {
+        Long tenant = newTenantId();
+        AssignmentDTO created = service.create(dto("Cleaning", false), tenant);
+
+        assertTrue(service.activate(created.getId(), tenant).getIsActive());
+        assertTrue(service.activate(created.getId(), tenant).getIsActive()); // idempotent
+
+        assertEquals(true, dbRow(created.getId())[1]);
+        assertEquals(List.of("Cleaning"), names(service.getAll(tenant, true)));
+        assertEquals(404, code(() -> service.activate(created.getId(), newTenantId())));
+    }
+
     // ---- tenant isolation
 
     @Test
@@ -230,6 +380,30 @@ class AssignmentServiceIntegrationTest {
     }
 
     // ---- helpers
+
+    private static AssignmentDTO details(String name, String address, Integer minutes, String cost, Long employeeId) {
+        AssignmentDTO dto = dto(name);
+        dto.setAddress(address);
+        dto.setEstimatedMinutes(minutes);
+        dto.setCost(cost == null ? null : new BigDecimal(cost));
+        dto.setAssignedEmployeeId(employeeId);
+        return dto;
+    }
+
+    private static User newEmployee(Long tenantId, boolean active) {
+        return new UserDAO(emf).create(new User(null, UUID.randomUUID() + "@example.com", "secret-password",
+                null, tenantId, active, Set.of("USER")));
+    }
+
+    /** address, estimated_minutes, cost, assigned_employee_id straight from the table. */
+    private static Object[] dbDetails(Long id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return (Object[]) em.createNativeQuery(
+                            "SELECT address, estimated_minutes, cost, assigned_employee_id FROM assignments WHERE id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
+        }
+    }
 
     private static AssignmentDTO dto(String name) {
         return dto(name, null);

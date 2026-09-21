@@ -16,6 +16,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -151,6 +152,74 @@ class AssignmentApiIntegrationTest {
         assertTrue(duplicate.body().contains("already exists"));
     }
 
+    // ---- details: address, estimated time, cost, employee
+
+    @Test
+    void adminCanFillInAndChangeAddressEstimatedTimeCostAndEmployee() throws Exception {
+        long first = employeeId(TENANT);
+        long second = employeeId(TENANT);
+        String name = unique("Cleaning at Main Street");
+
+        HttpResponse<String> created = send("POST", "/api/assignment", adminToken, "{\"name\":\"" + name
+                + "\",\"address\":\"Main Street 1\",\"estimatedMinutes\":90,\"cost\":1250.5,\"assignedEmployeeId\":"
+                + first + "}");
+        assertEquals(201, created.statusCode());
+        JsonNode body = json(created);
+        long id = body.get("id").asLong();
+        assertEquals("Main Street 1", body.get("address").asText());
+        assertEquals(90, body.get("estimatedMinutes").asInt());
+        assertEquals(0, new BigDecimal("1250.50").compareTo(body.get("cost").decimalValue()));
+        assertEquals(first, body.get("assignedEmployeeId").asLong());
+
+        HttpResponse<String> read = send("GET", "/api/assignment/" + id, adminToken, null);
+        assertEquals("Main Street 1", json(read).get("address").asText());
+        assertEquals(first, json(read).get("assignedEmployeeId").asLong());
+
+        HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name
+                + "\",\"address\":\"Second Street 2\",\"estimatedMinutes\":120,\"cost\":99,\"assignedEmployeeId\":"
+                + second + "}");
+        assertEquals(200, updated.statusCode());
+        assertEquals("Second Street 2", json(updated).get("address").asText());
+        assertEquals(second, json(updated).get("assignedEmployeeId").asLong());
+        assertEquals(second, dbEmployee(id));
+
+        HttpResponse<String> cleared = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name + "\"}");
+        assertEquals(200, cleared.statusCode());
+        assertTrue(json(cleared).get("address").isNull());
+        assertTrue(json(cleared).get("assignedEmployeeId").isNull());
+    }
+
+    @Test
+    void invalidDetailsAndForeignEmployeesAreRejected() throws Exception {
+        long employeeOfAnotherTenant = employeeId(OTHER_TENANT);
+
+        assertEquals(400, send("POST", "/api/assignment", adminToken,
+                "{\"name\":\"" + unique("A") + "\",\"cost\":-1}").statusCode());
+        assertEquals(400, send("POST", "/api/assignment", adminToken,
+                "{\"name\":\"" + unique("A") + "\",\"estimatedMinutes\":0}").statusCode());
+        HttpResponse<String> foreign = send("POST", "/api/assignment", adminToken,
+                "{\"name\":\"" + unique("A") + "\",\"assignedEmployeeId\":" + employeeOfAnotherTenant + "}");
+        assertEquals(400, foreign.statusCode());
+        assertTrue(foreign.body().contains("Employee not found"));
+    }
+
+    // ---- activate
+
+    @Test
+    void adminCanActivateADeactivatedAssignmentButAUserCannot() throws Exception {
+        long id = create(adminToken, unique("Seasonal"));
+        send("PATCH", "/api/assignment/" + id + "/deactivate", adminToken, null);
+
+        assertEquals(403, send("PATCH", "/api/assignment/" + id + "/activate", userToken, null).statusCode());
+        assertFalse(dbActive(id));
+
+        HttpResponse<String> activated = send("PATCH", "/api/assignment/" + id + "/activate", adminToken, null);
+        assertEquals(200, activated.statusCode());
+        assertTrue(json(activated).get("isActive").asBoolean());
+        assertTrue(dbActive(id));
+        assertEquals(404, send("PATCH", "/api/assignment/" + id + "/activate", otherTenantAdminToken, null).statusCode());
+    }
+
     // ---- role permissions
 
     @Test
@@ -216,6 +285,20 @@ class AssignmentApiIntegrationTest {
     }
 
     // ---- helpers
+
+    private static long employeeId(long tenantId) {
+        return new UserDAO(emf).create(new User(null, UUID.randomUUID() + "@example.com", PASSWORD, null,
+                tenantId, true, Set.of("USER"))).getId();
+    }
+
+    private static Long dbEmployee(long id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Number value = (Number) em.createNativeQuery("SELECT assigned_employee_id FROM assignments WHERE id = :id")
+                    .setParameter("id", id)
+                    .getSingleResult();
+            return value == null ? null : value.longValue();
+        }
+    }
 
     private static long create(String token, String name) throws Exception {
         HttpResponse<String> response = send("POST", "/api/assignment", token, "{\"name\":\"" + name + "\"}");

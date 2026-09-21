@@ -43,6 +43,11 @@ public class AssignmentRoutes {
         ctx.json(assignmentService.deactivate(id, callerTenantId(ctx)));
     }
 
+    public void activate(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(assignmentService.activate(id, callerTenantId(ctx)));
+    }
+
     public void delete(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         assignmentService.delete(id, callerTenantId(ctx));

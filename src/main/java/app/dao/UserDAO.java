@@ -143,6 +143,10 @@ public class UserDAO implements ISecurityDAO {
             if (user == null) return null;
 
             em.getTransaction().begin();
+            // assignments linked to this user stay, but become unassigned
+            em.createQuery("UPDATE Assignment a SET a.assignedEmployeeId = null WHERE a.assignedEmployeeId = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
             em.remove(user);
             em.getTransaction().commit();
             return user;
