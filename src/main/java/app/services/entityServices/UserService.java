@@ -82,4 +82,8 @@ public class UserService {
     public User setFlex(Long id) {
         return userDAO.setRole(id, "FLEX");
     }
+
+    public User deactivateUser(long userID) {
+        return userDAO.deactivateUser(userID);
+    }
 }

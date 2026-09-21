@@ -234,4 +234,17 @@ public class UserDAO implements ISecurityDAO {
             throw new ValidationException("Email and password are required");
         }
     }
+
+    public User deactivateUser(long userID) {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, userID);
+            user.setIsActive(false);
+            em.getTransaction().begin();
+            em.merge(user);
+            em.getTransaction().commit();
+            return user;
+        } catch (Exception e) {
+        }
+        return null;
+    }
 }

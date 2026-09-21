@@ -5,18 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
-      <change afterPath="$PROJECT_DIR$/requests/http-client.env.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requests/db-live-test.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/db-live-test.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/user-routes.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/user-routes.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/http-client.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/requests/http-client.env.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dao/ISecurityDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dao/ISecurityDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/dao/ISecurityDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dao/ISecurityDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/entities/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,60 +79,60 @@
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
       <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0000000000000004" />
-      <entry key="S2" value="1.0001886625503056" />
-      <entry key="S5" value="1.0477354147808984" />
-      <entry key="S10" value="1.307571120310883" />
-      <entry key="S30" value="2.162177253002696" />
-      <entry key="S60" value="2.9916220915101928" />
-      <entry key="M2" value="4.351022433712922" />
-      <entry key="M5" value="12.666760082765615" />
-      <entry key="M10" value="36.32255155919481" />
-      <entry key="M15" value="63.623353067042174" />
-      <entry key="M30" value="128.82259104536945" />
-      <entry key="H1" value="193.96320168760798" />
-      <entry key="H2" value="241.33035250456115" />
-      <entry key="H4" value="270.1089831697872" />
-      <entry key="D1" value="297.20621036018275" />
-      <entry key="W1" value="302.1643047024452" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.000005380781429" />
+      <entry key="S5" value="1.0262606878700093" />
+      <entry key="S10" value="1.4878456090478902" />
+      <entry key="S30" value="4.883828832048065" />
+      <entry key="S60" value="7.899287351163373" />
+      <entry key="M2" value="10.63308671711655" />
+      <entry key="M5" value="15.914433102571142" />
+      <entry key="M10" value="29.443221131510896" />
+      <entry key="M15" value="47.00086411729209" />
+      <entry key="M30" value="105.93619446757292" />
+      <entry key="H1" value="197.40004710875561" />
+      <entry key="H2" value="287.55295820698694" />
+      <entry key="H4" value="352.67510359314934" />
+      <entry key="D1" value="421.36948778141374" />
+      <entry key="W1" value="434.7248165026391" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="1.0308321859988429E-100" />
-      <entry key="S5" value="1.0122206386059159E-40" />
-      <entry key="S10" value="1.0060917645055625E-20" />
-      <entry key="S30" value="2.1588006062104504E-7" />
-      <entry key="S60" value="4.6462894940053505E-4" />
-      <entry key="M2" value="0.02155525340608491" />
-      <entry key="M5" value="0.21548708840253294" />
-      <entry key="M10" value="0.4642058685567567" />
-      <entry key="M15" value="0.5995247054454258" />
-      <entry key="M30" value="0.7742898071429236" />
-      <entry key="H1" value="0.879937388194708" />
-      <entry key="H2" value="0.9380497791667072" />
-      <entry key="H4" value="0.9685296996823106" />
-      <entry key="D1" value="0.9946848206602055" />
-      <entry key="W1" value="0.999238953291752" />
+      <entry key="S2" value="1.7672966767414598E-181" />
+      <entry key="S5" value="6.799822822572984E-73" />
+      <entry key="S10" value="1.1405226468379776E-36" />
+      <entry key="S30" value="1.649999278341266E-12" />
+      <entry key="S60" value="1.8188999195816773E-6" />
+      <entry key="M2" value="0.0020340232018155593" />
+      <entry key="M5" value="0.2074357019346812" />
+      <entry key="M10" value="1.2608449289452122" />
+      <entry key="M15" value="2.414804688649598" />
+      <entry key="M30" value="4.788140348890028" />
+      <entry key="H1" value="6.863870438526146" />
+      <entry key="H2" value="8.265971083226649" />
+      <entry key="H4" value="9.086226547686199" />
+      <entry key="D1" value="9.84069865400621" />
+      <entry key="W1" value="9.977063935018124" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9330329915368074" />
-      <entry key="MS500" value="0.9862327044933596" />
-      <entry key="S2" value="0.9967285634289441" />
-      <entry key="S5" value="1.046311687392974" />
-      <entry key="S10" value="1.3067524316628572" />
-      <entry key="S30" value="2.1617861477478595" />
-      <entry key="S60" value="2.99181635280452" />
-      <entry key="M2" value="4.371996569519599" />
-      <entry key="M5" value="12.880350763832597" />
-      <entry key="M10" value="36.784551017709084" />
-      <entry key="M15" value="64.22083979230581" />
-      <entry key="M30" value="129.59538813539578" />
-      <entry key="H1" value="194.8422026938891" />
-      <entry key="H2" value="242.2678709883959" />
-      <entry key="H4" value="271.0772287765546" />
-      <entry key="D1" value="298.2008449978223" />
-      <entry key="W1" value="303.1635364134099" />
+      <entry key="MS100" value="0.004394759705815663" />
+      <entry key="MS500" value="0.3377435211339094" />
+      <entry key="S2" value="0.7623415410668953" />
+      <entry key="S5" value="0.9223424103605515" />
+      <entry key="S10" value="1.4230221045354854" />
+      <entry key="S30" value="4.820097002775051" />
+      <entry key="S60" value="7.8444747297498765" />
+      <entry key="M2" value="10.597544623745884" />
+      <entry key="M5" value="16.097394591429346" />
+      <entry key="M10" value="30.672443115424386" />
+      <entry key="M15" value="49.37969011847542" />
+      <entry key="M30" value="110.69061617644402" />
+      <entry key="H1" value="204.24012061615667" />
+      <entry key="H2" value="295.80468623861566" />
+      <entry key="H4" value="361.7535228753659" />
+      <entry key="D1" value="431.20878009459335" />
+      <entry key="W1" value="444.7016768170019" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -145,6 +149,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "HTTP Request.db-live-test | #28 (1).executor": "Run",
+    "HTTP Request.db-live-test | #28.executor": "Run",
     "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
     "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1).executor": "Run",
     "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to.executor": "Run",
@@ -156,7 +162,17 @@
     "HTTP Request.db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged.executor": "Run",
     "HTTP Request.db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first).executor": "Run",
     "HTTP Request.db-live-test | 11j. Read back: only Kitchen remains.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (1).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (2).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (3).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#2 (1).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#2.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (1).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (2).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#3.executor": "Run",
     "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token (1).executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
     "HTTP Request.user-routes | Update user.executor": "Run",
     "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
@@ -202,18 +218,18 @@
         <entry key="HttpClient.HttpRequestRunConfigurationType">
           <value>
             <map>
-              <entry key="db-live-test | 11f. Assign both custom roles (replaces the whole set)" value="STOPPED" />
-              <entry key="db-live-test | 11g. Read back: customRoles lists both, roles still [&quot;ADMIN&quot;]" value="STOPPED" />
-              <entry key="db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged" value="STOPPED" />
-              <entry key="db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first)" value="STOPPED" />
-              <entry key="db-live-test | 11j. Read back: only Kitchen remains" value="STOPPED" />
+              <entry key="db-live-test | #28" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#1" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#1 (3)" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#2 (1)" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#3" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.db-live-test | 11j. Read back: only Kitchen remains">
+  <component name="RunManager" selected="HTTP Request.db-live-test | #28 (1)">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
@@ -224,28 +240,35 @@
     <configuration default="true" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" environment="&lt;No Environment&gt;" path="">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 11f. Assign both custom roles (replaces the whole set)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11f. Assign both custom roles (replaces the whole set)" index="17" runType="Run single request">
+    <configuration name="db-live-test | 2. Register a user in the live database#1 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 11g. Read back: customRoles lists both, roles still [&quot;ADMIN&quot;]" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11g. Read back: customRoles lists both, roles still [&quot;ADMIN&quot;]" index="18" runType="Run single request">
+    <configuration name="db-live-test | 2. Register a user in the live database#2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#2" index="3" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11h. PUT without customRoleIds must leave assignments unchanged" index="19" runType="Run single request">
+    <configuration name="db-live-test | 2. Register a user in the live database#3 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#3" index="4" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11i. Delete the Cleaning role, expect 204 (unassigns it from the user first)" index="20" runType="Run single request">
+    <configuration name="db-live-test | #28 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#28" index="28" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 11j. Read back: only Kitchen remains" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11j. Read back: only Kitchen remains" index="21" runType="Run single request">
+    <configuration name="db-live-test | #28" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#28" index="28" runType="Run single request">
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="HTTP Request.db-live-test | #28" />
+      <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3 (1)" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.db-live-test | 11j. Read back: only Kitchen remains" />
-        <item itemvalue="HTTP Request.db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first)" />
-        <item itemvalue="HTTP Request.db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged" />
-        <item itemvalue="HTTP Request.db-live-test | 11g. Read back: customRoles lists both, roles still [&quot;ADMIN&quot;]" />
-        <item itemvalue="HTTP Request.db-live-test | 11f. Assign both custom roles (replaces the whole set)" />
+        <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3 (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
+        <item itemvalue="HTTP Request.db-live-test | #28" />
       </list>
     </recent_temporary>
   </component>
@@ -397,11 +420,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
           <line>109</line>
           <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
