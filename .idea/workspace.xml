@@ -62,61 +62,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.814962300762319" />
-      <entry key="MS500" value="3.1799245177523634" />
-      <entry key="S2" value="4.043883514884925" />
-      <entry key="S5" value="7.510232788313064" />
-      <entry key="S10" value="13.471472695043266" />
-      <entry key="S30" value="23.34704974251538" />
-      <entry key="S60" value="29.56915412944695" />
-      <entry key="M2" value="44.59029506135474" />
-      <entry key="M5" value="84.91628167412128" />
-      <entry key="M10" value="124.80507366962486" />
-      <entry key="M15" value="153.8017464499448" />
-      <entry key="M30" value="227.86461166242933" />
-      <entry key="H1" value="349.66455560646733" />
-      <entry key="H2" value="497.8874104974583" />
-      <entry key="H4" value="624.47352972074" />
-      <entry key="D1" value="775.9656277500944" />
-      <entry key="W1" value="807.5504004010554" />
+      <entry key="MS100" value="1.923498869677192" />
+      <entry key="MS500" value="4.255635712027528" />
+      <entry key="S2" value="11.970376985919017" />
+      <entry key="S5" value="28.732555154483038" />
+      <entry key="S10" value="50.07155761767018" />
+      <entry key="S30" value="89.40313701394429" />
+      <entry key="S60" value="107.89232922991398" />
+      <entry key="M2" value="120.1380617945258" />
+      <entry key="M5" value="143.29704905176993" />
+      <entry key="M10" value="184.25072036007566" />
+      <entry key="M15" value="219.19787286208282" />
+      <entry key="M30" value="304.51754812611847" />
+      <entry key="H1" value="436.7376328774758" />
+      <entry key="H2" value="597.1673480897372" />
+      <entry key="H4" value="735.9925774278344" />
+      <entry key="D1" value="904.4574900284621" />
+      <entry key="W1" value="939.8786251127119" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="1.5E-323" />
-      <entry key="S2" value="1.9354609610784222E-81" />
-      <entry key="S5" value="5.205668926287243E-33" />
-      <entry key="S10" value="7.659629230183884E-17" />
-      <entry key="S30" value="5.822415944185277E-6" />
-      <entry key="S60" value="0.0033289199205551617" />
-      <entry key="M2" value="0.08106883832031685" />
-      <entry key="M5" value="0.5540889805729767" />
-      <entry key="M10" value="1.0804747185465884" />
-      <entry key="M15" value="1.4959052196769067" />
-      <entry key="M30" value="3.118414498591565" />
-      <entry key="H1" value="6.2770128783630685" />
-      <entry key="H2" value="9.766673880476207" />
-      <entry key="H4" value="12.428049514123712" />
-      <entry key="D1" value="15.328702139648277" />
-      <entry key="W1" value="15.902046031325268" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="2.918727555884827E-190" />
+      <entry key="S5" value="1.541133287663564E-76" />
+      <entry key="S10" value="1.3179216012489459E-38" />
+      <entry key="S30" value="3.2384000959093505E-13" />
+      <entry key="S60" value="7.850855538817049E-7" />
+      <entry key="M2" value="0.001244975396426154" />
+      <entry key="M5" value="0.10425628388183719" />
+      <entry key="M10" value="0.46867951660568036" />
+      <entry key="M15" value="0.8571924162692889" />
+      <entry key="M30" value="2.3605921699032835" />
+      <entry key="H1" value="5.461306871932838" />
+      <entry key="H2" value="9.110001882755348" />
+      <entry key="H4" value="12.00297399004734" />
+      <entry key="D1" value="15.240049127251448" />
+      <entry key="W1" value="15.888874930896653" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.7539187325985803" />
-      <entry key="MS500" value="3.1289100807399652" />
-      <entry key="S2" value="4.024506724675304" />
-      <entry key="S5" value="7.498307789993377" />
-      <entry key="S10" value="13.462133481939132" />
-      <entry key="S30" value="23.34203739931818" />
-      <entry key="S60" value="29.56924078869807" />
-      <entry key="M2" value="44.66726860334667" />
-      <entry key="M5" value="85.46335039242423" />
-      <entry key="M10" value="125.8787958629709" />
-      <entry key="M15" value="155.29063885322716" />
-      <entry key="M30" value="230.97212563355177" />
-      <entry key="H1" value="355.9276847645668" />
-      <entry key="H2" value="507.64222626896907" />
-      <entry key="H4" value="636.8937327591086" />
-      <entry key="D1" value="791.2926693521997" />
-      <entry key="W1" value="823.4521991881003" />
+      <entry key="MS100" value="1.8466245323949073" />
+      <entry key="MS500" value="4.199144121616956" />
+      <entry key="S2" value="11.940547198248414" />
+      <entry key="S5" value="28.710485988605935" />
+      <entry key="S10" value="50.053875219800034" />
+      <entry key="S30" value="89.39260699616736" />
+      <entry key="S60" value="107.88587177279491" />
+      <entry key="M2" value="120.13562898938777" />
+      <entry key="M5" value="143.39843143122616" />
+      <entry key="M10" value="184.71567513620832" />
+      <entry key="M15" value="220.0505119248034" />
+      <entry key="M30" value="306.86961913604176" />
+      <entry key="H1" value="442.1867248647279" />
+      <entry key="H2" value="606.2662213289977" />
+      <entry key="H4" value="747.9879393662084" />
+      <entry key="D1" value="919.6958825588989" />
+      <entry key="W1" value="955.7672521950026" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -402,12 +402,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>109</line>
+          <line>110</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>104</line>
+          <line>105</line>
           <properties class="app.services.routeSecurity.SecurityController">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />

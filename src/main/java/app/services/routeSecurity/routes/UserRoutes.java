@@ -68,8 +68,10 @@ public class UserRoutes {
     }
 
     /**
-     * Admin-only creation of a user with a name, a unique email and exactly one role.
-     * The user always lands in the calling administrator's tenant, whatever the body says.
+     * Admin-only creation of a user with a name, a unique email, exactly one system role
+     * (ADMIN or USER) and optionally some of the company's custom roles (customRoleIds).
+     * The user always lands in the calling administrator's tenant, whatever the body says,
+     * and custom roles from any other tenant are refused.
      */
     public void createUser(Context ctx) {
         UserDTO caller = ctx.attribute("user");
@@ -79,12 +81,12 @@ public class UserRoutes {
         UserDTO dto = ctx.bodyValidator(UserDTO.class).get();
         Set<String> roles = dto.getRoles();
         if (roles == null || roles.size() != 1) {
-            throw new ApiException(400, "Exactly one role is required");
+            throw new ApiException(400, "Exactly one system role (ADMIN or USER) is required");
         }
 
         try {
             UserService.CreatedUser created = userService.createUserWithRole(
-                    dto.getName(), dto.getEmail(), roles.iterator().next(), caller.getTenantId());
+                    dto.getName(), dto.getEmail(), roles.iterator().next(), caller.getTenantId(), dto.getCustomRoleIds());
             ctx.status(201).json(Map.of(
                     "user", userMapper.toDto(created.user()),
                     "temporaryPassword", created.temporaryPassword()));

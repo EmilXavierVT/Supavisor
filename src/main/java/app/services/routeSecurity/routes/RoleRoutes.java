@@ -21,15 +21,14 @@ public class RoleRoutes {
 
     protected void getRolesByTenant(Context ctx) {
         Long tenantId = Long.parseLong(ctx.pathParam("tenantId"));
+        if (!tenantId.equals(callerTenantId(ctx))) {
+            throw new ApiException(403, "You can only see your own company's roles");
+        }
         ctx.json(roleService.getRolesByTenant(tenantId));
     }
 
     protected void createRole(Context ctx) {
-        UserDTO user = ctx.attribute("user");
-        if (user == null || user.getTenantId() == null) {
-            throw new ApiException(401, "Not authenticated or tenantId missing from token");
-        }
-        Long tenantId = user.getTenantId();
+        Long tenantId = callerTenantId(ctx);
 
         RoleDTO roleDTO = ctx.bodyAsClass(RoleDTO.class);
         ctx.json(roleService.createRole(roleDTO, tenantId));
@@ -37,8 +36,16 @@ public class RoleRoutes {
 
     protected void deleteRole(Context ctx) {
         Long roleId = Long.parseLong(ctx.pathParam("id"));
-        Long tenantId = Long.parseLong(ctx.queryParam("tenantId"));
-        roleService.deleteRole(roleId, tenantId);
+        // the tenant comes from the token, never from the request, so one company cannot delete another's roles
+        roleService.deleteRole(roleId, callerTenantId(ctx));
         ctx.status(204);
+    }
+
+    private Long callerTenantId(Context ctx) {
+        UserDTO user = ctx.attribute("user");
+        if (user == null || user.getTenantId() == null) {
+            throw new ApiException(401, "Not authenticated or tenantId missing from token");
+        }
+        return user.getTenantId();
     }
 }

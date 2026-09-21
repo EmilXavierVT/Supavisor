@@ -15,9 +15,8 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 public class UserService {
-    /** Roles an administrator may hand out when creating a user. */
-    public static final Set<String> ASSIGNABLE_ROLES =
-            Set.of("ADMIN", "EMPLOYEE", "CLEANING_STAFF", "CLEANING_CLIENT", "SUBSCRIBER", "FLEX");
+    /** The system roles: what a user may do in the app. Company-specific roles (kitchen, cleaning ...) are custom roles. */
+    public static final Set<String> SYSTEM_ROLES = Set.of("ADMIN", "USER");
 
     private static final Pattern EMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$");
@@ -59,10 +58,12 @@ public class UserService {
     }
 
     /**
-     * Creates an active user in the given tenant with a single role and a generated
-     * temporary password. The email has to be well formed and not already in use.
+     * Creates an active user in the given tenant with one system role, any number of the
+     * tenant's custom roles (null or empty for none) and a generated temporary password.
+     * The email has to be well formed and not already in use.
      */
-    public CreatedUser createUserWithRole(String name, String email, String role, Long tenantId) throws ValidationException {
+    public CreatedUser createUserWithRole(String name, String email, String role, Long tenantId,
+                                          Set<Long> customRoleIds) throws ValidationException {
         String cleanName = name == null ? "" : name.trim();
         String cleanEmail = email == null ? "" : email.trim();
         String cleanRole = role == null ? "" : role.trim().toUpperCase(Locale.ROOT);
@@ -76,8 +77,8 @@ public class UserService {
         if (cleanEmail.length() > MAX_EMAIL_LENGTH || !EMAIL_PATTERN.matcher(cleanEmail).matches()) {
             throw new ValidationException("A valid email is required");
         }
-        if (!ASSIGNABLE_ROLES.contains(cleanRole)) {
-            throw new ValidationException("Role must be one of: " + String.join(", ", new TreeSet<>(ASSIGNABLE_ROLES)));
+        if (!SYSTEM_ROLES.contains(cleanRole)) {
+            throw new ValidationException("Role must be one of: " + String.join(", ", new TreeSet<>(SYSTEM_ROLES)));
         }
         if (tenantId == null) {
             throw new ValidationException("The administrator does not belong to a tenant");
@@ -90,7 +91,7 @@ public class UserService {
         User user = new User(null, cleanEmail, temporaryPassword, null, tenantId, true, Set.of(cleanRole));
         user.setName(cleanName);
         try {
-            return new CreatedUser(userDAO.create(user), temporaryPassword);
+            return new CreatedUser(userDAO.create(user, customRoleIds), temporaryPassword);
         } catch (PersistenceException e) {
             // lost a race against another request creating the same email
             if (userDAO.getByEmail(cleanEmail) != null) {

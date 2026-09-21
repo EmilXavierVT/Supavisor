@@ -54,12 +54,34 @@ public class UserDAO implements ISecurityDAO {
     public User create(User user) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            if (user.getPassword() != null && !user.getPassword().startsWith("$2")) {
-                user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-            }
+            hashPasswordIfPlain(user);
             User saved = em.merge(user);
             em.getTransaction().commit();
             return saved;
+        }
+    }
+
+    /**
+     * Like {@link #create(User)}, but also assigns the given custom roles, which must all
+     * belong to the user's tenant. The user and the assignments are saved together, so a
+     * bad role id leaves nothing behind.
+     */
+    public User create(User user, Set<Long> customRoleIds) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            Set<Role> resolved = resolveRoles(em, customRoleIds, user.getTenantId());
+
+            em.getTransaction().begin();
+            hashPasswordIfPlain(user);
+            user.setCustomRoles(resolved);
+            User saved = em.merge(user);
+            em.getTransaction().commit();
+            return saved;
+        }
+    }
+
+    private void hashPasswordIfPlain(User user) {
+        if (user.getPassword() != null && !user.getPassword().startsWith("$2")) {
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         }
     }
 

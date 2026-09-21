@@ -1,6 +1,7 @@
 package app.services.entityServices;
 
 import app.dao.IRoleDAO;
+import app.exceptions.ApiException;
 import app.entities.Role;
 import app.entities.Tenant;
 import app.services.dtoConverter.RoleMapper;
@@ -29,14 +30,23 @@ public class RoleService {
     }
 
     public RoleDTO createRole(RoleDTO roleDTO, Long tenantId) {
+        String roleName = roleDTO.getRoleName() == null ? "" : roleDTO.getRoleName().trim();
+        if (roleName.isEmpty()) {
+            throw new ApiException(400, "Role name is required");
+        }
+        if (roleName.length() > 255) {
+            throw new ApiException(400, "Role name must be at most 255 characters");
+        }
+        roleDTO.setRoleName(roleName);
+
         Tenant tenant = entityManager.getReference(Tenant.class, tenantId);
         
         // Check uniqueness
         boolean exists = roleDAO.findByTenantId(tenantId).stream()
-                .anyMatch(r -> r.getRoleName().equalsIgnoreCase(roleDTO.getRoleName()));
+                .anyMatch(r -> r.getRoleName().equalsIgnoreCase(roleName));
         
         if (exists) {
-            throw new RuntimeException("Role name already exists for this tenant");
+            throw new ApiException(409, "A role with this name already exists");
         }
 
         Role role = roleMapper.toEntity(roleDTO, tenant);
@@ -49,7 +59,7 @@ public class RoleService {
             if (role.getTenant().getId().equals(tenantId)) {
                 roleDAO.delete(roleId);
             } else {
-                throw new RuntimeException("Role does not belong to this tenant");
+                throw new ApiException(403, "Role does not belong to this tenant");
             }
         });
     }
