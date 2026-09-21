@@ -22,6 +22,7 @@ public class UserMapper {
                 null,
                 user.getPhoneNumber(),
                 user.getTenantId(),
+                user.getIsActive(),
                 new HashSet<>(user.getRoles())
         );
         dto.setCustomRoles(user.getCustomRoles().stream()
@@ -38,6 +39,7 @@ public class UserMapper {
                 dto.getPassword(),
                 dto.getPhoneNumber(),
                 dto.getTenantId(),
+                dto.getIsActive(),
                 dto.getRoles() == null ? new HashSet<>() : new HashSet<>(dto.getRoles())
         );
     }

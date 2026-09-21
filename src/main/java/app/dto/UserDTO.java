@@ -11,13 +11,14 @@ public class UserDTO {
     private Long tenantId;
     private Set<String> roles = new HashSet<>();
     private Set<RoleDTO> customRoles = new HashSet<>();
+    private boolean isActive;
     // null = leave assignments untouched, empty set = clear them all
     private Set<Long> customRoleIds;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String email, String password, String phoneNumber, Long tenantId, Set<String> roles) {
+    public UserDTO(Long id, String email, String password, String phoneNumber, Long tenantId, boolean isActive, Set<String> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -26,9 +27,6 @@ public class UserDTO {
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
     }
 
-    public UserDTO(Long id, String email, String password, String phoneNumber, Set<String> roles) {
-        this(id, email, password, phoneNumber, null, roles);
-    }
 
     public UserDTO(String email, Set<String> roles) {
         this.email = email;
@@ -91,6 +89,12 @@ public class UserDTO {
         this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
     }
 
+    public boolean getIsActive() {
+        return isActive;
+    }
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
     public Set<Long> getCustomRoleIds() {
         return customRoleIds;
     }

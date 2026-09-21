@@ -52,6 +52,16 @@ public class User {
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
     }
 
+    public User(Long id, String email, String password, String phoneNumber, Long tenantId, boolean isActive, Set<String> roles) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.tenantId = tenantId;
+        this.isActive = isActive;
+        this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
     public User(Long id, String email, String password, String phoneNumber, Long tenantId, Set<String> roles, Set<Role> customRoles) {
         this(id, email, password, phoneNumber, tenantId, roles);
         this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);

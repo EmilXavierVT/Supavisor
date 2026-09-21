@@ -5,22 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/db-live-test.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/db-live-test.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/http-client.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/requests/http-client.env.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/entities/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/UserMapper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="add-roles" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -78,61 +65,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.000005380781429" />
-      <entry key="S5" value="1.0262606878700093" />
-      <entry key="S10" value="1.4878456090478902" />
-      <entry key="S30" value="4.883828832048065" />
-      <entry key="S60" value="7.899287351163373" />
-      <entry key="M2" value="10.63308671711655" />
-      <entry key="M5" value="15.914433102571142" />
-      <entry key="M10" value="29.443221131510896" />
-      <entry key="M15" value="47.00086411729209" />
-      <entry key="M30" value="105.93619446757292" />
-      <entry key="H1" value="197.40004710875561" />
-      <entry key="H2" value="287.55295820698694" />
-      <entry key="H4" value="352.67510359314934" />
-      <entry key="D1" value="421.36948778141374" />
-      <entry key="W1" value="434.7248165026391" />
+      <entry key="MS100" value="1.0000075767086076" />
+      <entry key="MS500" value="1.101364616478721" />
+      <entry key="S2" value="1.8413937215265537" />
+      <entry key="S5" value="2.4136394621445056" />
+      <entry key="S10" value="2.9025281552382105" />
+      <entry key="S30" value="5.1679353871437135" />
+      <entry key="S60" value="8.113811432180785" />
+      <entry key="M2" value="12.568637779777967" />
+      <entry key="M5" value="21.972559867663705" />
+      <entry key="M10" value="36.274666742042484" />
+      <entry key="M15" value="53.027477203157126" />
+      <entry key="M30" value="110.07551738866829" />
+      <entry key="H1" value="202.52893478245022" />
+      <entry key="H2" value="296.8847397487485" />
+      <entry key="H4" value="366.4784939036806" />
+      <entry key="D1" value="440.92879623476296" />
+      <entry key="W1" value="455.51227716846796" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="1.7672966767414598E-181" />
-      <entry key="S5" value="6.799822822572984E-73" />
-      <entry key="S10" value="1.1405226468379776E-36" />
-      <entry key="S30" value="1.649999278341266E-12" />
-      <entry key="S60" value="1.8188999195816773E-6" />
-      <entry key="M2" value="0.0020340232018155593" />
-      <entry key="M5" value="0.2074357019346812" />
-      <entry key="M10" value="1.2608449289452122" />
-      <entry key="M15" value="2.414804688649598" />
-      <entry key="M30" value="4.788140348890028" />
-      <entry key="H1" value="6.863870438526146" />
-      <entry key="H2" value="8.265971083226649" />
-      <entry key="H4" value="9.086226547686199" />
-      <entry key="D1" value="9.84069865400621" />
-      <entry key="W1" value="9.977063935018124" />
+      <entry key="MS500" value="2.063010160700356E-73" />
+      <entry key="S2" value="6.739463750822683E-19" />
+      <entry key="S5" value="5.388321837739044E-8" />
+      <entry key="S10" value="2.327759200540148E-4" />
+      <entry key="S30" value="0.07122170641580797" />
+      <entry key="S60" value="0.3863427711597928" />
+      <entry key="M2" value="1.1015265134779508" />
+      <entry key="M5" value="2.389294734416676" />
+      <entry key="M10" value="3.7992736419065873" />
+      <entry key="M15" value="5.0620560444309275" />
+      <entry key="M30" value="7.711892215791897" />
+      <entry key="H1" value="10.145093619692268" />
+      <entry key="H2" value="11.84434689997924" />
+      <entry key="H4" value="12.857014703872556" />
+      <entry key="D1" value="13.799656791145647" />
+      <entry key="W1" value="13.971127218936667" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.004394759705815663" />
-      <entry key="MS500" value="0.3377435211339094" />
-      <entry key="S2" value="0.7623415410668953" />
-      <entry key="S5" value="0.9223424103605515" />
-      <entry key="S10" value="1.4230221045354854" />
-      <entry key="S30" value="4.820097002775051" />
-      <entry key="S60" value="7.8444747297498765" />
-      <entry key="M2" value="10.597544623745884" />
-      <entry key="M5" value="16.097394591429346" />
-      <entry key="M10" value="30.672443115424386" />
-      <entry key="M15" value="49.37969011847542" />
-      <entry key="M30" value="110.69061617644402" />
-      <entry key="H1" value="204.24012061615667" />
-      <entry key="H2" value="295.80468623861566" />
-      <entry key="H4" value="361.7535228753659" />
-      <entry key="D1" value="431.20878009459335" />
-      <entry key="W1" value="444.7016768170019" />
+      <entry key="MS100" value="0.002743143664255443" />
+      <entry key="MS500" value="0.3479534814897472" />
+      <entry key="S2" value="1.3957268891052583" />
+      <entry key="S5" value="2.1600890076033648" />
+      <entry key="S10" value="2.749961761171896" />
+      <entry key="S30" value="5.147790595890252" />
+      <entry key="S60" value="8.412914080055623" />
+      <entry key="M2" value="13.592575297871642" />
+      <entry key="M5" value="24.30725698913823" />
+      <entry key="M10" value="40.02781590599078" />
+      <entry key="M15" value="58.0446850805058" />
+      <entry key="M30" value="117.74875401456637" />
+      <entry key="H1" value="212.64694288630986" />
+      <entry key="H2" value="308.7128002788885" />
+      <entry key="H4" value="379.32654377078825" />
+      <entry key="D1" value="454.7268310455614" />
+      <entry key="W1" value="469.4831693488003" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -186,7 +173,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "add-roles",
+    "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -219,10 +206,6 @@
           <value>
             <map>
               <entry key="db-live-test | #28" value="STOPPED" />
-              <entry key="db-live-test | 2. Register a user in the live database#1" value="STOPPED" />
-              <entry key="db-live-test | 2. Register a user in the live database#1 (3)" value="STOPPED" />
-              <entry key="db-live-test | 2. Register a user in the live database#2 (1)" value="STOPPED" />
-              <entry key="db-live-test | 2. Register a user in the live database#3" value="STOPPED" />
             </map>
           </value>
         </entry>
