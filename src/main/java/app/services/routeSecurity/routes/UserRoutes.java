@@ -164,10 +164,10 @@ public class UserRoutes {
         ctx.json(userMapper.toDto(user));
     }
 
-    public void deactivateEmployee( Context ctx) {
+    public void reversActivation( Context ctx) {
         long employeeId = ctx.pathParamAsClass("id", Long.class).get();
         try{
-        userService.deactivateUser(employeeId);
+        userService.reversActivation(employeeId);
             respondWithUser(ctx, userService.getById(employeeId));
             ctx.status(200);
             ctx.json("User deactivated successfully");

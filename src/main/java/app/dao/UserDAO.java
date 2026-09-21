@@ -235,10 +235,10 @@ public class UserDAO implements ISecurityDAO {
         }
     }
 
-    public User deactivateUser(long userID) {
+    public User reversActivation(long userID) {
         try (EntityManager em = emf.createEntityManager()) {
             User user = em.find(User.class, userID);
-            user.setIsActive(false);
+            user.reversActivation();
             em.getTransaction().begin();
             em.merge(user);
             em.getTransaction().commit();

@@ -83,7 +83,7 @@ public class UserService {
         return userDAO.setRole(id, "FLEX");
     }
 
-    public User deactivateUser(long userID) {
-        return userDAO.deactivateUser(userID);
+    public User reversActivation(long userID) {
+        return userDAO.reversActivation(userID);
     }
 }
