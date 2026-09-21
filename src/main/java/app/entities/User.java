@@ -148,6 +148,10 @@ public class User {
         return isActive;
     }
 
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
     public void reversActivation() {
         if (isActive) isActive = false;
         else if (!isActive) isActive = true; {
