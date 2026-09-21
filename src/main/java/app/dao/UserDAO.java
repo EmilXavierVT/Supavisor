@@ -1,5 +1,6 @@
 package app.dao;
 
+import app.entities.Role;
 import app.entities.User;
 import app.exceptions.ValidationException;
 import jakarta.persistence.EntityManager;
@@ -7,8 +8,10 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class UserDAO implements ISecurityDAO {
     private final EntityManagerFactory emf;
@@ -51,12 +54,34 @@ public class UserDAO implements ISecurityDAO {
     public User create(User user) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            if (user.getPassword() != null && !user.getPassword().startsWith("$2")) {
-                user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-            }
+            hashPasswordIfPlain(user);
             User saved = em.merge(user);
             em.getTransaction().commit();
             return saved;
+        }
+    }
+
+    /**
+     * Like {@link #create(User)}, but also assigns the given custom roles, which must all
+     * belong to the user's tenant. The user and the assignments are saved together, so a
+     * bad role id leaves nothing behind.
+     */
+    public User create(User user, Set<Long> customRoleIds) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            Set<Role> resolved = resolveRoles(em, customRoleIds, user.getTenantId());
+
+            em.getTransaction().begin();
+            hashPasswordIfPlain(user);
+            user.setCustomRoles(resolved);
+            User saved = em.merge(user);
+            em.getTransaction().commit();
+            return saved;
+        }
+    }
+
+    private void hashPasswordIfPlain(User user) {
+        if (user.getPassword() != null && !user.getPassword().startsWith("$2")) {
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         }
     }
 
@@ -66,15 +91,49 @@ public class UserDAO implements ISecurityDAO {
             if (existing == null) return null;
 
             em.getTransaction().begin();
-            existing.setEmail(user.getEmail());
-            existing.setPhoneNumber(user.getPhoneNumber());
-            existing.setTenantId(user.getTenantId());
-            if (user.getPassword() != null && !user.getPassword().isBlank()) {
-                existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-            }
-            existing.setRoles(user.getRoles());
+            applyFields(existing, user);
             em.getTransaction().commit();
             return existing;
+        }
+    }
+
+    /**
+     * Like {@link #update(User)}, but also replaces the user's custom roles when
+     * {@code customRoleIds} is non-null. {@code null} leaves the assignments untouched,
+     * an empty set clears them.
+     */
+    public User update(User user, Set<Long> customRoleIds) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User existing = em.find(User.class, user.getId());
+            if (existing == null) return null;
+
+            Set<Role> resolved = customRoleIds == null
+                    ? null
+                    : resolveRoles(em, customRoleIds, user.getTenantId());
+
+            em.getTransaction().begin();
+            applyFields(existing, user);
+            if (resolved != null) {
+                existing.setCustomRoles(resolved);
+            }
+            em.getTransaction().commit();
+            return existing;
+        }
+    }
+
+    private void applyFields(User existing, User user) {
+        existing.setEmail(user.getEmail());
+        if (user.getName() != null) {
+            existing.setName(user.getName());
+        }
+        existing.setPhoneNumber(user.getPhoneNumber());
+        existing.setTenantId(user.getTenantId());
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+        }
+        // an update that carries no roles keeps the current ones - a user must always have at least one
+        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+            existing.setRoles(user.getRoles());
         }
     }
 
@@ -102,13 +161,74 @@ public class UserDAO implements ISecurityDAO {
         }
     }
 
+    public User setCustomRoles(Long id, Set<Long> roleIds) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, id);
+            if (user == null) return null;
+
+            Set<Role> resolved = resolveRoles(em, roleIds, user.getTenantId());
+
+            em.getTransaction().begin();
+            user.setCustomRoles(resolved);
+            em.getTransaction().commit();
+            return user;
+        }
+    }
+
+    public User addCustomRole(Long id, Long roleId) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, id);
+            if (user == null) return null;
+
+            Role role = resolveRoles(em, Set.of(roleId), user.getTenantId()).iterator().next();
+
+            em.getTransaction().begin();
+            user.addCustomRole(role);
+            em.getTransaction().commit();
+            return user;
+        }
+    }
+
+    public User removeCustomRole(Long id, Long roleId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, id);
+            if (user == null) return null;
+
+            em.getTransaction().begin();
+            user.getCustomRoles().removeIf(role -> role.getId().equals(roleId));
+            em.getTransaction().commit();
+            return user;
+        }
+    }
+
+    private Set<Role> resolveRoles(EntityManager em, Set<Long> ids, Long tenantId) throws ValidationException {
+        Set<Role> roles = new HashSet<>();
+        if (ids == null) return roles;
+        for (Long roleId : ids) {
+            Role role = roleId == null ? null : em.find(Role.class, roleId);
+            if (role == null) {
+                throw new ValidationException("Role " + roleId + " does not exist");
+            }
+            if (tenantId == null || !tenantId.equals(role.getTenant().getId())) {
+                throw new ValidationException("Role " + roleId + " does not belong to the user's tenant");
+            }
+            roles.add(role);
+        }
+        return roles;
+    }
+
     @Override
     public User createUser(String email, String password) throws ValidationException {
+        return createUser(email, password, null, null);
+    }
+
+    @Override
+    public User createUser(String email, String password, String phoneNumber, Long tenantId) throws ValidationException {
         validateCredentials(email, password);
         if (getByEmail(email) != null) {
             throw new ValidationException("User already exists");
         }
-        return create(new User(null, email, password, null, java.util.Set.of("USER")));
+        return create(new User(null, email, password, phoneNumber, tenantId, java.util.Set.of("USER")));
     }
 
     @Override
@@ -141,5 +261,18 @@ public class UserDAO implements ISecurityDAO {
         if (email == null || email.isBlank() || password == null || password.isBlank()) {
             throw new ValidationException("Email and password are required");
         }
+    }
+
+    public User reversActivation(long userID) {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, userID);
+            user.reversActivation();
+            em.getTransaction().begin();
+            em.merge(user);
+            em.getTransaction().commit();
+            return user;
+        } catch (Exception e) {
+        }
+        return null;
     }
 }

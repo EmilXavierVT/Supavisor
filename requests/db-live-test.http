@@ -1,8 +1,12 @@
+
+
 @baseUrl = http://localhost:7070/api
 @email = db-live-{{$timestamp}}@example.com
 @password = secret-password
 @newPassword = changed-secret-password
 @phoneNumber = 12345678
+
+
 
 ### 1. Check app is running
 GET {{baseUrl}}/health
@@ -15,7 +19,36 @@ Accept: application/json
 
 {
   "email": "frededv@test.dk",
-  "password": "1234"
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+### 2. Register a user in the live database
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+### 2. Register a user in the live database
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
 }
 
 > {% client.global.set("db_live_user_id", response.body.id); %}
@@ -100,6 +133,114 @@ Accept: application/json
 
 > {% client.global.set("db_live_admin_token", response.body.token); %}
 
+### 11a. Create a tenant to attach the test user to
+POST {{baseUrl}}/tenant/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+{
+  "name": "db-live-tenant-{{$timestamp}}"
+}
+
+> {% client.global.set("db_live_tenant_id", response.body.id); %}
+
+### 11b. Put the test user in that tenant (keeps ADMIN)
+PUT {{baseUrl}}/user/{{db_live_user_id}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+{
+  "email": "{{email}}",
+  "phoneNumber": "{{phoneNumber}}",
+  "tenantId": {{db_live_tenant_id}},
+  "roles": ["ADMIN"]
+}
+
+### 11c. Login again so the token carries the real tenantId
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{newPassword}}"
+}
+
+> {% client.global.set("db_live_admin_token", response.body.token); %}
+
+### 11d. Create custom role "Cleaning"
+POST {{baseUrl}}/role/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+{
+  "roleName": "Cleaning"
+}
+
+> {% client.global.set("db_live_role_cleaning_id", response.body.id); %}
+
+### 11e. Create custom role "Kitchen"
+POST {{baseUrl}}/role/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+{
+  "roleName": "Kitchen"
+}
+
+> {% client.global.set("db_live_role_kitchen_id", response.body.id); %}
+
+### 11f. Assign both custom roles (replaces the whole set)
+PUT {{baseUrl}}/user/{{db_live_user_id}}/custom-roles
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+{
+  "customRoleIds": [{{db_live_role_cleaning_id}}, {{db_live_role_kitchen_id}}]
+}
+
+### 11g. Read back: customRoles lists both, roles still ["ADMIN"]
+GET {{baseUrl}}/user/{{db_live_user_id}}
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+### 11h. PUT without customRoleIds must leave assignments unchanged
+PUT {{baseUrl}}/user/{{db_live_user_id}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+{
+  "email": "{{email}}",
+  "phoneNumber": "{{phoneNumber}}",
+  "tenantId": {{db_live_tenant_id}},
+  "roles": ["ADMIN"]
+}
+
+### 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first)
+DELETE {{baseUrl}}/role/{{db_live_role_cleaning_id}}?tenantId={{db_live_tenant_id}}
+Authorization: Bearer {{db_live_admin_token}}
+
+### 11j. Read back: only Kitchen remains
+GET {{baseUrl}}/user/{{db_live_user_id}}
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+### 11k. Unassign Kitchen, then re-add it
+DELETE {{baseUrl}}/user/{{db_live_user_id}}/custom-roles/{{db_live_role_kitchen_id}}
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
+###
+POST {{baseUrl}}/user/{{db_live_user_id}}/custom-roles/{{db_live_role_kitchen_id}}
+Accept: application/json
+Authorization: Bearer {{db_live_admin_token}}
+
 ### 12. Delete the live-test row
 DELETE {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
@@ -109,3 +250,8 @@ Authorization: Bearer {{db_live_admin_token}}
 GET {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
 Authorization: Bearer {{db_live_admin_token}}
+
+###
+PUT {{baseUrl}}/user/deactivate/2
+Authorization: Bearer {{db_live_admin_token}}
+

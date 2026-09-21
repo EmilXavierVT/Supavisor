@@ -1,2 +1,4 @@
 .agents
 config.*
+.idea
+.idea/workspace.xml

@@ -16,6 +16,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String name;
+
     @Column(nullable = false)
     private String password;
 
@@ -29,6 +31,16 @@ public class User {
     @Column(name = "role", nullable = false)
     private Set<String> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_custom_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> customRoles = new HashSet<>();
+
+    @Column(name = "is_active")
+    private boolean isActive;
+
+
     public User() {
 
     }
@@ -40,6 +52,21 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.tenantId = tenantId;
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
+    public User(Long id, String email, String password, String phoneNumber, Long tenantId, boolean isActive, Set<String> roles) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.tenantId = tenantId;
+        this.isActive = isActive;
+        this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
+    public User(Long id, String email, String password, String phoneNumber, Long tenantId, Set<String> roles, Set<Role> customRoles) {
+        this(id, email, password, phoneNumber, tenantId, roles);
+        this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
     }
 
     public User(Long id, String email, String password, String phoneNumber, Set<String> roles) {
@@ -60,6 +87,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -94,6 +129,22 @@ public class User {
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
     }
 
+    public Set<Role> getCustomRoles() {
+        return customRoles;
+    }
+
+    public void setCustomRoles(Set<Role> customRoles) {
+        this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
+    }
+
+    public void addCustomRole(Role role) {
+        customRoles.add(role);
+    }
+
+    public void removeCustomRole(Role role) {
+        customRoles.remove(role);
+    }
+
     public Set<String> getRolesAsStrings() {
         return roles;
     }
@@ -101,5 +152,19 @@ public class User {
     public void replaceRole(String role) {
         roles.clear();
         roles.add(role);
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public void reversActivation() {
+        if (isActive) isActive = false;
+        else if (!isActive) isActive = true; {
+        }
     }
 }

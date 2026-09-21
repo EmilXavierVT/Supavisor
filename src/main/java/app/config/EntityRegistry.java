@@ -11,5 +11,6 @@ final class EntityRegistry {
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Tenant.class);
         configuration.addAnnotatedClass(AssignmentType.class);
+        configuration.addAnnotatedClass(Role.class);
     }
 }

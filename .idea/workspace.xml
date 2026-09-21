@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,7 +25,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="add-roles" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,61 +62,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.8951392073002595" />
-      <entry key="MS500" value="3.1811401494421294" />
-      <entry key="S2" value="3.7589104530019664" />
-      <entry key="S5" value="3.9001834595279936" />
-      <entry key="S10" value="3.9495085053976835" />
-      <entry key="S30" value="3.9836005023891903" />
-      <entry key="S60" value="4.133604424279472" />
-      <entry key="M2" value="6.302612225727918" />
-      <entry key="M5" value="21.942080289996202" />
-      <entry key="M10" value="64.81816699109302" />
-      <entry key="M15" value="112.30357595349057" />
-      <entry key="M30" value="235.14813794076295" />
-      <entry key="H1" value="410.8139863142074" />
-      <entry key="H2" value="617.0082078161686" />
-      <entry key="H4" value="798.0559171720561" />
-      <entry key="D1" value="1023.4264975421288" />
-      <entry key="W1" value="1071.6391871848718" />
+      <entry key="MS100" value="2.037522246373867" />
+      <entry key="MS500" value="3.962430308966884" />
+      <entry key="S2" value="11.256106869168164" />
+      <entry key="S5" value="23.36188267654868" />
+      <entry key="S10" value="37.69996030681641" />
+      <entry key="S30" value="63.64527038533207" />
+      <entry key="S60" value="76.32746388982034" />
+      <entry key="M2" value="87.61311572939314" />
+      <entry key="M5" value="123.86838030006514" />
+      <entry key="M10" value="181.60433947737496" />
+      <entry key="M15" value="228.24016024187253" />
+      <entry key="M30" value="332.83914317963183" />
+      <entry key="H1" value="480.9985988016365" />
+      <entry key="H2" value="656.2140400493065" />
+      <entry key="H4" value="808.15203862138" />
+      <entry key="D1" value="993.9316794951077" />
+      <entry key="W1" value="1033.2054063365792" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="9.491122635098379E-193" />
-      <entry key="S10" value="1.0342565220380396E-96" />
-      <entry key="S30" value="1.386468693576171E-32" />
-      <entry key="S60" value="1.6244515696710305E-16" />
-      <entry key="M2" value="1.790835355568935E-8" />
-      <entry key="M5" value="0.0012057581254050086" />
-      <entry key="M10" value="0.05040283345605917" />
-      <entry key="M15" value="0.193849330569922" />
-      <entry key="M30" value="1.1225713523321428" />
-      <entry key="H1" value="3.7661106591021896" />
-      <entry key="H2" value="7.56513556593045" />
-      <entry key="H4" value="10.93800176436619" />
-      <entry key="D1" value="15.005871426292458" />
-      <entry key="W1" value="15.853764817485002" />
+      <entry key="S2" value="4.5223745096943023E-284" />
+      <entry key="S5" value="4.612213339949443E-114" />
+      <entry key="S10" value="2.2799439451822477E-57" />
+      <entry key="S30" value="1.8044382923227919E-19" />
+      <entry key="S60" value="5.86033916869539E-10" />
+      <entry key="M2" value="3.4014465558071305E-5" />
+      <entry key="M5" value="0.02470036630973539" />
+      <entry key="M10" value="0.22812692676399518" />
+      <entry key="M15" value="0.5304104084505726" />
+      <entry key="M30" value="1.856897027818241" />
+      <entry key="H1" value="4.843730926939754" />
+      <entry key="H2" value="8.579464497640798" />
+      <entry key="H4" value="11.64822423205934" />
+      <entry key="D1" value="15.164037271659794" />
+      <entry key="W1" value="15.877529518572683" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.760327078729999" />
-      <entry key="MS500" value="3.134553498537487" />
-      <entry key="S2" value="3.745203475260401" />
-      <entry key="S5" value="3.894501400019825" />
-      <entry key="S10" value="3.9466327710743085" />
-      <entry key="S30" value="3.9826339556268766" />
-      <entry key="S60" value="4.133105857203356" />
-      <entry key="M2" value="6.302253211761732" />
-      <entry key="M5" value="21.942839194049245" />
-      <entry key="M10" value="64.86773698535953" />
-      <entry key="M15" value="112.49600170847141" />
-      <entry key="M30" value="236.2663785974154" />
-      <entry key="H1" value="414.5715059838798" />
-      <entry key="H2" value="624.5640097046831" />
-      <entry key="H4" value="808.9869338675272" />
-      <entry key="D1" value="1038.430729424095" />
-      <entry key="W1" value="1087.4927034925868" />
+      <entry key="MS100" value="1.9801383265047585" />
+      <entry key="MS500" value="3.9205893806543544" />
+      <entry key="S2" value="11.229609545341868" />
+      <entry key="S5" value="23.34293441618194" />
+      <entry key="S10" value="37.68436852252015" />
+      <entry key="S30" value="63.63540711009701" />
+      <entry key="S60" value="76.32126783169797" />
+      <entry key="M2" value="87.60953700318703" />
+      <entry key="M5" value="123.8908779048757" />
+      <entry key="M10" value="181.8298713527742" />
+      <entry key="M15" value="228.767226950469" />
+      <entry key="M30" value="334.6890717238688" />
+      <entry key="H1" value="485.83136274140793" />
+      <entry key="H2" value="664.7829571514565" />
+      <entry key="H4" value="819.792842313956" />
+      <entry key="D1" value="1009.0940628498547" />
+      <entry key="W1" value="1049.0826873858734" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -172,8 +170,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "11.AdminCheck",
-    "git.auto.fetch.suggestion.counter": "1",
+    "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -198,6 +195,23 @@
       <recent name="$PROJECT_DIR$/src/main/java/app/config" />
       <recent name="$PROJECT_DIR$" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationStatuses">
+      <map>
+        <entry key="HttpClient.HttpRequestRunConfigurationType">
+          <value>
+            <map>
+              <entry key="db-live-test | #28" value="STOPPED" />
+              <entry key="db-live-test | #28 (1)" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#2 (1)" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#3" value="STOPPED" />
+              <entry key="db-live-test | 3. Login and store USER token" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="RunManager" selected="HTTP Request.db-live-test | #28 (1)">
     <configuration default="true" type="Application" factoryName="Application">
@@ -388,12 +402,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>107</line>
+          <line>110</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>102</line>
+          <line>105</line>
           <properties class="app.services.routeSecurity.SecurityController">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />

@@ -27,6 +27,7 @@ public final class HibernateConfig {
 
         // Teaching-friendly default - change to update in production
         props.put("hibernate.hbm2ddl.auto", "update");
+        //props.put("hibernate.hbm2ddl.auto", "drop-and-create");
 
         if (isDeployed()) {
             setDeployedProperties(props);

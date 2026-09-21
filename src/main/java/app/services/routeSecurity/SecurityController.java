@@ -42,7 +42,7 @@ public class SecurityController implements ISecurityController{
     public void register(Context ctx) {
         UserDTO user = ctx.bodyAsClass(UserDTO.class);
         try {
-            User entity = userDAO.createUser(user.getEmail(), user.getPassword());
+            User entity = userDAO.createUser(user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getTenantId());
             ObjectNode node = objectMapper.createObjectNode();
             node.put("msg", "register success")
                     .put("id",entity.getId());
@@ -56,7 +56,10 @@ public class SecurityController implements ISecurityController{
         UserDTO user = ctx.bodyAsClass(UserDTO.class);
         try{
             User userEntity = userDAO.getVerifiedUser(user.getEmail(), user.getPassword());
-            String token = createToken(new UserDTO(userEntity.getEmail(),userEntity.getRolesAsStrings()));
+            UserDTO tokenUser = new UserDTO(userEntity.getEmail(), userEntity.getRolesAsStrings());
+            tokenUser.setTenantId(userEntity.getTenantId());
+            tokenUser.setId(userEntity.getId());
+            String token = createToken(tokenUser);
             ObjectNode node =objectMapper.createObjectNode();
 
             String roles = String.join(",", userEntity.getRolesAsStrings());

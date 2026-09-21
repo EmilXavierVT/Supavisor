@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TokenSecurityTest {
@@ -33,6 +35,38 @@ class TokenSecurityTest {
         String token = createToken(60_000);
 
         assertFalse(tokenSecurity.tokenExpiredWithin(token, 1_800_000));
+    }
+
+    @Test
+    void tenantIdSurvivesTokenRoundTrip() throws Exception {
+        UserDTO user = new UserDTO("user@example.com", Set.of("USER"));
+        user.setTenantId(7L);
+        String token = tokenSecurity.createToken(user, ISSUER, "60000", SECRET_KEY);
+
+        assertEquals(7L, tokenSecurity.getUserWithRolesFromToken(token).getTenantId());
+    }
+
+    @Test
+    void missingTenantIdParsesAsNull() throws Exception {
+        String token = createToken(60_000);
+
+        assertNull(tokenSecurity.getUserWithRolesFromToken(token).getTenantId());
+    }
+
+    @Test
+    void userIdSurvivesTokenRoundTrip() throws Exception {
+        UserDTO user = new UserDTO("user@example.com", Set.of("USER"));
+        user.setId(11L);
+        String token = tokenSecurity.createToken(user, ISSUER, "60000", SECRET_KEY);
+
+        assertEquals(11L, tokenSecurity.getUserWithRolesFromToken(token).getId());
+    }
+
+    @Test
+    void missingUserIdParsesAsNull() throws Exception {
+        String token = createToken(60_000);
+
+        assertNull(tokenSecurity.getUserWithRolesFromToken(token).getId());
     }
 
     private String createToken(long tokenExpireTime) throws Exception {
