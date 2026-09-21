@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:7070/api
-@email = user-test@example.com
-@password = secret-password
-@phoneNumber = 12345678
+@email = frededv@test.dk
+@password = 1234
+@phoneNumber = 25715522
 @userId = 1
 @tenantId = 1
 
@@ -52,7 +52,7 @@ Authorization: Bearer {{auth_token}}
   "email": "{{email}}",
   "password": "{{password}}",
   "phoneNumber": "{{phoneNumber}}",
-  "roles": ["USER"]
+  "roles": ["ADMIN"]
 }
 
 ### Change password

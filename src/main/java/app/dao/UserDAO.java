@@ -191,11 +191,16 @@ public class UserDAO implements ISecurityDAO {
 
     @Override
     public User createUser(String email, String password) throws ValidationException {
+        return createUser(email, password, null, null);
+    }
+
+    @Override
+    public User createUser(String email, String password, String phoneNumber, Long tenantId) throws ValidationException {
         validateCredentials(email, password);
         if (getByEmail(email) != null) {
             throw new ValidationException("User already exists");
         }
-        return create(new User(null, email, password, null, java.util.Set.of("USER")));
+        return create(new User(null, email, password, phoneNumber, tenantId, java.util.Set.of("USER")));
     }
 
     @Override
