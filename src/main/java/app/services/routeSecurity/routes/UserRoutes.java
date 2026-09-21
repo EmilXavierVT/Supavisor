@@ -8,6 +8,7 @@ import app.services.dtoConverter.UserMapper;
 import app.services.entityServices.UserService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +59,7 @@ public class UserRoutes {
         debugLogger.info("Creating user");
         UserDTO dto = ctx.bodyValidator(UserDTO.class).get();
         User user = userMapper.fromDto(dto);
+        user.setIsActive(true);
         User created = userService.create(user);
         ctx.status(201).json(userMapper.toDto(created));
     }
@@ -73,6 +75,7 @@ public class UserRoutes {
         } catch (ValidationException e) {
             throw new ApiException(400, e.getMessage());
         }
+
         if (updated == null) {
             ctx.status(404).result("User not found");
             return;
@@ -161,5 +164,17 @@ public class UserRoutes {
             return;
         }
         ctx.json(userMapper.toDto(user));
+    }
+
+    public void deactivateEmployee( Context ctx) {
+        long employeeId = ctx.pathParamAsClass("id", Long.class).get();
+        try{
+        userService.deactivateUser(employeeId);
+            respondWithUser(ctx, userService.getById(employeeId));
+            ctx.status(200);
+            ctx.json("User deactivated successfully");
+        } catch (Exception e) {
+            ctx.status(404).result("User not found");
+        }
     }
 }

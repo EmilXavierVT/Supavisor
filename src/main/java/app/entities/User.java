@@ -35,6 +35,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> customRoles = new HashSet<>();
 
+    @Column(name = "is_active")
+    private boolean isActive;
+
+
     public User() {
 
     }
@@ -128,5 +132,13 @@ public class User {
     public void replaceRole(String role) {
         roles.clear();
         roles.add(role);
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

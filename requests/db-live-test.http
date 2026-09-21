@@ -25,6 +25,32 @@ Accept: application/json
   "roles": ["ADMIN"]
 }
 
+### 2. Register a user in the live database
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+### 2. Register a user in the live database
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
 > {% client.global.set("db_live_user_id", response.body.id); %}
 
 ### 3. Login and store USER token
@@ -224,3 +250,8 @@ Authorization: Bearer {{db_live_admin_token}}
 GET {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
 Authorization: Bearer {{db_live_admin_token}}
+
+###
+PUT {{baseUrl}}/user/deactivate/2
+Authorization: Bearer {{db_live_admin_token}}
+
