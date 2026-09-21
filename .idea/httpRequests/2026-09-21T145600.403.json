@@ -1,6 +1,0 @@
-{
-  "title": "User was not authorized with roles: [USER]. Needed roles are: [ADMIN]",
-  "status": 403,
-  "type": "https://javalin.io/documentation#forbiddenresponse",
-  "details": {}
-}

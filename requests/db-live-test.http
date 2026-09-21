@@ -19,7 +19,7 @@ Accept: application/json
 
 {
   "email": "frededv@test.dk",
-  "password": "1234",
+  "password": "DerErEtYndigtLand",
   "phoneNumber": "25715522",
   "tenantId" : 1,
   "roles": ["ADMIN"]
@@ -31,8 +31,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "Luke@test.dl",
-  "password": "1234",
+  "email": "Luke@test.dk",
+  "password": "DerErEtYndigtLand123",
   "phoneNumber": "45912492",
   "tenantId" : 1,
   "roles": ["USER"]
@@ -45,7 +45,7 @@ Accept: application/json
 
 {
   "email": "Emil@test.dk",
-  "password": "1234",
+  "password": "DerErEtYndigtLand321",
   "phoneNumber": "41821929",
   "tenantId" : 1,
   "roles": ["USER"]
