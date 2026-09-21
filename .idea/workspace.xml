@@ -4,28 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId" />
+    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="150" />
+    <option name="cachedIndexableFilesCount" value="224" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
-        <option value="HTTP Private Environment File" />
+        <option value="HTTP Public Environment File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="11.As-an-administrator,-I-want-to-create-and-manage-assignment-types,-so-that-recurring-kinds-of-work-are-consistently-classified" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,8 +40,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/EmilXavierVT/Supavisor&quot;,
-    &quot;accountId&quot;: &quot;ce5b9cec-6726-4d33-90fc-1b18021aec65&quot;
+    &quot;url&quot;: &quot;https://github.com/EmilXavierVT/Supavisor.git&quot;,
+    &quot;accountId&quot;: &quot;d529687c-2198-42f1-a77e-46dc5596888e&quot;
   },
   &quot;recentNewPullRequestHead&quot;: {
     &quot;server&quot;: {
@@ -53,15 +55,71 @@
   }
 }</component>
   <component name="HttpClientSelectedEnvironments">
-    <file url="file://$PROJECT_DIR$/src/main/resources/http/dev.http" environment="dev" />
+    <file url="file://$PROJECT_DIR$/requests/db-live-test.http" environment="dev" />
+    <file url="file://$PROJECT_DIR$/requests/user-routes.http" environment="dev" />
   </component>
-  <component name="KubernetesApiPersistence">{}</component>
-  <component name="KubernetesApiProvider">{
-  &quot;isMigrated&quot;: true
-}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.8951392073002595" />
+      <entry key="MS500" value="3.1811401494421294" />
+      <entry key="S2" value="3.7589104530019664" />
+      <entry key="S5" value="3.9001834595279936" />
+      <entry key="S10" value="3.9495085053976835" />
+      <entry key="S30" value="3.9836005023891903" />
+      <entry key="S60" value="4.133604424279472" />
+      <entry key="M2" value="6.302612225727918" />
+      <entry key="M5" value="21.942080289996202" />
+      <entry key="M10" value="64.81816699109302" />
+      <entry key="M15" value="112.30357595349057" />
+      <entry key="M30" value="235.14813794076295" />
+      <entry key="H1" value="410.8139863142074" />
+      <entry key="H2" value="617.0082078161686" />
+      <entry key="H4" value="798.0559171720561" />
+      <entry key="D1" value="1023.4264975421288" />
+      <entry key="W1" value="1071.6391871848718" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="9.491122635098379E-193" />
+      <entry key="S10" value="1.0342565220380396E-96" />
+      <entry key="S30" value="1.386468693576171E-32" />
+      <entry key="S60" value="1.6244515696710305E-16" />
+      <entry key="M2" value="1.790835355568935E-8" />
+      <entry key="M5" value="0.0012057581254050086" />
+      <entry key="M10" value="0.05040283345605917" />
+      <entry key="M15" value="0.193849330569922" />
+      <entry key="M30" value="1.1225713523321428" />
+      <entry key="H1" value="3.7661106591021896" />
+      <entry key="H2" value="7.56513556593045" />
+      <entry key="H4" value="10.93800176436619" />
+      <entry key="D1" value="15.005871426292458" />
+      <entry key="W1" value="15.853764817485002" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.760327078729999" />
+      <entry key="MS500" value="3.134553498537487" />
+      <entry key="S2" value="3.745203475260401" />
+      <entry key="S5" value="3.894501400019825" />
+      <entry key="S10" value="3.9466327710743085" />
+      <entry key="S30" value="3.9826339556268766" />
+      <entry key="S60" value="4.133105857203356" />
+      <entry key="M2" value="6.302253211761732" />
+      <entry key="M5" value="21.942839194049245" />
+      <entry key="M10" value="64.86773698535953" />
+      <entry key="M15" value="112.49600170847141" />
+      <entry key="M30" value="236.2663785974154" />
+      <entry key="H1" value="414.5715059838798" />
+      <entry key="H2" value="624.5640097046831" />
+      <entry key="H4" value="808.9869338675272" />
+      <entry key="D1" value="1038.430729424095" />
+      <entry key="W1" value="1087.4927034925868" />
+    </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -77,16 +135,32 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "HTTP Request.db-live-test | #28 (1).executor": "Run",
+    "HTTP Request.db-live-test | #28.executor": "Run",
     "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
+    "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1).executor": "Run",
+    "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to.executor": "Run",
+    "HTTP Request.db-live-test | 11b. Put the test user in that tenant (keeps ADMIN).executor": "Run",
+    "HTTP Request.db-live-test | 11d. Create custom role \"Cleaning\".executor": "Run",
+    "HTTP Request.db-live-test | 11e. Create custom role \"Kitchen\".executor": "Run",
+    "HTTP Request.db-live-test | 11f. Assign both custom roles (replaces the whole set).executor": "Run",
+    "HTTP Request.db-live-test | 11g. Read back: customRoles lists both, roles still [\"ADMIN\"].executor": "Run",
+    "HTTP Request.db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged.executor": "Run",
+    "HTTP Request.db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first).executor": "Run",
+    "HTTP Request.db-live-test | 11j. Read back: only Kitchen remains.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (1).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (2).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (3).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#1.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#2 (1).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#2.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (1).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (2).executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database#3.executor": "Run",
     "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token (1).executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
-    "HTTP Request.dev | 1. Create a new Assignment Type.executor": "Run",
-    "HTTP Request.dev | 1. Get All Assignment Types (with Token).executor": "Run",
-    "HTTP Request.dev | 1. Get All Assignment Types.executor": "Run",
-    "HTTP Request.dev | 2. Get All Assignment Types (Active & Inactive).executor": "Run",
-    "HTTP Request.dev | 3. Create New Assignment Type.executor": "Run",
-    "HTTP Request.dev | login (1).executor": "Run",
-    "HTTP Request.dev | login.executor": "Run",
+    "HTTP Request.user-routes | Update user.executor": "Run",
     "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
     "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
     "JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor": "Run",
@@ -96,12 +170,13 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "11.AdminCheck",
+    "git.auto.fetch.suggestion.counter": "1",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/khnda/IdeaProjects/4. Semester/Supavisor/src/main/resources/http",
+    "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -111,61 +186,70 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
     "rest.client.default.execution.environment": "dev",
+    "settings.editor.selected.configurable": "preferences.editor",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
-  },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
-    ]
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\khnda\IdeaProjects\4. Semester\Supavisor\src\main\resources\http" />
       <recent name="$PROJECT_DIR$/src/main/java/app" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/java/app/config" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="HTTP Request.db-live-test | #28 (1)">
+    <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="app.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="dev | login" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/main/resources/http/dev.http" requestIdentifier="login" runType="Run single request">
+    <configuration default="true" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" environment="&lt;No Environment&gt;" path="">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 2. Register a user in the live database#2 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#2" index="3" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 2. Register a user in the live database#3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#3" index="4" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | #28 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#28" index="28" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | #28" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#28" index="28" runType="Run single request">
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Main" />
-      <item itemvalue="HTTP Request.dev | login" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2 (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3" />
+      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
+      <item itemvalue="HTTP Request.db-live-test | #28" />
+      <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="HTTP Request.dev | login" />
+        <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
+        <item itemvalue="HTTP Request.db-live-test | #28" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2 (1)" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
+        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
       </set>
     </attachedChunks>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="" />
@@ -175,7 +259,6 @@
       <updated>1788956915058</updated>
       <workItem from="1788956916085" duration="114000" />
       <workItem from="1788957196744" duration="60824000" />
-      <workItem from="1789653888943" duration="6648000" />
     </task>
     <task id="LOCAL-00001" summary="first initial setup of the user entity. Full DAO and DTO setup up for the user">
       <option name="closed" value="true" />
@@ -319,5 +402,9 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

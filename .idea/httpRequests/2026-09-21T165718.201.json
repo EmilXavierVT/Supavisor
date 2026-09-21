@@ -1,0 +1,13 @@
+{
+  "id": 3,
+  "email": "Emil@test.dk",
+  "password": null,
+  "phoneNumber": "41821929",
+  "tenantId": 1,
+  "roles": [
+    "USER"
+  ],
+  "customRoles": [],
+  "isActive": false,
+  "customRoleIds": null
+}

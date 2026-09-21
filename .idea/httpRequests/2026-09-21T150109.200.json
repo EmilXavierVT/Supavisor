@@ -1,0 +1,23 @@
+{
+  "id": 1,
+  "email": "db-live-1789995669@example.com",
+  "password": null,
+  "phoneNumber": "12345678",
+  "tenantId": 1,
+  "roles": [
+    "ADMIN"
+  ],
+  "customRoles": [
+    {
+      "id": 2,
+      "roleName": "Kitchen",
+      "tenantId": 1
+    },
+    {
+      "id": 1,
+      "roleName": "Cleaning",
+      "tenantId": 1
+    }
+  ],
+  "customRoleIds": null
+}

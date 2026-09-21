@@ -1,0 +1,12 @@
+{
+  "id": 3,
+  "email": "Luke@test.dl",
+  "password": null,
+  "phoneNumber": "45912492",
+  "tenantId": 1,
+  "roles": [
+    "USER"
+  ],
+  "customRoles": [],
+  "customRoleIds": null
+}

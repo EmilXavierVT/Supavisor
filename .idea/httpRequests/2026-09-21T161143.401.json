@@ -1,0 +1,6 @@
+{
+  "title": "Authorization header is missing",
+  "status": 401,
+  "type": "https://javalin.io/documentation#unauthorizedresponse",
+  "details": {}
+}

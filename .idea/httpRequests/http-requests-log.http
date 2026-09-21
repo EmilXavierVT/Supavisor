@@ -1,0 +1,655 @@
+PUT http://localhost:7070/api/user/deactivate/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3OTAwMDU1ODQsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.atsXtrOg9TaSSl3z0Di9mVbZfUltYqpx-gDAEarTsUM
+
+<> 2026-09-21T171655.200.json
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234"
+}
+
+<> 2026-09-21T171624.200.json
+
+###
+PUT http://localhost:7070/api/user/deactivate/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3OTAwMDE3MTksImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.tl1mzkD-FrsJ7HSu9cPguaHTs-13gsvnEiR6uA4w5Gc
+
+<> 2026-09-21T171604.401.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T165718.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T165717.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T165715.201.json
+
+###
+PUT http://localhost:7070/api/user/deactivate/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3OTAwMDE3MTksImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.tl1mzkD-FrsJ7HSu9cPguaHTs-13gsvnEiR6uA4w5Gc
+
+<> 2026-09-21T162451.200.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T162444.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T162442.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T162440.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T162035.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T162029.500.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T162024.500.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T162021.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T162015.500.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T162010.201.json
+
+###
+PUT http://localhost:7070/api/user/deactivate/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3OTAwMDE3MTksImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.tl1mzkD-FrsJ7HSu9cPguaHTs-13gsvnEiR6uA4w5Gc
+
+<> 2026-09-21T161541.200.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T161516.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T161515.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T161513.201.json
+
+###
+PUT http://localhost:7070/api/user/deactivate
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3OTAwMDE3MTksImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.tl1mzkD-FrsJ7HSu9cPguaHTs-13gsvnEiR6uA4w5Gc
+Accept: application/json
+
+{
+  "id: 3,
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T161251.400.json
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234"
+}
+
+<> 2026-09-21T161159.200.json
+
+###
+PUT http://localhost:7070/api/user/deactivate
+Accept: application/json
+
+{
+  "id: 3,
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T161143.401.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T160901.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T160858.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T160830.201.json
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234"
+}
+
+<> 2026-09-21T160651.401.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T160551.401.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T160119.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T155846.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T155843.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T155842.201.json
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234"
+}
+
+<> 2026-09-21T153106.200.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T153054.409.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T153017.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T153014.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T153006.201.json
+
+###
+GET http://localhost:7070/api/user/1
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+<> 2026-09-21T150128.200.json
+
+###
+DELETE http://localhost:7070/api/role/1?tenantId=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+###
+PUT http://localhost:7070/api/user/1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+{
+  "email": "db-live-1789995669@example.com",
+  "phoneNumber": "12345678",
+  "tenantId": 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T150109.200.json
+
+###
+GET http://localhost:7070/api/user/1
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+<> 2026-09-21T150100.200.json
+
+###
+PUT http://localhost:7070/api/user/1/custom-roles
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+{
+  "customRoleIds": [1, 2]
+}
+
+<> 2026-09-21T150054.200.json
+
+###
+POST http://localhost:7070/api/role/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+{
+  "roleName": "Kitchen"
+}
+
+<> 2026-09-21T150044.200.json
+
+###
+POST http://localhost:7070/api/role/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+{
+  "roleName": "Cleaning"
+}
+
+<> 2026-09-21T150038.200.json
+
+###
+PUT http://localhost:7070/api/user/1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+{
+  "email": "db-live-1789995623@example.com",
+  "phoneNumber": "12345678",
+  "tenantId": 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T150023.200.json
+
+###
+POST http://localhost:7070/api/tenant/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+{
+  "name": "db-live-tenant-1789995578"
+}
+
+<> 2026-09-21T145938.201.json
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234"
+}
+
+<> 2026-09-21T145832.200.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T145732.201.json
+
+###
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234"
+}
+
+<> 2026-09-21T145621.401.json
+
+###
+POST http://localhost:7070/api/tenant/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInN1YiI6ImZyZWRlZHZAdGVzdC5kayIsImV4cCI6MTc4OTk5NTc2OCwiZW1haWwiOiJmcmVkZWR2QHRlc3QuZGsiLCJyb2xlcyI6IlVTRVIifQ.D1wk5rPsrvsPFtnNLrQ7aWMCqTOouH6Fhjkl26YjLzY
+
+{
+  "name": "db-live-tenant-1789995360"
+}
+
+<> 2026-09-21T145600.403.json
+
+###
