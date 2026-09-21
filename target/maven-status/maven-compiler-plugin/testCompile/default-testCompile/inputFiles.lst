@@ -1,5 +1,6 @@
-/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/config/ApplicationConfigIntegrationTest.java
-/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/config/TestEntityManagerFactory.java
-/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dao/UserDAOIntegrationTest.java
-/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/dto/UserDTOTest.java
-/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/routeSecurity/TokenSecurityTest.java
+C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\config\ApplicationConfigIntegrationTest.java
+C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\config\TestEntityManagerFactory.java
+C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\dao\UserCustomRolesIntegrationTest.java
+C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\dao\UserDAOIntegrationTest.java
+C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\dto\UserDTOTest.java
+C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\services\routeSecurity\TokenSecurityTest.java

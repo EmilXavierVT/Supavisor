@@ -29,6 +29,12 @@ public class User {
     @Column(name = "role", nullable = false)
     private Set<String> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_custom_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> customRoles = new HashSet<>();
+
     public User() {
 
     }
@@ -40,6 +46,11 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.tenantId = tenantId;
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
+    public User(Long id, String email, String password, String phoneNumber, Long tenantId, Set<String> roles, Set<Role> customRoles) {
+        this(id, email, password, phoneNumber, tenantId, roles);
+        this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
     }
 
     public User(Long id, String email, String password, String phoneNumber, Set<String> roles) {
@@ -92,6 +103,22 @@ public class User {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
+    public Set<Role> getCustomRoles() {
+        return customRoles;
+    }
+
+    public void setCustomRoles(Set<Role> customRoles) {
+        this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
+    }
+
+    public void addCustomRole(Role role) {
+        customRoles.add(role);
+    }
+
+    public void removeCustomRole(Role role) {
+        customRoles.remove(role);
     }
 
     public Set<String> getRolesAsStrings() {

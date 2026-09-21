@@ -1,5 +1,6 @@
-app/dto/UserDTOTest.class
-app/config/ApplicationConfigIntegrationTest.class
-app/services/routeSecurity/TokenSecurityTest.class
-app/config/TestEntityManagerFactory.class
-app/dao/UserDAOIntegrationTest.class
+app\services\routeSecurity\TokenSecurityTest.class
+app\dao\UserCustomRolesIntegrationTest.class
+app\dao\UserDAOIntegrationTest.class
+app\config\ApplicationConfigIntegrationTest.class
+app\config\TestEntityManagerFactory.class
+app\dto\UserDTOTest.class

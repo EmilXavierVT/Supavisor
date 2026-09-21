@@ -53,6 +53,9 @@ public class RoleDAO implements IRoleDAO {
             Role role = em.find(Role.class, id);
             if (role != null) {
                 em.getTransaction().begin();
+                em.createNativeQuery("DELETE FROM user_custom_roles WHERE role_id = :id")
+                        .setParameter("id", id)
+                        .executeUpdate();
                 em.remove(role);
                 em.getTransaction().commit();
             }

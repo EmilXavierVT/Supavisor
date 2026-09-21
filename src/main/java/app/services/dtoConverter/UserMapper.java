@@ -5,15 +5,18 @@ import app.entities.User;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class UserMapper {
     public UserMapper(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
     }
 
+    private final RoleMapper roleMapper = new RoleMapper();
+
     public UserDTO toDto(User user) {
         if (user == null) return null;
-        return new UserDTO(
+        UserDTO dto = new UserDTO(
                 user.getId(),
                 user.getEmail(),
                 null,
@@ -21,6 +24,10 @@ public class UserMapper {
                 user.getTenantId(),
                 new HashSet<>(user.getRoles())
         );
+        dto.setCustomRoles(user.getCustomRoles().stream()
+                .map(roleMapper::toDTO)
+                .collect(Collectors.toSet()));
+        return dto;
     }
 
     public User fromDto(UserDTO dto) {
