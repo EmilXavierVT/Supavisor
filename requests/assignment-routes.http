@@ -1,0 +1,316 @@
+### Assignment routes - manual test script (user story 11)
+#
+# Run the requests top to bottom against a local server (http://localhost:7070).
+# Each request says what to expect. Assignments belong to the tenant in the caller's token, so
+# admin and user below must be in the same company; the last section shows another company can't see them.
+#
+# Needs an existing ADMIN account that has a tenant - change these two if yours differ:
+@baseUrl = http://localhost:7070/api
+@adminEmail = 1@1.dk
+@adminPassword = 123
+# A plain USER is created below. Change this email if you re-run the script (it must be unique):
+@userEmail = assignment-tester@example.com
+
+
+### 0a. Login as admin                                        -> 200, token saved
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "{{adminEmail}}", "password": "{{adminPassword}}" }
+
+> {% client.global.set("admin_token", response.body.token); %}
+
+### 0b. Create a normal (non-admin) user in the same company   -> 201, temporary password saved
+POST {{baseUrl}}/user/create
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Assignment Tester", "email": "{{userEmail}}", "roles": ["USER"] }
+
+> {% client.global.set("user_password", response.body.temporaryPassword); client.global.set("user_id", response.body.user.id); %}
+
+### 0c. Login as that user                                     -> 200, token saved
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "{{userEmail}}", "password": "{{user_password}}" }
+
+> {% client.global.set("user_token", response.body.token); %}
+
+
+### ---------------------------------------------------------------- CREATE
+
+### 1. Create "Cleaning at Main Street 1" with all details     -> 201, isActive true, id saved
+# An assignment is a template: name + optional address, estimatedMinutes, cost and one assigned employee.
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "name": "Cleaning at Main Street 1",
+  "address": "Main Street 1, 8000 Aarhus",
+  "estimatedMinutes": 90,
+  "cost": 1250.50,
+  "assignedEmployeeId": {{user_id}}
+}
+
+> {% client.global.set("assignment_id", response.body.id); %}
+
+### 2. Create "Kitchen"                                        -> 201, id saved
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Kitchen" }
+
+> {% client.global.set("kitchen_id", response.body.id); %}
+
+### 3. Same name again                                         -> 409 "already exists"
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Cleaning at Main Street 1" }
+
+### 4. Same name, different case and spaces                    -> 409
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "  cLEANING AT main street 1  " }
+
+### 5a. Missing name                                           -> 400 "name is required"
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ }
+
+### 5b. Blank name                                             -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "    " }
+
+### 5c. Name over 100 characters                               -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }
+
+### 5d. The tenant in the body is ignored (uses the token's)   -> 201, tenantId = your own company
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Tenant in body is ignored", "tenantId": 999999 }
+
+### 5e. Negative cost                                          -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad cost", "cost": -5 }
+
+### 5f. Cost with more than 2 decimals                         -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad cost", "cost": 10.005 }
+
+### 5g. Estimated time of 0 minutes                            -> 400
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad time", "estimatedMinutes": 0 }
+
+### 5h. Employee that does not exist (or is in another company) -> 400 "Employee not found"
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Bad employee", "assignedEmployeeId": 999999 }
+
+### 5i. Only the name is required                              -> 201, other fields null
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Just a name" }
+
+
+### ---------------------------------------------------------------- READ
+
+### 6. List all as admin                                       -> 200, includes active AND inactive
+GET {{baseUrl}}/assignment/all
+Authorization: Bearer {{admin_token}}
+
+### 7. Read one                                               -> 200, with address, estimatedMinutes, cost, assignedEmployeeId
+GET {{baseUrl}}/assignment/{{assignment_id}}
+Authorization: Bearer {{admin_token}}
+
+### 8. Read one that does not exist                           -> 404
+GET {{baseUrl}}/assignment/999999
+Authorization: Bearer {{admin_token}}
+
+
+### ---------------------------------------------------------------- UPDATE
+
+### 9. Change name and details                                -> 200 "Deep cleaning", new address/time/cost
+# PUT replaces ALL details: a detail you leave out or set to null is cleared (see 9b).
+PUT {{baseUrl}}/assignment/{{assignment_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "name": "Deep cleaning at Main Street 1",
+  "address": "Second Street 2, 8000 Aarhus",
+  "estimatedMinutes": 120,
+  "cost": 2000,
+  "assignedEmployeeId": {{user_id}}
+}
+
+### 9b. Send only the name                                     -> 200, address/time/cost/employee are now null
+PUT {{baseUrl}}/assignment/{{kitchen_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Kitchen" }
+
+### 10. Rename to a name that is taken                         -> 409
+PUT {{baseUrl}}/assignment/{{assignment_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "kitchen", "address": "Second Street 2" }
+
+### 11. Rename to blank                                        -> 400
+PUT {{baseUrl}}/assignment/{{assignment_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "" }
+
+### 12. Update one that does not exist                         -> 404
+PUT {{baseUrl}}/assignment/999999
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "name": "Nope" }
+
+
+### ---------------------------------------------------------------- DEACTIVATE
+
+### 13. Deactivate "Deep cleaning"                            -> 200, isActive false
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/deactivate
+Authorization: Bearer {{admin_token}}
+
+### 14. Admin list, active only (what a picker should use)    -> 200, "Deep cleaning" is NOT in it
+GET {{baseUrl}}/assignment/all?activeOnly=true
+Authorization: Bearer {{admin_token}}
+
+### 15. Admin list, everything                                -> 200, "Deep cleaning" still there (isActive false)
+GET {{baseUrl}}/assignment/all
+Authorization: Bearer {{admin_token}}
+
+### 16. Activate again                                        -> 200, isActive true (details untouched)
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
+Authorization: Bearer {{admin_token}}
+
+
+### ---------------------------------------------------------------- PERMISSIONS
+
+### 17. No token                                              -> 401
+GET {{baseUrl}}/assignment/all
+
+### 18. Garbage token                                         -> 401
+GET {{baseUrl}}/assignment/all
+Authorization: Bearer not-a-real-token
+
+### 19. Normal user may read, but only active ones            -> 200 (deactivate something first to see the difference)
+GET {{baseUrl}}/assignment/all
+Authorization: Bearer {{user_token}}
+
+### 20a. Normal user tries to create                          -> 403
+POST {{baseUrl}}/assignment
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{ "name": "Sneaky" }
+
+### 20b. Normal user tries to update                          -> 403
+PUT {{baseUrl}}/assignment/{{assignment_id}}
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{ "name": "Sneaky" }
+
+### 20c. Normal user tries to deactivate                      -> 403
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/deactivate
+Authorization: Bearer {{user_token}}
+
+### 20c2. Normal user tries to activate                       -> 403
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
+Authorization: Bearer {{user_token}}
+
+### 20d. Normal user tries to delete                          -> 403
+DELETE {{baseUrl}}/assignment/{{assignment_id}}
+Authorization: Bearer {{user_token}}
+
+
+### ---------------------------------------------------------------- DELETE
+
+### 21. Delete "Kitchen"                                      -> 204
+DELETE {{baseUrl}}/assignment/{{kitchen_id}}
+Authorization: Bearer {{admin_token}}
+
+### 22. Read it again                                         -> 404
+GET {{baseUrl}}/assignment/{{kitchen_id}}
+Authorization: Bearer {{admin_token}}
+
+### 23. Delete it again                                       -> 404
+DELETE {{baseUrl}}/assignment/{{kitchen_id}}
+Authorization: Bearer {{admin_token}}
+
+# Deleting an assignment that other records still point at returns 409 "in use ... Deactivate it instead".
+# Nothing references assignments yet, so that case is covered by the automated test
+# (AssignmentServiceIntegrationTest.deleteIsRefusedWhileAnotherRecordReferencesTheAssignment).
+
+
+### ---------------------------------------------------------------- OTHER COMPANY
+# Log in as an ADMIN of a DIFFERENT tenant and put its token here, then run these:
+@otherTenantAdminToken = paste-a-token-from-another-tenant-here
+
+### 24. Other company's list does not contain your assignments -> 200, no "Deep cleaning"
+GET {{baseUrl}}/assignment/all
+Authorization: Bearer {{otherTenantAdminToken}}
+
+### 25. Other company reads/changes yours                      -> 404 for each of these three
+GET {{baseUrl}}/assignment/{{assignment_id}}
+Authorization: Bearer {{otherTenantAdminToken}}
+
+###
+PUT {{baseUrl}}/assignment/{{assignment_id}}
+Content-Type: application/json
+Authorization: Bearer {{otherTenantAdminToken}}
+
+{ "name": "Hacked" }
+
+###
+PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
+Authorization: Bearer {{otherTenantAdminToken}}
+
+###
+DELETE {{baseUrl}}/assignment/{{assignment_id}}
+Authorization: Bearer {{otherTenantAdminToken}}
+
+
+### ---------------------------------------------------------------- CLEAN UP
+
+### 26. Delete "Deep cleaning" (and the "Tenant in body is ignored" row from 5d, by its id from the list)
+DELETE {{baseUrl}}/assignment/{{assignment_id}}
+Authorization: Bearer {{admin_token}}

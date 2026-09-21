@@ -3,4 +3,5 @@ C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\config\TestEntityManag
 C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\dao\UserCustomRolesIntegrationTest.java
 C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\dao\UserDAOIntegrationTest.java
 C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\dto\UserDTOTest.java
+C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\services\entityServices\UserServiceIntegrationTest.java
 C:\Users\frede\T-mice\backend\Supavisor\src\test\java\app\services\routeSecurity\TokenSecurityTest.java

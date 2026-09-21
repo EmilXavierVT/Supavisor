@@ -32,57 +32,65 @@ public class Routes {
     public EndpointGroup getRoutes() {
 
         UserRoutes userRoutes = new UserRoutes(emf);
-            TenantRoutes tenantRoutes = new TenantRoutes(emf);
-            RoleRoutes roleRoutes = new RoleRoutes(emf);
+        TenantRoutes tenantRoutes = new TenantRoutes(emf);
+        RoleRoutes roleRoutes = new RoleRoutes(emf);
+        AssignmentRoutes assignmentRoutes = new AssignmentRoutes(emf);
 
-            SystemController systemController = new SystemController();
+        SystemController systemController = new SystemController();
 
-            return () -> {
-                get("/", ctx -> ctx.result("Hello Javalin World!"));
-                get("/health", systemController::health, Role.ANYONE);
+        return () -> {
+            get("/", ctx -> ctx.result("Hello Javalin World!"));
+            get("/health", systemController::health, Role.ANYONE);
 
-                path("/user", () -> {
-                    get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
-                    post("/", userRoutes::createUser, Role.ADMIN);
-                    get("/tenant/{tenantId}", userRoutes::getByTenantId, Role.USER, Role.ADMIN);
-                    get("/{id}", userRoutes::getById, Role.USER, Role.ADMIN);
-                    put("/{id}", userRoutes::update, Role.USER, Role.ADMIN);
-                    delete("/{id}", userRoutes::delete, Role.ADMIN);
-                    put("/{id}/admin", userRoutes::setAdmin, Role.ADMIN);
-                    put("/{id}/employee", userRoutes::setEmployee, Role.ADMIN);
-                    put("/{id}/cleaning-staff", userRoutes::setCleaningStaff, Role.ADMIN);
-                    put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
-                    put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
-                    put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
-                    put("/{id}/custom-roles", userRoutes::setCustomRoles, Role.ADMIN);
-                    post("/{id}/custom-roles/{roleId}", userRoutes::addCustomRole, Role.ADMIN);
-                    delete("/{id}/custom-roles/{roleId}", userRoutes::removeCustomRole, Role.ADMIN);
-                });
+            path("/user", () -> {
+                get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
+                post("/", userRoutes::createUser, Role.ADMIN);
+                get("/tenant/{tenantId}", userRoutes::getByTenantId, Role.USER, Role.ADMIN);
+                get("/{id}", userRoutes::getById, Role.USER, Role.ADMIN);
+                put("/{id}", userRoutes::update, Role.USER, Role.ADMIN);
+                delete("/{id}", userRoutes::delete, Role.ADMIN);
+                put("/{id}/admin", userRoutes::setAdmin, Role.ADMIN);
+                put("/{id}/employee", userRoutes::setEmployee, Role.ADMIN);
+                put("/{id}/cleaning-staff", userRoutes::setCleaningStaff, Role.ADMIN);
+                put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
+                put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
+                put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
+                put("/{id}/custom-roles", userRoutes::setCustomRoles, Role.ADMIN);
+                post("/{id}/custom-roles/{roleId}", userRoutes::addCustomRole, Role.ADMIN);
+                delete("/{id}/custom-roles/{roleId}", userRoutes::removeCustomRole, Role.ADMIN);
+            });
 
-                path("/tenant", () -> {
-                    get("/all", tenantRoutes::getAll, Role.ADMIN, Role.USER);
-                    post("/", tenantRoutes::create, Role.ADMIN);
-                    get("/{id}", tenantRoutes::getById, Role.USER, Role.ADMIN);
-                    put("/{id}", tenantRoutes::update, Role.ADMIN);
-                    delete("/{id}", tenantRoutes::delete, Role.ADMIN);
-                });
+            path("/tenant", () -> {
+                get("/all", tenantRoutes::getAll, Role.ADMIN, Role.USER);
+                post("/", tenantRoutes::create, Role.ADMIN);
+                get("/{id}", tenantRoutes::getById, Role.USER, Role.ADMIN);
+                put("/{id}", tenantRoutes::update, Role.ADMIN);
+                delete("/{id}", tenantRoutes::delete, Role.ADMIN);
+            });
 
-                path("/role", () -> {
-                    get("/tenant/{tenantId}", roleRoutes::getRolesByTenant, Role.USER, Role.ADMIN);
-                    post("/", roleRoutes::createRole, Role.ADMIN);
-                    delete("/{id}", roleRoutes::deleteRole, Role.ADMIN);
-                });
+            path("/role", () -> {
+                get("/tenant/{tenantId}", roleRoutes::getRolesByTenant, Role.USER, Role.ADMIN);
+                post("/", roleRoutes::createRole, Role.ADMIN);
+                delete("/{id}", roleRoutes::deleteRole, Role.ADMIN);
+            });
 
-                path("user", () -> {
-                    put("/update", userRoutes::update, Role.ADMIN);
-                    post("/create", userRoutes::createUser, Role.ADMIN);
-                    put("/reversActivtion/{id}", userRoutes::reversActivation, Role.ADMIN);
+            path("user", () -> {
+                put("/update", userRoutes::update, Role.ADMIN);
+                post("/create", userRoutes::createUser, Role.ADMIN);
+                put("/reversActivtion/{id}", userRoutes::reversActivation, Role.ADMIN);
+            });
 
-
-                });
-            };
+            path("/assignment", () -> {
+                get("/all", assignmentRoutes::getAll, Role.ADMIN, Role.USER);
+                get("/{id}", assignmentRoutes::getById, Role.ADMIN, Role.USER);
+                post("/", assignmentRoutes::create, Role.ADMIN);
+                put("/{id}", assignmentRoutes::update, Role.ADMIN);
+                patch("/{id}/deactivate", assignmentRoutes::deactivate, Role.ADMIN);
+                patch("/{id}/activate", assignmentRoutes::activate, Role.ADMIN);
+                delete("/{id}", assignmentRoutes::delete, Role.ADMIN);
+            });
+        };
     }
-
 
     public EndpointGroup getRouteResource(String resourceName) {
         UserRoutes userRoutes = new UserRoutes(emf);

@@ -1,0 +1,4 @@
+{
+  "status": 409,
+  "msg": "User already exists"
+}
