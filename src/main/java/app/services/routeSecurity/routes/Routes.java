@@ -76,12 +76,13 @@ public class Routes {
                 path("user", () -> {
                     put("/update", userRoutes::update, Role.ADMIN);
                     post("/create", userRoutes::create, Role.ADMIN);
-                    put("/deactivate/{id}", userRoutes::reversActivation, Role.ADMIN);
+                    put("/reversActivtion/{id}", userRoutes::reversActivation, Role.ADMIN);
 
 
                 });
             };
     }
+
 
     public EndpointGroup getRouteResource(String resourceName) {
         UserRoutes userRoutes = new UserRoutes(emf);
