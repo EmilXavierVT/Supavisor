@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 public class RoleService {
     private final IRoleDAO roleDAO;
     private final RoleMapper roleMapper;
-    private final EntityManager entityManager;
+    private final EntityManagerFactory emf;
 
     public RoleService(EntityManagerFactory emf) {
         this.roleDAO = new app.dao.RoleDAO(emf);
         this.roleMapper = new RoleMapper();
-        this.entityManager = emf.createEntityManager();
+        this.emf = emf;
     }
 
     public List<RoleDTO> getRolesByTenant(Long tenantId) {
@@ -39,8 +39,14 @@ public class RoleService {
         }
         roleDTO.setRoleName(roleName);
 
-        Tenant tenant = entityManager.getReference(Tenant.class, tenantId);
-        
+        Tenant tenant;
+        try (EntityManager em = emf.createEntityManager()) {
+            tenant = em.find(Tenant.class, tenantId);
+        }
+        if (tenant == null) {
+            throw new ApiException(400, "Your company (tenant " + tenantId + ") does not exist");
+        }
+
         // Check uniqueness
         boolean exists = roleDAO.findByTenantId(tenantId).stream()
                 .anyMatch(r -> r.getRoleName().equalsIgnoreCase(roleName));
