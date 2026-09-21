@@ -65,9 +65,7 @@ public class UserRoutes {
     }
 
     public void update(Context ctx) {
-        Long id = ctx.pathParamAsClass("id", Long.class).get();
         UserDTO dto = ctx.bodyValidator(UserDTO.class).get();
-        dto.setId(id);
         User user = userMapper.fromDto(dto);
         User updated;
         try {
