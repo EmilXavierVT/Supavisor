@@ -11,13 +11,13 @@ Content-Type: application/json
 @authToken = {{login.response.body.token}}
 
 
-### 1. Get All Assignments (with Token)
-GET http://localhost:7070/api/assignment/all
+### 1. Get All Assignment Types (with Token)
+GET http://localhost:7070/api/assignment-types/all
 Authorization: Bearer {{authToken}}
 
 
-### 2. Create a new Assignment
-POST http://localhost:7070/api/assignment
+### 2. Create a new Assignment Type
+POST http://localhost:7070/api/assignment-types
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -27,8 +27,8 @@ Content-Type: application/json
 }
 
 
-### 3. Update Assignment
-PUT http://localhost:7070/api/assignment/1
+### 3. Update Assignment Type
+PUT http://localhost:7070/api/assignment-types/1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -38,11 +38,11 @@ Content-Type: application/json
 }
 
 
-### 4. Deactivate Assignment
-PATCH http://localhost:7070/api/assignment/1/deactivate
+### 4. Deactivate Assignment Type
+PATCH http://localhost:7070/api/assignment-types/1/deactivate
 Authorization: Bearer {{authToken}}
 
 
-### 5. Hard Delete Assignment
-DELETE http://localhost:7070/api/assignment/1
+### 5. Hard Delete Assignment Type
+DELETE http://localhost:7070/api/assignment-types/1
 Authorization: Bearer {{authToken}}

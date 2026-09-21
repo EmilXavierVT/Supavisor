@@ -1,3 +1,4 @@
+app\services\entityServices\UserServiceIntegrationTest.class
 app\services\routeSecurity\TokenSecurityTest.class
 app\dao\UserCustomRolesIntegrationTest.class
 app\dao\UserDAOIntegrationTest.class
