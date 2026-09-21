@@ -24,6 +24,7 @@ public class TokenSecurity implements ITokenSecurity {
         Set<String> rolesSet = (Set)Arrays.stream(roles.split(",")).collect(Collectors.toSet());
         UserDTO user = new UserDTO(username, rolesSet);
         user.setTenantId(jwt.getJWTClaimsSet().getLongClaim("tenantId"));
+        user.setId(jwt.getJWTClaimsSet().getLongClaim("userId"));
         return user;
     }
 
@@ -62,6 +63,7 @@ public class TokenSecurity implements ITokenSecurity {
                     .claim("email", user.getEmail())
                     .claim("roles", user.getRoles().stream().reduce((s1, s2) -> s1 + "," + s2).get())
                     .claim("tenantId",user.getTenantId())
+                    .claim("userId", user.getId())
                     .expirationTime(new Date(new Date().getTime() + Long.parseLong(TOKEN_EXPIRE_TIME)))
                     .build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);

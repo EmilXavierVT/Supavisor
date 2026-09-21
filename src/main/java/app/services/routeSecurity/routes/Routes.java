@@ -43,7 +43,7 @@ public class Routes {
 
                 path("/user", () -> {
                     get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
-                    post("/", userRoutes::create, Role.ADMIN);
+                    post("/", userRoutes::createUser, Role.ADMIN);
                     get("/tenant/{tenantId}", userRoutes::getByTenantId, Role.USER, Role.ADMIN);
                     get("/{id}", userRoutes::getById, Role.USER, Role.ADMIN);
                     put("/{id}", userRoutes::update, Role.USER, Role.ADMIN);
@@ -75,7 +75,7 @@ public class Routes {
 
                 path("user", () -> {
                     put("/update", userRoutes::update, Role.ADMIN);
-                    post("/create", userRoutes::create, Role.ADMIN);
+                    post("/create", userRoutes::createUser, Role.ADMIN);
                     put("/reversActivtion/{id}", userRoutes::reversActivation, Role.ADMIN);
 
 

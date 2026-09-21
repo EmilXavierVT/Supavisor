@@ -101,12 +101,18 @@ public class UserDAO implements ISecurityDAO {
 
     private void applyFields(User existing, User user) {
         existing.setEmail(user.getEmail());
+        if (user.getName() != null) {
+            existing.setName(user.getName());
+        }
         existing.setPhoneNumber(user.getPhoneNumber());
         existing.setTenantId(user.getTenantId());
         if (user.getPassword() != null && !user.getPassword().isBlank()) {
             existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         }
-        existing.setRoles(user.getRoles());
+        // an update that carries no roles keeps the current ones - a user must always have at least one
+        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+            existing.setRoles(user.getRoles());
+        }
     }
 
     public User delete(Long id) {

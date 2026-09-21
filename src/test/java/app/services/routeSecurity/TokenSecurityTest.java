@@ -53,6 +53,22 @@ class TokenSecurityTest {
         assertNull(tokenSecurity.getUserWithRolesFromToken(token).getTenantId());
     }
 
+    @Test
+    void userIdSurvivesTokenRoundTrip() throws Exception {
+        UserDTO user = new UserDTO("user@example.com", Set.of("USER"));
+        user.setId(11L);
+        String token = tokenSecurity.createToken(user, ISSUER, "60000", SECRET_KEY);
+
+        assertEquals(11L, tokenSecurity.getUserWithRolesFromToken(token).getId());
+    }
+
+    @Test
+    void missingUserIdParsesAsNull() throws Exception {
+        String token = createToken(60_000);
+
+        assertNull(tokenSecurity.getUserWithRolesFromToken(token).getId());
+    }
+
     private String createToken(long tokenExpireTime) throws Exception {
         UserDTO user = new UserDTO("user@example.com", Set.of("USER"));
         return tokenSecurity.createToken(user, ISSUER, String.valueOf(tokenExpireTime), SECRET_KEY);
