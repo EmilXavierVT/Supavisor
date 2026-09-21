@@ -24,6 +24,7 @@ public class UserDTO {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.tenantId = tenantId;
+        this.isActive = isActive;
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
     }
 

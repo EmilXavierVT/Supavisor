@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +14,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="150" />
+    <option name="cachedIndexableFilesCount" value="224" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -65,61 +65,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000075767086076" />
-      <entry key="MS500" value="1.101364616478721" />
-      <entry key="S2" value="1.8413937215265537" />
-      <entry key="S5" value="2.4136394621445056" />
-      <entry key="S10" value="2.9025281552382105" />
-      <entry key="S30" value="5.1679353871437135" />
-      <entry key="S60" value="8.113811432180785" />
-      <entry key="M2" value="12.568637779777967" />
-      <entry key="M5" value="21.972559867663705" />
-      <entry key="M10" value="36.274666742042484" />
-      <entry key="M15" value="53.027477203157126" />
-      <entry key="M30" value="110.07551738866829" />
-      <entry key="H1" value="202.52893478245022" />
-      <entry key="H2" value="296.8847397487485" />
-      <entry key="H4" value="366.4784939036806" />
-      <entry key="D1" value="440.92879623476296" />
-      <entry key="W1" value="455.51227716846796" />
+      <entry key="MS100" value="1.8938055422672915" />
+      <entry key="MS500" value="3.6510610565629804" />
+      <entry key="S2" value="11.257101495937922" />
+      <entry key="S5" value="26.532745426687107" />
+      <entry key="S10" value="42.66522617146858" />
+      <entry key="S30" value="65.62892911474681" />
+      <entry key="S60" value="76.29464922527264" />
+      <entry key="M2" value="85.3241091410406" />
+      <entry key="M5" value="97.89083944615383" />
+      <entry key="M10" value="113.3249895737024" />
+      <entry key="M15" value="130.41495314330427" />
+      <entry key="M30" value="187.73950803642347" />
+      <entry key="H1" value="280.431846851914" />
+      <entry key="H2" value="375.1171044890218" />
+      <entry key="H4" value="445.01384015484854" />
+      <entry key="D1" value="519.8369360403595" />
+      <entry key="W1" value="534.498750747775" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="2.063010160700356E-73" />
-      <entry key="S2" value="6.739463750822683E-19" />
-      <entry key="S5" value="5.388321837739044E-8" />
-      <entry key="S10" value="2.327759200540148E-4" />
-      <entry key="S30" value="0.07122170641580797" />
-      <entry key="S60" value="0.3863427711597928" />
-      <entry key="M2" value="1.1015265134779508" />
-      <entry key="M5" value="2.389294734416676" />
-      <entry key="M10" value="3.7992736419065873" />
-      <entry key="M15" value="5.0620560444309275" />
-      <entry key="M30" value="7.711892215791897" />
-      <entry key="H1" value="10.145093619692268" />
-      <entry key="H2" value="11.84434689997924" />
-      <entry key="H4" value="12.857014703872556" />
-      <entry key="D1" value="13.799656791145647" />
-      <entry key="W1" value="13.971127218936667" />
+      <entry key="MS500" value="6.55080566298688E-88" />
+      <entry key="S2" value="1.5998294199270342E-22" />
+      <entry key="S5" value="1.912638363567896E-9" />
+      <entry key="S10" value="4.385586883770888E-5" />
+      <entry key="S30" value="0.040829644379578825" />
+      <entry key="S60" value="0.29251921671565995" />
+      <entry key="M2" value="0.9584859708705106" />
+      <entry key="M5" value="2.259987558114488" />
+      <entry key="M10" value="3.6950365256354605" />
+      <entry key="M15" value="4.969038822842547" />
+      <entry key="M30" value="7.640709207003032" />
+      <entry key="H1" value="10.098163992286857" />
+      <entry key="H2" value="11.816920090592605" />
+      <entry key="H4" value="12.842120203262324" />
+      <entry key="D1" value="13.79699108316989" />
+      <entry key="W1" value="13.970741639689933" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.002743143664255443" />
-      <entry key="MS500" value="0.3479534814897472" />
-      <entry key="S2" value="1.3957268891052583" />
-      <entry key="S5" value="2.1600890076033648" />
-      <entry key="S10" value="2.749961761171896" />
-      <entry key="S30" value="5.147790595890252" />
-      <entry key="S60" value="8.412914080055623" />
-      <entry key="M2" value="13.592575297871642" />
-      <entry key="M5" value="24.30725698913823" />
-      <entry key="M10" value="40.02781590599078" />
-      <entry key="M15" value="58.0446850805058" />
-      <entry key="M30" value="117.74875401456637" />
-      <entry key="H1" value="212.64694288630986" />
-      <entry key="H2" value="308.7128002788885" />
-      <entry key="H4" value="379.32654377078825" />
-      <entry key="D1" value="454.7268310455614" />
-      <entry key="W1" value="469.4831693488003" />
+      <entry key="MS100" value="1.8404649665922497" />
+      <entry key="MS500" value="3.6053925246853633" />
+      <entry key="S2" value="11.226025547081907" />
+      <entry key="S5" value="26.500171421359767" />
+      <entry key="S10" value="42.61764819086939" />
+      <entry key="S30" value="65.60730868259587" />
+      <entry key="S60" value="76.51530560340315" />
+      <entry key="M2" value="86.2119500656121" />
+      <entry key="M5" value="100.09787212321918" />
+      <entry key="M10" value="116.97450071047588" />
+      <entry key="M15" value="135.3395213090031" />
+      <entry key="M30" value="195.3416939832079" />
+      <entry key="H1" value="290.5029380896615" />
+      <entry key="H2" value="386.9177195823531" />
+      <entry key="H4" value="457.84697771820413" />
+      <entry key="D1" value="533.6323007558132" />
+      <entry key="W1" value="548.4692566837567" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -186,7 +186,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
     "rest.client.default.execution.environment": "dev",
-    "settings.editor.selected.configurable": "settings.sync",
+    "settings.editor.selected.configurable": "preferences.editor",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -205,14 +205,16 @@
         <entry key="HttpClient.HttpRequestRunConfigurationType">
           <value>
             <map>
-              <entry key="db-live-test | #28" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#1" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#2 (1)" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#3" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.db-live-test | #28 (1)">
+  <component name="RunManager" selected="HTTP Request.db-live-test | 2. Register a user in the live database#3">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
@@ -223,35 +225,35 @@
     <configuration default="true" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" environment="&lt;No Environment&gt;" path="">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 2. Register a user in the live database#1 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
+    <configuration name="db-live-test | 2. Register a user in the live database#1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 2. Register a user in the live database#2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#2" index="3" runType="Run single request">
+    <configuration name="db-live-test | 2. Register a user in the live database#2 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#2" index="3" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="db-live-test | 2. Register a user in the live database#3 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#3" index="4" runType="Run single request">
       <method v="2" />
     </configuration>
+    <configuration name="db-live-test | 2. Register a user in the live database#3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#3" index="4" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <configuration name="db-live-test | #28 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#28" index="28" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | #28" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#28" index="28" runType="Run single request">
-      <method v="2" />
-    </configuration>
     <list>
-      <item itemvalue="HTTP Request.db-live-test | #28" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2 (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3" />
       <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
-      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
-      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2" />
       <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3 (1)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2 (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1" />
         <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
         <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3 (1)" />
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2" />
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
-        <item itemvalue="HTTP Request.db-live-test | #28" />
       </list>
     </recent_temporary>
   </component>
