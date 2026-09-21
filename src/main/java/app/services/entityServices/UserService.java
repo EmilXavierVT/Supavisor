@@ -2,9 +2,11 @@ package app.services.entityServices;
 
 import app.dao.UserDAO;
 import app.entities.User;
+import app.exceptions.ValidationException;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserService {
     private final UserDAO userDAO;
@@ -37,8 +39,24 @@ public class UserService {
         return userDAO.update(user);
     }
 
+    public User update(User user, Set<Long> customRoleIds) throws ValidationException {
+        return userDAO.update(user, customRoleIds);
+    }
+
     public User delete(Long id) {
         return userDAO.delete(id);
+    }
+
+    public User setCustomRoles(Long id, Set<Long> roleIds) throws ValidationException {
+        return userDAO.setCustomRoles(id, roleIds);
+    }
+
+    public User addCustomRole(Long id, Long roleId) throws ValidationException {
+        return userDAO.addCustomRole(id, roleId);
+    }
+
+    public User removeCustomRole(Long id, Long roleId) {
+        return userDAO.removeCustomRole(id, roleId);
     }
 
     public User setAdmin(Long id) {

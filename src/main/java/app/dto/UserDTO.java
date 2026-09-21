@@ -10,6 +10,9 @@ public class UserDTO {
     private String phoneNumber;
     private Long tenantId;
     private Set<String> roles = new HashSet<>();
+    private Set<RoleDTO> customRoles = new HashSet<>();
+    // null = leave assignments untouched, empty set = clear them all
+    private Set<Long> customRoleIds;
 
     public UserDTO() {
     }
@@ -78,5 +81,21 @@ public class UserDTO {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+    }
+
+    public Set<RoleDTO> getCustomRoles() {
+        return customRoles;
+    }
+
+    public void setCustomRoles(Set<RoleDTO> customRoles) {
+        this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
+    }
+
+    public Set<Long> getCustomRoleIds() {
+        return customRoleIds;
+    }
+
+    public void setCustomRoleIds(Set<Long> customRoleIds) {
+        this.customRoleIds = customRoleIds == null ? null : new HashSet<>(customRoleIds);
     }
 }

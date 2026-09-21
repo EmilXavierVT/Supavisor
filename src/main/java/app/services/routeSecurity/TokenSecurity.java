@@ -22,7 +22,9 @@ public class TokenSecurity implements ITokenSecurity {
         String roles = jwt.getJWTClaimsSet().getClaim("roles").toString();
         String username = jwt.getJWTClaimsSet().getClaim("email").toString();
         Set<String> rolesSet = (Set)Arrays.stream(roles.split(",")).collect(Collectors.toSet());
-        return new UserDTO(username, rolesSet);
+        UserDTO user = new UserDTO(username, rolesSet);
+        user.setTenantId(jwt.getJWTClaimsSet().getLongClaim("tenantId"));
+        return user;
     }
 
     public boolean tokenIsValid(String token, String secret) throws ParseException, TokenVerificationException {

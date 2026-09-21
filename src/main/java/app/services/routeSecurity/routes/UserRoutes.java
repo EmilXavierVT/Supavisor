@@ -2,6 +2,8 @@ package app.services.routeSecurity.routes;
 
 import app.dto.UserDTO;
 import app.entities.User;
+import app.exceptions.ApiException;
+import app.exceptions.ValidationException;
 import app.services.dtoConverter.UserMapper;
 import app.services.entityServices.UserService;
 import io.javalin.http.Context;
@@ -65,7 +67,12 @@ public class UserRoutes {
         UserDTO dto = ctx.bodyValidator(UserDTO.class).get();
         dto.setId(id);
         User user = userMapper.fromDto(dto);
-        User updated = userService.update(user);
+        User updated;
+        try {
+            updated = userService.update(user, dto.getCustomRoleIds());
+        } catch (ValidationException e) {
+            throw new ApiException(400, e.getMessage());
+        }
         if (updated == null) {
             ctx.status(404).result("User not found");
             return;
@@ -116,6 +123,43 @@ public class UserRoutes {
     public void setFlex(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         User user = userService.setFlex(id);
+        ctx.json(userMapper.toDto(user));
+    }
+
+    public void setCustomRoles(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        UserDTO dto = ctx.bodyValidator(UserDTO.class).get();
+        if (dto.getCustomRoleIds() == null) {
+            throw new ApiException(400, "customRoleIds is required");
+        }
+        try {
+            respondWithUser(ctx, userService.setCustomRoles(id, dto.getCustomRoleIds()));
+        } catch (ValidationException e) {
+            throw new ApiException(400, e.getMessage());
+        }
+    }
+
+    public void addCustomRole(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        Long roleId = ctx.pathParamAsClass("roleId", Long.class).get();
+        try {
+            respondWithUser(ctx, userService.addCustomRole(id, roleId));
+        } catch (ValidationException e) {
+            throw new ApiException(400, e.getMessage());
+        }
+    }
+
+    public void removeCustomRole(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        Long roleId = ctx.pathParamAsClass("roleId", Long.class).get();
+        respondWithUser(ctx, userService.removeCustomRole(id, roleId));
+    }
+
+    private void respondWithUser(Context ctx, User user) {
+        if (user == null) {
+            ctx.status(404).result("User not found");
+            return;
+        }
         ctx.json(userMapper.toDto(user));
     }
 }
