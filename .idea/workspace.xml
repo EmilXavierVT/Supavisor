@@ -4,34 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="updated gitignore">
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/Project.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/ProjectStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/EntityRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dto/RoleDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dto/RoleDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/RoleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/dtoConverter/RoleMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/dto/RoleDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dto/RoleDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/entities/Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/entities/Role.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/dtoConverter/RoleMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/dtoConverter/RoleMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.config.ApplicationConfigIntegrationTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.config.ApplicationConfigIntegrationTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dao.UserDAOIntegrationTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dao.UserDAOIntegrationTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dto.UserDTOTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.dto.UserDTOTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-app.services.routeSecurity.TokenSecurityTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-app.services.routeSecurity.TokenSecurityTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/app.config.ApplicationConfigIntegrationTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/app.config.ApplicationConfigIntegrationTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/app.dao.UserDAOIntegrationTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/app.dao.UserDAOIntegrationTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/app.dto.UserDTOTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/app.dto.UserDTOTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/app.services.routeSecurity.TokenSecurityTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/app.services.routeSecurity.TokenSecurityTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/app/dao/UserCustomRolesIntegrationTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/app/dao/UserCustomRolesIntegrationTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/app/services/entityServices/UserServiceIntegrationTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/app/services/entityServices/UserServiceIntegrationTest.class" afterDir="false" />
+    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150100.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150109.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150128.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153006.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153014.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" afterDir="false" />
     </list>
     <list id="3f833543-8ac3-4875-a65c-7f2ea54fa5b8" name="Changes by shay" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,6 +71,65 @@
     <commands />
     <urls />
   </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.641559077828274E-13" />
+      <entry key="MS500" value="0.0030022496569836244" />
+      <entry key="S2" value="0.43594586078750935" />
+      <entry key="S5" value="1.578012181139999" />
+      <entry key="S10" value="2.927309965311154" />
+      <entry key="S30" value="5.345673418003856" />
+      <entry key="S60" value="6.969952237346869" />
+      <entry key="M2" value="11.567677167533372" />
+      <entry key="M5" value="25.234790842460463" />
+      <entry key="M10" value="42.89765778927035" />
+      <entry key="M15" value="58.80725274430855" />
+      <entry key="M30" value="103.7208281667096" />
+      <entry key="H1" value="219.27467542463953" />
+      <entry key="H2" value="468.73602476728405" />
+      <entry key="H4" value="799.9046255268447" />
+      <entry key="D1" value="1365.0359297367074" />
+      <entry key="W1" value="1508.3394964006472" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0000000000010354" />
+      <entry key="S10" value="1.000001736596884" />
+      <entry key="S30" value="1.0249329868480865" />
+      <entry key="S60" value="1.2766395191766033" />
+      <entry key="M2" value="1.9630046529911533" />
+      <entry key="M5" value="3.177036842277231" />
+      <entry key="M10" value="3.9259233119141244" />
+      <entry key="M15" value="4.2430416832876166" />
+      <entry key="M30" value="4.659171739998989" />
+      <entry key="H1" value="5.4184204329191745" />
+      <entry key="H2" value="7.842362561733286" />
+      <entry key="H4" value="11.891109307075046" />
+      <entry key="D1" value="19.602507496628508" />
+      <entry key="W1" value="21.634162240740466" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="6.067951575567434E-11" />
+      <entry key="MS500" value="0.00960798711944864" />
+      <entry key="S2" value="0.6215559268004271" />
+      <entry key="S5" value="1.9762813333691864" />
+      <entry key="S10" value="3.4321276738599598" />
+      <entry key="S30" value="6.0542403973949925" />
+      <entry key="S60" value="8.039393647519441" />
+      <entry key="M2" value="13.398291293461636" />
+      <entry key="M5" value="28.34065392540968" />
+      <entry key="M10" value="46.78199799005639" />
+      <entry key="M15" value="63.02078329980018" />
+      <entry key="M30" value="108.36398099368671" />
+      <entry key="H1" value="224.6835796148467" />
+      <entry key="H2" value="476.57072499497656" />
+      <entry key="H4" value="811.7893137574519" />
+      <entry key="D1" value="1384.6365163883745" />
+      <entry key="W1" value="1529.9733517505924" />
+    </decayedShown>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -101,6 +146,10 @@
     "Application.Main.executor": "Run",
     "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
     "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token (1).executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token (2).executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token (3).executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token (4).executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
     "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
     "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
@@ -112,7 +161,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "project-entity-setup",
+    "git-widget-placeholder": "fixingIsActiveState",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -136,8 +185,25 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunDashboard">
+    <option name="configurationStatuses">
+      <map>
+        <entry key="HttpClient.HttpRequestRunConfigurationType">
+          <value>
+            <map>
+              <entry key="db-live-test | 2. Register a user in the live database#1 (1)" value="STOPPED" />
+              <entry key="db-live-test | 3. Login and store USER token" value="STOPPED" />
+              <entry key="db-live-test | 3. Login and store USER token (1)" value="STOPPED" />
+              <entry key="db-live-test | 3. Login and store USER token (3)" value="STOPPED" />
+              <entry key="db-live-test | 3. Login and store USER token (4)" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="HTTP Request.db-live-test | 3. Login and store USER token (2)">
+    <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
       <extension name="coverage">
@@ -153,24 +219,17 @@
     <configuration name="db-live-test | 2. Register a user in the live database" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database" index="2" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="3" runType="Run single request">
+    <configuration name="db-live-test | 2. Register a user in the live database#1 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="SupaVisor" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="app.services.economic.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="app.services.economic" />
-      <option name="MAIN_CLASS_NAME" value="app.services.economic.EconomicProductClientIntegrationTest" />
-      <option name="METHOD_NAME" value="retrievesProductsFromEconomicApi" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="db-live-test | 3. Login and store USER token (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 3. Login and store USER token (2)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 3. Login and store USER token (4)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
+      <method v="2" />
     </configuration>
     <configuration name="UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="SupaVisor" />
@@ -188,13 +247,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (2)" />
+      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (4)" />
+      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" />
-        <item itemvalue="JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" />
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (2)" />
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (4)" />
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
         <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -366,24 +432,8 @@
     <MESSAGE value="test" />
     <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>107</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java</url>
-          <line>102</line>
-          <properties class="app.services.routeSecurity.SecurityController">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

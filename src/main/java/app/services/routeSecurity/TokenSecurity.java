@@ -21,10 +21,12 @@ public class TokenSecurity implements ITokenSecurity {
         SignedJWT jwt = SignedJWT.parse(token);
         String roles = jwt.getJWTClaimsSet().getClaim("roles").toString();
         String username = jwt.getJWTClaimsSet().getClaim("email").toString();
+        boolean isActive = jwt.getJWTClaimsSet().getBooleanClaim("isActive");
         Set<String> rolesSet = (Set)Arrays.stream(roles.split(",")).collect(Collectors.toSet());
         UserDTO user = new UserDTO(username, rolesSet);
         user.setTenantId(jwt.getJWTClaimsSet().getLongClaim("tenantId"));
         user.setId(jwt.getJWTClaimsSet().getLongClaim("userId"));
+        user.setIsActive(isActive);
         return user;
     }
 
