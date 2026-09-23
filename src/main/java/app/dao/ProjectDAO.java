@@ -45,10 +45,10 @@ public class ProjectDAO {
 
     public Project create(Project project) {
         try (EntityManager em = emf.createEntityManager()) {
-            EntityTransaction tx = em.getTransaction();
-            tx.begin();
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
             em.persist(project);
-            tx.commit();
+            transaction.commit();
             return project;
         }
     }

@@ -27,8 +27,6 @@ public class ProjectDTO {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    // output only: the tenant always comes from the caller's token, never from the request body
     public Long getTenantId() { return tenantId; }
     public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
 

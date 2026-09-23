@@ -132,7 +132,7 @@ public class ProjectService {
         for (Long assignmentId : uniqueIds) {
             Assignment assignment = assignmentDAO.getById(assignmentId);
             if (assignment == null || !tenantId.equals(assignment.getTenantId())) {
-                throw new ApiException(400, "Assignment not found");
+                throw new ApiException(400, "Assignment not found, it may not belong to you");
             }
         }
         return List.copyOf(uniqueIds);
