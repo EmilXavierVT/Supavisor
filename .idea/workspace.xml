@@ -19,27 +19,28 @@
       <change beforePath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" afterDir="false" />
     </list>
+    <list id="3f833543-8ac3-4875-a65c-7f2ea54fa5b8" name="Changes by shay" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="245" />
+    <option name="cachedIndexableFilesCount" value="191" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
-        <option value="HTTP Public Environment File" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="add-roles" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -50,26 +51,22 @@
     &quot;assignee&quot;: &quot;EmilXavierVT&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/EmilXavierVT/Supavisor.git&quot;,
-    &quot;accountId&quot;: &quot;d529687c-2198-42f1-a77e-46dc5596888e&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/EmilXavierVT/Supavisor.git",
+    "accountId": "d529687c-2198-42f1-a77e-46dc5596888e"
   },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
     },
-    &quot;owner&quot;: &quot;EmilXavierVT&quot;,
-    &quot;repository&quot;: &quot;Supavisor&quot;
+    "owner": "EmilXavierVT",
+    "repository": "Supavisor"
   }
-}</component>
-  <component name="HttpClientSelectedEnvironments">
-    <file url="file://$PROJECT_DIR$/requests/db-live-test.http" environment="dev" />
-    <file url="file://$PROJECT_DIR$/requests/user-routes.http" environment="dev" />
-  </component>
+}]]></component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -147,35 +144,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
-    "HTTP Request.db-live-test | #28 (1).executor": "Run",
-    "HTTP Request.db-live-test | #28.executor": "Run",
     "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
-    "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1).executor": "Run",
-    "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to.executor": "Run",
-    "HTTP Request.db-live-test | 11b. Put the test user in that tenant (keeps ADMIN).executor": "Run",
-    "HTTP Request.db-live-test | 11d. Create custom role \"Cleaning\".executor": "Run",
-    "HTTP Request.db-live-test | 11e. Create custom role \"Kitchen\".executor": "Run",
-    "HTTP Request.db-live-test | 11f. Assign both custom roles (replaces the whole set).executor": "Run",
-    "HTTP Request.db-live-test | 11g. Read back: customRoles lists both, roles still [\"ADMIN\"].executor": "Run",
-    "HTTP Request.db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged.executor": "Run",
-    "HTTP Request.db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first).executor": "Run",
-    "HTTP Request.db-live-test | 11j. Read back: only Kitchen remains.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (1).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (2).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (3).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#2 (1).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#2.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (1).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (2).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#3.executor": "Run",
     "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token (1).executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token (2).executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token (3).executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token (4).executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
-    "HTTP Request.user-routes | Update user.executor": "Run",
     "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
     "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
     "JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor": "Run",
@@ -185,7 +160,6 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "fixingIsActiveState",
     "junie.onboarding.icon.badge.shown": "true",
@@ -199,8 +173,6 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
-    "rest.client.default.execution.environment": "dev",
-    "settings.editor.selected.configurable": "preferences.editor",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -234,11 +206,17 @@
     <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="app.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" environment="&lt;No Environment&gt;" path="">
+    <configuration name="db-live-test | 2. Register a user in the live database" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database" index="2" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="db-live-test | 2. Register a user in the live database#1 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
@@ -253,8 +231,21 @@
     <configuration name="db-live-test | 3. Login and store USER token (4)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
-      <method v="2" />
+    <configuration name="UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="SupaVisor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="app.dao.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="app.dao" />
+      <option name="MAIN_CLASS_NAME" value="app.dao.UserDAOIntegrationTest" />
+      <option name="METHOD_NAME" value="userDaoCanFetchUsersByTenantId" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <list>
       <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
@@ -276,8 +267,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
       </set>
     </attachedChunks>
   </component>
@@ -395,7 +386,31 @@
       <option name="project" value="LOCAL" />
       <updated>1789637677841</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="added new Entity Role. this might have to be changed to CustomRoles as these describe the actual custom roles made by an admin user. the commit contains DAO + DTO + Entity. for now user has a role as a field. this might need to change so we have system roles and custom roles">
+      <option name="closed" value="true" />
+      <created>1789740860142</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1789740860142</updated>
+    </task>
+    <task id="LOCAL-00015" summary="updated gitignore">
+      <option name="closed" value="true" />
+      <created>1789740976663</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1789740976663</updated>
+    </task>
+    <task id="LOCAL-00016" summary="test">
+      <option name="closed" value="true" />
+      <created>1790155755650</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1790155755650</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -412,7 +427,10 @@
     <MESSAGE value="added new endpoint for token validation" />
     <MESSAGE value="Implemented tenant support without changing the existing project structure.&#10;Changed:&#10;- Added Tenant entity, TenantDTO, TenantDAO, TenantService, TenantMapper, and TenantRoutes.&#10;- Added tenantId to User and UserDTO.&#10;- Updated UserMapper and UserDAO.update() to preserve tenantId.&#10;- Registered Tenant in EntityRegistry.&#10;- Added tenant CRUD endpoints under /api/tenant:&#10;- GET /tenant/all&#10;- POST /tenant/&#10;- GET /tenant/{id}&#10;- PUT /tenant/{id}&#10;- DELETE /tenant/{id}" />
     <MESSAGE value="created endpoint + helper methods to retrieve user based on tenantId" />
-    <option name="LAST_COMMIT_MESSAGE" value="created endpoint + helper methods to retrieve user based on tenantId" />
+    <MESSAGE value="added new Entity Role. this might have to be changed to CustomRoles as these describe the actual custom roles made by an admin user. the commit contains DAO + DTO + Entity. for now user has a role as a field. this might need to change so we have system roles and custom roles" />
+    <MESSAGE value="updated gitignore" />
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
