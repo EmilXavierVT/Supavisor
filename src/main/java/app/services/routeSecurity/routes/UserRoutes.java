@@ -205,6 +205,24 @@ public class UserRoutes {
         respondWithUser(ctx, userService.removeCustomRole(id, roleId));
     }
 
+    public void setPrimaryCategory(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        UserDTO dto = ctx.bodyValidator(UserDTO.class).get();
+        if (dto.getPrimaryCategoryId() == null) {
+            throw new ApiException(400, "primaryCategoryId is required");
+        }
+        try {
+            respondWithUser(ctx, userService.setPrimaryCategory(id, dto.getPrimaryCategoryId()));
+        } catch (ValidationException e) {
+            throw new ApiException(400, e.getMessage());
+        }
+    }
+
+    public void clearPrimaryCategory(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        respondWithUser(ctx, userService.clearPrimaryCategory(id));
+    }
+
     private static final String SELF_DEMOTION_MESSAGE =
             "You cannot remove administrative privileges from your own account";
 

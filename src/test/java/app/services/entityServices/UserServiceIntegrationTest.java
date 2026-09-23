@@ -3,6 +3,7 @@ package app.services.entityServices;
 import app.config.TestEntityManagerFactory;
 import app.dao.RoleDAO;
 import app.dao.UserDAO;
+import app.entities.EmployeeCategory;
 import app.entities.Role;
 import app.entities.Tenant;
 import app.entities.User;
@@ -117,6 +118,35 @@ class UserServiceIntegrationTest {
         assertNull(userService.getByEmail("foreign-role@example.com"));
     }
 
+    @Test
+    void assignsOneActivePrimaryCategoryAndReplacingItRemovesTheOldPrimary() throws ValidationException {
+        Tenant tenant = createTenant();
+        EmployeeCategory cleaning = createCategory(tenant.getId(), "Cleaning", true);
+        EmployeeCategory kitchen = createCategory(tenant.getId(), "Kitchen", true);
+        User user = userService.createUserWithRole("Worker", "primary-category@example.com", "USER", tenant.getId(), null).user();
+
+        userService.setPrimaryCategory(user.getId(), cleaning.getId());
+        assertEquals(cleaning.getId(), userService.getById(user.getId()).getPrimaryCategory().getId());
+
+        userService.setPrimaryCategory(user.getId(), kitchen.getId());
+
+        User reloaded = userService.getById(user.getId());
+        assertEquals(kitchen.getId(), reloaded.getPrimaryCategory().getId());
+    }
+
+    @Test
+    void rejectsInactiveOrForeignPrimaryCategory() throws ValidationException {
+        Tenant mine = createTenant();
+        Tenant other = createTenant();
+        EmployeeCategory inactive = createCategory(mine.getId(), "Inactive", false);
+        EmployeeCategory foreign = createCategory(other.getId(), "Foreign", true);
+        User user = userService.createUserWithRole("Worker", "bad-primary-category@example.com", "USER", mine.getId(), null).user();
+
+        assertThrows(ValidationException.class, () -> userService.setPrimaryCategory(user.getId(), inactive.getId()));
+        assertThrows(ValidationException.class, () -> userService.setPrimaryCategory(user.getId(), foreign.getId()));
+        assertNull(userService.getById(user.getId()).getPrimaryCategory());
+    }
+
     private static Tenant createTenant() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -129,5 +159,15 @@ class UserServiceIntegrationTest {
 
     private static Role createRole(Tenant tenant, String name) {
         return new RoleDAO(emf).save(Role.builder().roleName(name).tenant(tenant).build());
+    }
+
+    private static EmployeeCategory createCategory(Long tenantId, String name, boolean active) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            EmployeeCategory category = new EmployeeCategory(null, name + "-" + UUID.randomUUID(), tenantId, active);
+            em.persist(category);
+            em.getTransaction().commit();
+            return category;
+        }
     }
 }

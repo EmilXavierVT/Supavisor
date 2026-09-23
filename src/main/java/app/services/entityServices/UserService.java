@@ -133,6 +133,14 @@ public class UserService {
         return userDAO.removeCustomRole(id, roleId);
     }
 
+    public User setPrimaryCategory(Long id, Long categoryId) throws ValidationException {
+        return userDAO.setPrimaryCategory(id, categoryId);
+    }
+
+    public User clearPrimaryCategory(Long id) {
+        return userDAO.clearPrimaryCategory(id);
+    }
+
     public User setAdmin(Long id) {
         return userDAO.setRole(id, "ADMIN");
     }

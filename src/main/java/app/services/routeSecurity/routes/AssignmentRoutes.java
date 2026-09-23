@@ -27,6 +27,14 @@ public class AssignmentRoutes {
         ctx.json(assignmentService.getById(id, callerTenantId(ctx), !isAdmin(ctx)));
     }
 
+    public void getCategorySchedule(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        if (caller == null || caller.getId() == null) {
+            throw new ApiException(401, "Not authenticated");
+        }
+        ctx.json(assignmentService.getCategoryScheduleForEmployee(caller.getId(), callerTenantId(ctx), !isAdmin(ctx)));
+    }
+
     public void create(Context ctx) {
         AssignmentDTO dto = ctx.bodyValidator(AssignmentDTO.class).get();
         ctx.status(201).json(assignmentService.create(dto, callerTenantId(ctx)));

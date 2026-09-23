@@ -13,6 +13,8 @@ public class UserDTO {
     private Set<String> roles = new HashSet<>();
     private Set<RoleDTO> customRoles = new HashSet<>();
     private boolean isActive;
+    private Long primaryCategoryId;
+    private String primaryCategoryName;
     // null = leave assignments untouched, empty set = clear them all
     private Set<Long> customRoleIds;
 
@@ -111,5 +113,21 @@ public class UserDTO {
 
     public void setCustomRoleIds(Set<Long> customRoleIds) {
         this.customRoleIds = customRoleIds == null ? null : new HashSet<>(customRoleIds);
+    }
+
+    public Long getPrimaryCategoryId() {
+        return primaryCategoryId;
+    }
+
+    public void setPrimaryCategoryId(Long primaryCategoryId) {
+        this.primaryCategoryId = primaryCategoryId;
+    }
+
+    public String getPrimaryCategoryName() {
+        return primaryCategoryName;
+    }
+
+    public void setPrimaryCategoryName(String primaryCategoryName) {
+        this.primaryCategoryName = primaryCategoryName;
     }
 }

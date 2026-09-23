@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: app.services.routeSecurity.TokenSecurityTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 s -- in app.services.routeSecurity.TokenSecurityTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.025 s -- in app.services.routeSecurity.TokenSecurityTest

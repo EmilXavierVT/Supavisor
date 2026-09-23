@@ -3,6 +3,7 @@ package app.services.entityServices;
 import app.config.TestEntityManagerFactory;
 import app.dao.UserDAO;
 import app.dto.AssignmentDTO;
+import app.entities.EmployeeCategory;
 import app.entities.User;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
@@ -350,6 +351,28 @@ class AssignmentServiceIntegrationTest {
     }
 
     @Test
+    void categoryScheduleUsesTheEmployeesCurrentPrimaryCategory() throws Exception {
+        Long tenant = newTenantId();
+        EmployeeCategory cleaning = newCategory(tenant, "Cleaning", true);
+        EmployeeCategory kitchen = newCategory(tenant, "Kitchen", true);
+        User requester = newEmployee(tenant, true);
+        User sameCategory = newEmployee(tenant, true);
+        User otherCategory = newEmployee(tenant, true);
+        UserDAO userDAO = new UserDAO(emf);
+        userDAO.setPrimaryCategory(requester.getId(), cleaning.getId());
+        userDAO.setPrimaryCategory(sameCategory.getId(), cleaning.getId());
+        userDAO.setPrimaryCategory(otherCategory.getId(), kitchen.getId());
+        service.create(details("Cleaning visible", null, null, null, sameCategory.getId()), tenant);
+        service.create(details("Kitchen hidden", null, null, null, otherCategory.getId()), tenant);
+
+        assertEquals(List.of("Cleaning visible"), names(service.getCategoryScheduleForEmployee(requester.getId(), tenant, true)));
+
+        userDAO.setPrimaryCategory(requester.getId(), kitchen.getId());
+
+        assertEquals(List.of("Kitchen hidden"), names(service.getCategoryScheduleForEmployee(requester.getId(), tenant, true)));
+    }
+
+    @Test
     void activateBringsADeactivatedAssignmentBack() {
         Long tenant = newTenantId();
         AssignmentDTO created = service.create(dto("Cleaning", false), tenant);
@@ -393,6 +416,16 @@ class AssignmentServiceIntegrationTest {
     private static User newEmployee(Long tenantId, boolean active) {
         return new UserDAO(emf).create(new User(null, UUID.randomUUID() + "@example.com", "secret-password",
                 null, tenantId, active, Set.of("USER")));
+    }
+
+    private static EmployeeCategory newCategory(Long tenantId, String name, boolean active) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            EmployeeCategory category = new EmployeeCategory(null, name + "-" + UUID.randomUUID(), tenantId, active);
+            em.persist(category);
+            em.getTransaction().commit();
+            return category;
+        }
     }
 
     /** address, estimated_minutes, cost, assigned_employee_id straight from the table. */

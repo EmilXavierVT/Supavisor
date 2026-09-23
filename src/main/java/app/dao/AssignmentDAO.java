@@ -50,6 +50,20 @@ public class AssignmentDAO {
         }
     }
 
+    public List<Assignment> getByAssignedEmployeePrimaryCategory(Long tenantId, Long categoryId, boolean activeOnly) {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT a FROM Assignment a, User u "
+                    + "WHERE a.tenantId = :tenantId AND a.assignedEmployeeId = u.id "
+                    + "AND u.primaryCategory.id = :categoryId"
+                    + (activeOnly ? " AND a.isActive = true" : "")
+                    + " ORDER BY LOWER(a.name), a.id";
+            return em.createQuery(jpql, Assignment.class)
+                    .setParameter("tenantId", tenantId)
+                    .setParameter("categoryId", categoryId)
+                    .getResultList();
+        }
+    }
+
     public Assignment create(Assignment assignment) {
         try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction tx = em.getTransaction();

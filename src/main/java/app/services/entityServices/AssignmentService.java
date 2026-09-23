@@ -12,6 +12,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,6 +50,19 @@ public class AssignmentService {
             throw notFound();
         }
         return mapper.toDto(assignment);
+    }
+
+    public List<AssignmentDTO> getCategoryScheduleForEmployee(Long employeeId, Long tenantId, boolean activeOnly) {
+        User employee = employeeId == null ? null : userDAO.getById(employeeId);
+        if (employee == null || !tenantId.equals(employee.getTenantId())) {
+            throw new ApiException(404, "Employee not found");
+        }
+        if (employee.getPrimaryCategory() == null) {
+            return Collections.emptyList();
+        }
+        return dao.getByAssignedEmployeePrimaryCategory(tenantId, employee.getPrimaryCategory().getId(), activeOnly).stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     public AssignmentDTO create(AssignmentDTO dto, Long tenantId) {

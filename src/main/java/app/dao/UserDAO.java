@@ -2,6 +2,7 @@ package app.dao;
 
 import app.entities.Role;
 import app.entities.User;
+import app.entities.EmployeeCategory;
 import app.exceptions.ValidationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -203,6 +204,46 @@ public class UserDAO implements ISecurityDAO {
             em.getTransaction().commit();
             return user;
         }
+    }
+
+    public User setPrimaryCategory(Long userId, Long categoryId) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, userId);
+            if (user == null) return null;
+
+            EmployeeCategory category = resolveActiveCategory(em, categoryId, user.getTenantId());
+
+            em.getTransaction().begin();
+            user.setPrimaryCategory(category);
+            em.getTransaction().commit();
+            return user;
+        }
+    }
+
+    public User clearPrimaryCategory(Long userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, userId);
+            if (user == null) return null;
+
+            em.getTransaction().begin();
+            user.setPrimaryCategory(null);
+            em.getTransaction().commit();
+            return user;
+        }
+    }
+
+    private EmployeeCategory resolveActiveCategory(EntityManager em, Long categoryId, Long tenantId) throws ValidationException {
+        EmployeeCategory category = categoryId == null ? null : em.find(EmployeeCategory.class, categoryId);
+        if (category == null) {
+            throw new ValidationException("Employee category does not exist");
+        }
+        if (tenantId == null || !tenantId.equals(category.getTenantId())) {
+            throw new ValidationException("Employee category does not belong to the user's tenant");
+        }
+        if (!category.isActive()) {
+            throw new ValidationException("Employee category is inactive");
+        }
+        return category;
     }
 
     private Set<Role> resolveRoles(EntityManager em, Set<Long> ids, Long tenantId) throws ValidationException {

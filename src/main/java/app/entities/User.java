@@ -40,6 +40,10 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "primary_category_id")
+    private EmployeeCategory primaryCategory;
+
 
     public User() {
 
@@ -160,6 +164,14 @@ public class User {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public EmployeeCategory getPrimaryCategory() {
+        return primaryCategory;
+    }
+
+    public void setPrimaryCategory(EmployeeCategory primaryCategory) {
+        this.primaryCategory = primaryCategory;
     }
 
     public void reversActivation() {

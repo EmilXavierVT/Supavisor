@@ -1,8 +1,14 @@
+app/dto/EmployeeCategoryDTO.class
 app/dao/ProjectDAO.class
 app/dto/ProjectDTO.class
 app/services/dtoConverter/ProjectMapper.class
 app/entities/Project.class
 app/entities/Role$Builder.class
+app/services/dtoConverter/EmployeeCategoryMapper.class
+app/entities/EmployeeCategory.class
+app/dao/EmployeeCategoryDAO.class
 app/entities/ProjectStatus.class
 app/services/routeSecurity/routes/ProjectRoutes.class
 app/services/entityServices/ProjectService.class
+app/services/routeSecurity/routes/EmployeeCategoryRoutes.class
+app/services/entityServices/EmployeeCategoryService.class

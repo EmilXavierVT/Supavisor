@@ -26,6 +26,10 @@ public class UserMapper {
                 new HashSet<>(user.getRoles())
         );
         dto.setName(user.getName());
+        if (user.getPrimaryCategory() != null) {
+            dto.setPrimaryCategoryId(user.getPrimaryCategory().getId());
+            dto.setPrimaryCategoryName(user.getPrimaryCategory().getName());
+        }
         dto.setCustomRoles(user.getCustomRoles().stream()
                 .map(roleMapper::toDTO)
                 .collect(Collectors.toSet()));

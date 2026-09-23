@@ -36,6 +36,7 @@ public class Routes {
         RoleRoutes roleRoutes = new RoleRoutes(emf);
         AssignmentRoutes assignmentRoutes = new AssignmentRoutes(emf);
         ProjectRoutes projectRoutes = new ProjectRoutes(emf);
+        EmployeeCategoryRoutes employeeCategoryRoutes = new EmployeeCategoryRoutes(emf);
 
         SystemController systemController = new SystemController();
 
@@ -59,6 +60,15 @@ public class Routes {
                 put("/{id}/custom-roles", userRoutes::setCustomRoles, Role.ADMIN);
                 post("/{id}/custom-roles/{roleId}", userRoutes::addCustomRole, Role.ADMIN);
                 delete("/{id}/custom-roles/{roleId}", userRoutes::removeCustomRole, Role.ADMIN);
+                put("/{id}/primary-category", userRoutes::setPrimaryCategory, Role.ADMIN);
+                delete("/{id}/primary-category", userRoutes::clearPrimaryCategory, Role.ADMIN);
+            });
+
+            path("/employee-category", () -> {
+                get("/all", employeeCategoryRoutes::getAll, Role.ADMIN, Role.USER);
+                post("/", employeeCategoryRoutes::create, Role.ADMIN);
+                patch("/{id}/deactivate", employeeCategoryRoutes::deactivate, Role.ADMIN);
+                patch("/{id}/activate", employeeCategoryRoutes::activate, Role.ADMIN);
             });
 
             path("/tenant", () -> {
@@ -83,6 +93,7 @@ public class Routes {
 
             path("/assignment", () -> {
                 get("/all", assignmentRoutes::getAll, Role.ADMIN, Role.USER);
+                get("/category-schedule", assignmentRoutes::getCategorySchedule, Role.ADMIN, Role.USER);
                 get("/{id}", assignmentRoutes::getById, Role.ADMIN, Role.USER);
                 post("/", assignmentRoutes::create, Role.ADMIN);
                 put("/{id}", assignmentRoutes::update, Role.ADMIN);
