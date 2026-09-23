@@ -1,4 +1,25 @@
 -------------------------------------------------------------------------------
 Test set: app.config.ApplicationConfigIntegrationTest
 -------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.201 s -- in app.config.ApplicationConfigIntegrationTest
+Tests run: 3, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 3.474 s <<< FAILURE! -- in app.config.ApplicationConfigIntegrationTest
+app.config.ApplicationConfigIntegrationTest.authTokenValidationAcceptsValidBearerToken -- Time elapsed: 0.400 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <200> but was: <500>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:152)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:147)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:558)
+	at app.config.ApplicationConfigIntegrationTest.loginAndGetToken(ApplicationConfigIntegrationTest.java:126)
+	at app.config.ApplicationConfigIntegrationTest.authTokenValidationAcceptsValidBearerToken(ApplicationConfigIntegrationTest.java:94)
+
+app.config.ApplicationConfigIntegrationTest.authRegisterRoutePersistsUserThroughDatabase -- Time elapsed: 0.062 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:195)
+	at app.config.ApplicationConfigIntegrationTest.authRegisterRoutePersistsUserThroughDatabase(ApplicationConfigIntegrationTest.java:85)
+
