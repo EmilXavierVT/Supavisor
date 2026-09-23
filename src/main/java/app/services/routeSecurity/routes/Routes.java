@@ -35,6 +35,7 @@ public class Routes {
         TenantRoutes tenantRoutes = new TenantRoutes(emf);
         RoleRoutes roleRoutes = new RoleRoutes(emf);
         AssignmentRoutes assignmentRoutes = new AssignmentRoutes(emf);
+        ProjectRoutes projectRoutes = new ProjectRoutes(emf);
 
         SystemController systemController = new SystemController();
 
@@ -88,6 +89,14 @@ public class Routes {
                 patch("/{id}/deactivate", assignmentRoutes::deactivate, Role.ADMIN);
                 patch("/{id}/activate", assignmentRoutes::activate, Role.ADMIN);
                 delete("/{id}", assignmentRoutes::delete, Role.ADMIN);
+            });
+
+            path("/project", () -> {
+                get("/all", projectRoutes::getAll, Role.ADMIN, Role.USER);
+                get("/{id}", projectRoutes::getById, Role.ADMIN, Role.USER);
+                post("/", projectRoutes::create, Role.ADMIN);
+                put("/{id}", projectRoutes::update, Role.ADMIN);
+                delete("/{id}", projectRoutes::delete, Role.ADMIN);
             });
         };
     }
