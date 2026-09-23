@@ -46,9 +46,9 @@ public final class HibernateConfig {
 
     private static void setDevProperties(Properties props) {
         String dbName = Utils.getPropertyValue("DB_NAME", "config.properties");
-        String username = Utils.getPropertyValue("DB_USERNAME", "config.properties");
-        String password = Utils.getPropertyValue("DB_PASSWORD", "config.properties");
-        String ConnectionStr = Utils.getPropertyValue("CONNECTION_STR", "config.properties") + dbName;
+        String username = Utils.getPropertyValue("LOCAL_DB_USERNAME", "config.properties");
+        String password = Utils.getPropertyValue("LOCAL_DB_PASSWORD", "config.properties");
+        String ConnectionStr = Utils.getPropertyValue("LOCAL_CONNECTION_STR", "config.properties") + dbName;
 
         props.put("hibernate.connection.url", ConnectionStr);
         props.put("hibernate.connection.username", username);

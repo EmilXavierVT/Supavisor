@@ -4,14 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId" />
+    <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T145832.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T145938.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150023.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150038.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150044.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/db-live-test.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/db-live-test.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/http-client.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/requests/http-client.env.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/TokenSecurity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/TokenSecurity.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="224" />
+    <option name="cachedIndexableFilesCount" value="245" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -62,61 +74,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.6434277423024115" />
-      <entry key="MS500" value="3.119503804007421" />
-      <entry key="S2" value="6.408666777992503" />
-      <entry key="S5" value="15.4883595949061" />
-      <entry key="S10" value="26.84577364429367" />
-      <entry key="S30" value="43.61981242279597" />
-      <entry key="S60" value="50.704935509032936" />
-      <entry key="M2" value="56.97242597582892" />
-      <entry key="M5" value="65.99624963746518" />
-      <entry key="M10" value="80.39015692074022" />
-      <entry key="M15" value="98.91450953678967" />
-      <entry key="M30" value="173.8540792693503" />
-      <entry key="H1" value="338.5711820674531" />
-      <entry key="H2" value="581.9217997625534" />
-      <entry key="H4" value="825.348275701431" />
-      <entry key="D1" value="1158.7167664995363" />
-      <entry key="W1" value="1233.8446379616155" />
+      <entry key="MS100" value="1.870434343966465" />
+      <entry key="MS500" value="3.1865881211573965" />
+      <entry key="S2" value="4.078989386632842" />
+      <entry key="S5" value="6.329942374245505" />
+      <entry key="S10" value="15.11188913864884" />
+      <entry key="S30" value="53.6447756441184" />
+      <entry key="S60" value="91.38152980151932" />
+      <entry key="M2" value="129.98811569004857" />
+      <entry key="M5" value="170.00623131799702" />
+      <entry key="M10" value="197.206792857516" />
+      <entry key="M15" value="219.9615557429186" />
+      <entry key="M30" value="298.4302056209121" />
+      <entry key="H1" value="464.625738710307" />
+      <entry key="H2" value="709.691418910589" />
+      <entry key="H4" value="955.3520534125546" />
+      <entry key="D1" value="1292.5684483838452" />
+      <entry key="W1" value="1368.6704240460892" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="5.090110135374892E-210" />
-      <entry key="S30" value="2.3583578522810348E-70" />
-      <entry key="S60" value="2.118637166159925E-35" />
-      <entry key="M2" value="6.467412610397423E-18" />
-      <entry key="M5" value="2.0152557127572964E-7" />
-      <entry key="M10" value="6.516132899656633E-4" />
-      <entry key="M15" value="0.010677943702947066" />
-      <entry key="M30" value="0.26346662949312194" />
-      <entry key="H1" value="1.8245211705151145" />
-      <entry key="H2" value="5.265560778814204" />
-      <entry key="H4" value="9.125400764679863" />
-      <entry key="D1" value="14.559514074614004" />
-      <entry key="W1" value="15.785521503200771" />
+      <entry key="MS100" value="6.428178245408552E-189" />
+      <entry key="MS500" value="2.299416175565933E-38" />
+      <entry key="S2" value="3.894075750904439E-10" />
+      <entry key="S5" value="1.722510025140056E-4" />
+      <entry key="S10" value="0.01312444294109294" />
+      <entry key="S30" value="0.2358813617832764" />
+      <entry key="S60" value="0.4856761902577426" />
+      <entry key="M2" value="0.696904721075803" />
+      <entry key="M5" value="0.8655047182379461" />
+      <entry key="M10" value="0.9308939795307428" />
+      <entry key="M15" value="0.9627483796046283" />
+      <entry key="M30" value="1.2280394379070616" />
+      <entry key="H1" value="2.7717942181739526" />
+      <entry key="H2" value="6.200408358737814" />
+      <entry key="H4" value="10.070995015960134" />
+      <entry key="D1" value="15.545312136321716" />
+      <entry key="W1" value="16.783326972471087" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.595662957405387" />
-      <entry key="MS500" value="3.0974242047765106" />
-      <entry key="S2" value="6.391637318355118" />
-      <entry key="S5" value="15.473259052660001" />
-      <entry key="S10" value="26.832816290987036" />
-      <entry key="S30" value="43.612533257929144" />
-      <entry key="S60" value="50.70058995024503" />
-      <entry key="M2" value="56.96986057718327" />
-      <entry key="M5" value="65.99497017041284" />
-      <entry key="M10" value="80.3899865058906" />
-      <entry key="M15" value="98.92445597076517" />
-      <entry key="M30" value="174.11608684543626" />
-      <entry key="H1" value="340.391270372765" />
-      <entry key="H2" value="587.1807125167572" />
-      <entry key="H4" value="834.4677686422373" />
-      <entry key="D1" value="1173.274675739659" />
-      <entry key="W1" value="1249.6299099991002" />
+      <entry key="MS100" value="1.7565678035048766" />
+      <entry key="MS500" value="3.116331897043837" />
+      <entry key="S2" value="4.054120808064917" />
+      <entry key="S5" value="6.317627701154613" />
+      <entry key="S10" value="15.111900336309718" />
+      <entry key="S30" value="53.84361783266918" />
+      <entry key="S60" value="91.82685464029007" />
+      <entry key="M2" value="130.65426548377303" />
+      <entry key="M5" value="170.85561762208613" />
+      <entry key="M10" value="198.1287274340217" />
+      <entry key="M15" value="220.91798314960926" />
+      <entry key="M30" value="299.65394253084577" />
+      <entry key="H1" value="467.39172425432474" />
+      <entry key="H2" value="715.8845112254572" />
+      <entry key="H4" value="965.4168012037289" />
+      <entry key="D1" value="1308.112094897788" />
+      <entry key="W1" value="1385.4534926821343" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -170,7 +182,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "11.AdminCheck",
+    "git-widget-placeholder": "localDB",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -202,18 +214,18 @@
         <entry key="HttpClient.HttpRequestRunConfigurationType">
           <value>
             <map>
-              <entry key="db-live-test | #28 (1)" value="STOPPED" />
-              <entry key="db-live-test | 2. Register a user in the live database#1" value="STOPPED" />
-              <entry key="db-live-test | 2. Register a user in the live database#2" value="STOPPED" />
-              <entry key="db-live-test | 2. Register a user in the live database#3" value="STOPPED" />
+              <entry key="db-live-test | 11a. Create a tenant to attach the test user to" value="STOPPED" />
+              <entry key="db-live-test | 11a. Create a tenant to attach the test user to (1)" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#1 (1)" value="STOPPED" />
               <entry key="db-live-test | 3. Login and store USER token" value="STOPPED" />
+              <entry key="db-live-test | 3. Login and store USER token (1)" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.db-live-test | 2. Register a user in the live database#3">
+  <component name="RunManager" selected="HTTP Request.db-live-test | 2. Register a user in the live database#1">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
@@ -224,35 +236,35 @@
     <configuration default="true" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" environment="&lt;No Environment&gt;" path="">
       <method v="2" />
     </configuration>
+    <configuration name="db-live-test | 11a. Create a tenant to attach the test user to (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11a. Create a tenant to attach the test user to" index="14" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 11a. Create a tenant to attach the test user to" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11a. Create a tenant to attach the test user to" index="14" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <configuration name="db-live-test | 2. Register a user in the live database#1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 2. Register a user in the live database#2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#2" index="3" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="db-live-test | 2. Register a user in the live database#3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#3" index="4" runType="Run single request">
+    <configuration name="db-live-test | 3. Login and store USER token (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | #28 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#28" index="28" runType="Run single request">
-      <method v="2" />
-    </configuration>
     <list>
+      <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to" />
+      <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (1)" />
       <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1" />
-      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2" />
-      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3" />
       <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
-      <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#3" />
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#2" />
         <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1" />
-        <item itemvalue="HTTP Request.db-live-test | #28 (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (1)" />
         <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
+        <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to" />
       </list>
     </recent_temporary>
   </component>
