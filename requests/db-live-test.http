@@ -60,7 +60,7 @@ Accept: application/json
 
 {
   "email": "frededv@test.dk",
-  "password": "1234"
+  "password": "DerErEtYndigtLand"
 }
 
 > {% client.global.set("db_live_token", response.body.token); %}
