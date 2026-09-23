@@ -93,6 +93,7 @@ public class Routes {
 
             path("/project", () -> {
                 get("/all", projectRoutes::getAll, Role.ADMIN, Role.USER);
+                get("/{id}/status-history", projectRoutes::getStatusHistory, Role.ADMIN, Role.USER);
                 get("/{id}", projectRoutes::getById, Role.ADMIN, Role.USER);
                 post("/", projectRoutes::create, Role.ADMIN);
                 put("/{id}", projectRoutes::update, Role.ADMIN);

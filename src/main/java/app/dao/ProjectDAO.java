@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.entities.Project;
+import app.entities.ProjectStatusHistory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -53,6 +54,20 @@ public class ProjectDAO {
         }
     }
 
+    public Project create(Project project, ProjectStatusHistory statusHistory) {
+        try (EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.persist(project);
+            if (statusHistory != null) {
+                statusHistory.setProjectId(project.getId());
+                em.persist(statusHistory);
+            }
+            transaction.commit();
+            return project;
+        }
+    }
+
     public Project update(Project project) {
         try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction tx = em.getTransaction();
@@ -60,6 +75,29 @@ public class ProjectDAO {
             Project updated = em.merge(project);
             tx.commit();
             return updated;
+        }
+    }
+
+    public Project update(Project project, ProjectStatusHistory statusHistory) {
+        try (EntityManager em = emf.createEntityManager()) {
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+            Project updated = em.merge(project);
+            if (statusHistory != null) {
+                em.persist(statusHistory);
+            }
+            tx.commit();
+            return updated;
+        }
+    }
+
+    public List<ProjectStatusHistory> getStatusHistory(Long projectId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT h FROM ProjectStatusHistory h WHERE h.projectId = :projectId ORDER BY h.changedAt DESC, h.id DESC",
+                            ProjectStatusHistory.class)
+                    .setParameter("projectId", projectId)
+                    .getResultList();
         }
     }
 
