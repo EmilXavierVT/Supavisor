@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="feat: add primary employee categories">
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153006.201.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153014.201.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests/db-live-test.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/db-live-test.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/EntityRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="employee-categories" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -93,7 +92,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "employee-categories",
+    "git-widget-placeholder": "employee-categories-main-merge",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -117,7 +116,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="HTTP Request.db-live-test | 3. Login and store USER token">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
@@ -171,10 +170,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
         <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" />
         <item itemvalue="JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" />
-        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
         <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database" />
       </list>
     </recent_temporary>
@@ -196,7 +195,7 @@
       <updated>1788956915058</updated>
       <workItem from="1788956916085" duration="114000" />
       <workItem from="1788957196744" duration="60824000" />
-      <workItem from="1790203606810" duration="9599000" />
+      <workItem from="1790203606810" duration="11723000" />
     </task>
     <task id="LOCAL-00001" summary="first initial setup of the user entity. Full DAO and DTO setup up for the user">
       <option name="closed" value="true" />
@@ -334,7 +333,15 @@
       <option name="project" value="LOCAL" />
       <updated>1790204530578</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="feat: add primary employee categories">
+      <option name="closed" value="true" />
+      <created>1790236141313</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1790236141313</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -72,8 +72,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
+  "email": "fv@tv.dk",
+  "password": "1234"
 }
 
 > {% client.global.set("db_live_token", response.body.token); %}
