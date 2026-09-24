@@ -1,12 +1,3 @@
-.agents/
-
-# Local configuration
+.agents
 config.*
-
-# IDE/user-local files
-.idea/
-.idea/workspace.xml
-.DS_Store
-
-# Build and test output
-target/
+.idea.*
