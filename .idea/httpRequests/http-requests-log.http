@@ -1,72 +1,6 @@
 POST http://localhost:7070/api/auth/register
 Content-Type: application/json
 Accept: application/json
-Content-Length: 120
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
-Accept-Encoding: br, deflate, gzip, x-gzip
-
-{
-  "email": "test@test.dk",
-  "password": "1234",
-  "phoneNumber": "25715522",
-  "tenantId" : 1,
-  "roles": ["ADMIN"]
-}
-
-<> 2026-09-23T232935.201.json
-
-###
-
-POST http://localhost:7070/api/auth/register
-Content-Type: application/json
-Accept: application/json
-Content-Length: 120
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
-Accept-Encoding: br, deflate, gzip, x-gzip
-
-{
-  "email": "test@test.dk",
-  "password": "1234",
-  "phoneNumber": "25715522",
-  "tenantId" : 1,
-  "roles": ["ADMIN"]
-}
-
-<> 2026-09-23T230925.201.json
-
-###
-
-POST http://localhost:7070/api/auth/register
-Content-Type: application/json
-Accept: application/json
-Content-Length: 136
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
-Accept-Encoding: br, deflate, gzip, x-gzip
-
-{
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand",
-  "phoneNumber": "25715522",
-  "tenantId" : 1,
-  "roles": ["ADMIN"]
-}
-
-<> 2026-09-23T230433.201.json
-
-###
-
-GET http://localhost:7070/api/health
-Accept: application/json
-User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
-Accept-Encoding: br, deflate, gzip, x-gzip
-
-<> 2026-09-23T230426.200.json
-
-###
-
-POST http://localhost:7070/api/auth/register
-Content-Type: application/json
-Accept: application/json
 
 {
   "email": "frededv@test.dk",
@@ -693,5 +627,38 @@ Accept: application/json
 }
 
 <> 2026-09-21T153006.201.json
+
+###
+GET http://localhost:7070/api/user/1
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+<> 2026-09-21T150128.200.json
+
+###
+DELETE http://localhost:7070/api/role/1?tenantId=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+###
+PUT http://localhost:7070/api/user/1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+{
+  "email": "db-live-1789995669@example.com",
+  "phoneNumber": "12345678",
+  "tenantId": 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T150109.200.json
+
+###
+GET http://localhost:7070/api/user/1
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJzdWIiOiJmcmVkZWR2QHRlc3QuZGsiLCJleHAiOjE3ODk5OTczMTIsImVtYWlsIjoiZnJlZGVkdkB0ZXN0LmRrIiwicm9sZXMiOiJBRE1JTiJ9.KluIYoacjMEncXslj_4ZuD7i0V-yTCAYvm6qzXikQzk
+
+<> 2026-09-21T150100.200.json
 
 ###
