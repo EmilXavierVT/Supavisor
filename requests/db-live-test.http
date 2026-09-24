@@ -31,6 +31,19 @@ Content-Type: application/json
 Accept: application/json
 
 {
+  "email": "test@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+### 2. Register a user in the live database
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
   "email": "Luke@test.dk",
   "password": "DerErEtYndigtLand123",
   "phoneNumber": "45912492",

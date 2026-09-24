@@ -14,12 +14,14 @@
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/dao/UserDAO.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/dto/AssignmentDTO.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/dto/ProjectDTO.java
+/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/dto/ProjectStatusHistoryDTO.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/dto/RoleDTO.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/dto/TenantDTO.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/dto/UserDTO.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/entities/Assignment.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/entities/Project.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/entities/ProjectStatus.java
+/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/entities/ProjectStatusHistory.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/entities/Role.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/entities/Tenant.java
 /Users/emilthorsen/Desktop/SupaVisor/src/main/java/app/entities/User.java

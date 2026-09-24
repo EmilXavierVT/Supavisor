@@ -1,42 +1,47 @@
-POST http://localhost:7070/api/auth/login
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
-}
-
-<> 2026-09-23T135137.200.json
-
-###
-POST http://localhost:7070/api/auth/login
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
-}
-
-<> 2026-09-23T134209.200.json
-
-###
-POST http://localhost:7070/api/auth/login
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
-}
-
-<> 2026-09-23T133902.200.json
-
-###
 POST http://localhost:7070/api/auth/register
 Content-Type: application/json
 Accept: application/json
+Content-Length: 120
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+
+{
+  "email": "test@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-23T232935.201.json
+
+###
+
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+Content-Length: 120
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+
+{
+  "email": "test@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-23T230925.201.json
+
+###
+
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+Content-Length: 136
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
 
 {
   "email": "frededv@test.dk",
@@ -46,45 +51,19 @@ Accept: application/json
   "roles": ["ADMIN"]
 }
 
-<> 2026-09-23T133857.201.json
+<> 2026-09-23T230433.201.json
 
 ###
-POST http://localhost:7070/api/auth/login
-Content-Type: application/json
+
+GET http://localhost:7070/api/health
 Accept: application/json
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
 
-{
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
-}
-
-<> 2026-09-23T133839.401.json
+<> 2026-09-23T230426.200.json
 
 ###
-POST http://localhost:7070/api/auth/login
-Content-Type: application/json
-Accept: application/json
 
-{
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
-}
-
-<> 2026-09-23T133824.401.json
-
-###
-POST http://localhost:7070/api/auth/login
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
-}
-
-<> 2026-09-23T133805.401.json
-
-###
 POST http://localhost:7070/api/auth/register
 Content-Type: application/json
 Accept: application/json
@@ -669,5 +648,50 @@ Accept: application/json
 }
 
 <> 2026-09-21T153054.409.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Emil@test.dk",
+  "password": "1234",
+  "phoneNumber": "41821929",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T153017.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "1234",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-21T153014.201.json
+
+###
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "Luke@test.dl",
+  "password": "1234",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-21T153006.201.json
 
 ###
