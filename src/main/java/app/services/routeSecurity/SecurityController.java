@@ -56,9 +56,12 @@ public class SecurityController implements ISecurityController{
         UserDTO user = ctx.bodyAsClass(UserDTO.class);
         try{
             User userEntity = userDAO.getVerifiedUser(user.getEmail(), user.getPassword());
-            UserDTO tokenUser = new UserDTO(userEntity.getEmail(), userEntity.getRolesAsStrings());
+            UserDTO tokenUser = new UserDTO();
+            tokenUser.setRoles(userEntity.getRoles());
+            tokenUser.setEmail(userEntity.getEmail());
             tokenUser.setTenantId(userEntity.getTenantId());
             tokenUser.setId(userEntity.getId());
+            tokenUser.setIsActive(userEntity.getIsActive());
             String token = createToken(tokenUser);
             ObjectNode node =objectMapper.createObjectNode();
 
@@ -69,7 +72,8 @@ public class SecurityController implements ISecurityController{
                     .put("username", userEntity.getEmail())
                     .put("accpted","indeed")
                     .put("id",userEntity.getId())
-                    .put("role", roles));
+                    .put("role", roles)
+                    .put("activity", userEntity.getIsActive()));
 
 
 

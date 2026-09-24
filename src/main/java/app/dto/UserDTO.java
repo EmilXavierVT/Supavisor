@@ -37,6 +37,12 @@ public class UserDTO {
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
     }
 
+    public UserDTO(String email, Set<String> roles , boolean isActive) {
+        this.email = email;
+        this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
+        this.isActive = isActive;
+    }
+
     public Long getId() {
         return id;
     }
