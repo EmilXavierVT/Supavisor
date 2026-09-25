@@ -65,3 +65,6 @@ Authorization: Bearer {{auth_token}}
   "currentPassword": "{{password}}",
   "newPassword": "new-secret-password"
 }
+
+###
+PUT {{baseUrl}}/user/1/employee

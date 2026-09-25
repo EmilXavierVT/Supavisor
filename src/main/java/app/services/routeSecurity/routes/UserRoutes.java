@@ -141,11 +141,24 @@ public class UserRoutes {
         ctx.json(userMapper.toDto(user));
     }
 
-    public void setEmployee(Context ctx) {
+    public void setEmployee(Context ctx)  {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         rejectSelfDemotion(ctx, id);
-        User user = userService.setEmployee(id);
-        ctx.json(userMapper.toDto(user));
+        User user = userService.getById(id);
+        try {
+            Long adminCount = userService.checkIfLastAdmin(user.getTenantId());
+            if (adminCount == 1) {
+                throw new ApiException(400, "Cannot remove last admin");
+            }
+            else if (adminCount > 1) {
+                user = userService.setEmployee(id);
+                ctx.json(userMapper.toDto(user));
+            }
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     public void setCleaningStaff(Context ctx) {

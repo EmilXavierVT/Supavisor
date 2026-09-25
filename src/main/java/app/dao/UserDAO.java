@@ -6,6 +6,7 @@ import app.exceptions.ValidationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import javassist.NotFoundException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.HashSet;
@@ -278,5 +279,22 @@ public class UserDAO implements ISecurityDAO {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    public long checkIfLastAdmin(Long tenantId) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT COUNT(DISTINCT u) " +
+                                    "FROM User u " +
+                                    "JOIN u.roles r " +
+                                    "WHERE u.tenantId = :tenantId " +
+                                    "AND UPPER(r) = 'ADMIN'",
+                            Long.class
+                    )
+                    .setParameter("tenantId", tenantId)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new ValidationException("Tenant id not found");
+        }
     }
 }
