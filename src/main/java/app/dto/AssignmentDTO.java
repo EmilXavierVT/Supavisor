@@ -8,10 +8,12 @@ public class AssignmentDTO {
     private String name;
     private Long tenantId;
     private Boolean isActive;
+    private Boolean isFlagged;
     private String address;
     private Integer estimatedMinutes;
     private BigDecimal cost;
     private Long assignedEmployeeId;
+    private Integer missingEmployeeCount;
 
     public AssignmentDTO() {}
 
@@ -35,6 +37,9 @@ public class AssignmentDTO {
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean active) { isActive = active; }
 
+    public Boolean getIsFlagged() { return isFlagged; }
+    public void setIsFlagged(Boolean flagged) { isFlagged = flagged; }
+
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
@@ -46,4 +51,7 @@ public class AssignmentDTO {
 
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
+
+    public Integer getMissingEmployeeCount() { return missingEmployeeCount; }
+    public void setMissingEmployeeCount(Integer missingEmployeeCount) { this.missingEmployeeCount = missingEmployeeCount; }
 }
