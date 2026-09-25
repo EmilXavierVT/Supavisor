@@ -160,4 +160,8 @@ public class UserService {
     public User reversActivation(long userID) {
         return userDAO.reversActivation(userID);
     }
+
+    public Long checkIfLastAdmin(Long tenantId) throws ValidationException {
+        return userDAO.checkIfLastAdmin(tenantId);
+    }
 }
