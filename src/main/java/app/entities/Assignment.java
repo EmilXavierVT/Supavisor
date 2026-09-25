@@ -1,7 +1,6 @@
 package app.entities;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
 /**
@@ -27,6 +26,9 @@ public class Assignment {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
+    @Column(name = "is_flagged", nullable = false)
+    private boolean isFlagged;
+
     private String address;
 
     @Column(name = "estimated_minutes")
@@ -39,8 +41,14 @@ public class Assignment {
     @Column(name = "assigned_employee_id")
     private Long assignedEmployeeId;
 
+    // Counter that tracks removed employees waiting for replacement
+    @Column(name = "missing_employee_count", nullable = false)
+    private int missingEmployeeCount = 0;
+
     public Assignment() {
         this.isActive = true;
+        this.isFlagged = false;
+        this.missingEmployeeCount = 0;
     }
 
     public Assignment(Long id, String name, Long tenantId, boolean isActive) {
@@ -48,6 +56,8 @@ public class Assignment {
         this.name = name;
         this.tenantId = tenantId;
         this.isActive = isActive;
+        this.isFlagged = false;
+        this.missingEmployeeCount = 0;
     }
 
     public Long getId() { return id; }
@@ -62,6 +72,9 @@ public class Assignment {
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
 
+    public boolean isFlagged() { return isFlagged; }
+    public void setFlagged(boolean flagged) { isFlagged = flagged; }
+
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
@@ -73,4 +86,7 @@ public class Assignment {
 
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
+
+    public int getMissingEmployeeCount() { return missingEmployeeCount; }
+    public void setMissingEmployeeCount(int missingEmployeeCount) { this.missingEmployeeCount = missingEmployeeCount; }
 }

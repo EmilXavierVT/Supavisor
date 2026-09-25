@@ -13,10 +13,12 @@ public class AssignmentMapper {
                 entity.getTenantId(),
                 entity.isActive()
         );
+        dto.setIsFlagged(entity.isFlagged());
         dto.setAddress(entity.getAddress());
         dto.setEstimatedMinutes(entity.getEstimatedMinutes());
         dto.setCost(entity.getCost());
         dto.setAssignedEmployeeId(entity.getAssignedEmployeeId());
+        dto.setMissingEmployeeCount(entity.getMissingEmployeeCount());
         return dto;
     }
 }
