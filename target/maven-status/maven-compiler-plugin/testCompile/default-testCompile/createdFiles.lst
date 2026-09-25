@@ -1,7 +1,2 @@
-app\services\entityServices\UserServiceIntegrationTest.class
-app\services\routeSecurity\TokenSecurityTest.class
-app\dao\UserCustomRolesIntegrationTest.class
-app\dao\UserDAOIntegrationTest.class
-app\config\ApplicationConfigIntegrationTest.class
-app\config\TestEntityManagerFactory.class
-app\dto\UserDTOTest.class
+app/services/entityServices/AssignmentServiceIntegrationTest.class
+app/services/routeSecurity/routes/AssignmentApiIntegrationTest.class
