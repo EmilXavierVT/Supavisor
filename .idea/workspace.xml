@@ -5,19 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="created endpoint + helper methods to retrieve user based on tenantId">
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150100.200.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150109.200.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T150128.200.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153006.201.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153014.201.json" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/app/services/routeSecurity/routes/UserRolesApiIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153054.409.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153106.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T155842.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T155843.201.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/config/HibernateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/db-live-test.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/db-live-test.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/http-client.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/requests/http-client.env.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dto/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/SecurityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dto/UserDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/SecurityController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,61 +79,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.641559077828274E-13" />
-      <entry key="MS500" value="0.0030022496569836244" />
-      <entry key="S2" value="0.43594586078750935" />
-      <entry key="S5" value="1.578012181139999" />
-      <entry key="S10" value="2.927309965311154" />
-      <entry key="S30" value="5.345673418003856" />
-      <entry key="S60" value="6.969952237346869" />
-      <entry key="M2" value="11.567677167533372" />
-      <entry key="M5" value="25.234790842460463" />
-      <entry key="M10" value="42.89765778927035" />
-      <entry key="M15" value="58.80725274430855" />
-      <entry key="M30" value="103.7208281667096" />
-      <entry key="H1" value="219.27467542463953" />
-      <entry key="H2" value="468.73602476728405" />
-      <entry key="H4" value="799.9046255268447" />
-      <entry key="D1" value="1365.0359297367074" />
-      <entry key="W1" value="1508.3394964006472" />
+      <entry key="MS100" value="1.8965076788400927" />
+      <entry key="MS500" value="3.8006375298476467" />
+      <entry key="S2" value="5.820205398497955" />
+      <entry key="S5" value="7.015037100152148" />
+      <entry key="S10" value="11.079958264390559" />
+      <entry key="S30" value="38.58288532494614" />
+      <entry key="S60" value="62.41582954012588" />
+      <entry key="M2" value="80.91834933971506" />
+      <entry key="M5" value="96.36177665004142" />
+      <entry key="M10" value="111.98624021294421" />
+      <entry key="M15" value="127.45144918825001" />
+      <entry key="M30" value="160.87770697471277" />
+      <entry key="H1" value="205.5319696127469" />
+      <entry key="H2" value="333.72751265253885" />
+      <entry key="H4" value="635.4577916928242" />
+      <entry key="D1" value="1483.5783466396206" />
+      <entry key="W1" value="1760.82207818423" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0000000000010354" />
-      <entry key="S10" value="1.000001736596884" />
-      <entry key="S30" value="1.0249329868480865" />
-      <entry key="S60" value="1.2766395191766033" />
-      <entry key="M2" value="1.9630046529911533" />
-      <entry key="M5" value="3.177036842277231" />
-      <entry key="M10" value="3.9259233119141244" />
-      <entry key="M15" value="4.2430416832876166" />
-      <entry key="M30" value="4.659171739998989" />
-      <entry key="H1" value="5.4184204329191745" />
-      <entry key="H2" value="7.842362561733286" />
-      <entry key="H4" value="11.891109307075046" />
-      <entry key="D1" value="19.602507496628508" />
-      <entry key="W1" value="21.634162240740466" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="1.1852035951255382E-210" />
+      <entry key="S5" value="1.2987666913567485E-84" />
+      <entry key="S10" value="1.5181479757373876E-42" />
+      <entry key="S30" value="1.862243812213424E-14" />
+      <entry key="S60" value="2.3226393633289544E-7" />
+      <entry key="M2" value="0.0011035080371476606" />
+      <entry key="M5" value="0.27741931042698154" />
+      <entry key="M10" value="2.0609363858651073" />
+      <entry key="M15" value="4.115110463708451" />
+      <entry key="M30" value="8.329770365317646" />
+      <entry key="H1" value="12.180377471001243" />
+      <entry key="H2" value="16.073281045649978" />
+      <entry key="H4" value="21.346283105376965" />
+      <entry key="D1" value="34.143472301212746" />
+      <entry key="W1" value="38.23193678464671" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="6.067951575567434E-11" />
-      <entry key="MS500" value="0.00960798711944864" />
-      <entry key="S2" value="0.6215559268004271" />
-      <entry key="S5" value="1.9762813333691864" />
-      <entry key="S10" value="3.4321276738599598" />
-      <entry key="S30" value="6.0542403973949925" />
-      <entry key="S60" value="8.039393647519441" />
-      <entry key="M2" value="13.398291293461636" />
-      <entry key="M5" value="28.34065392540968" />
-      <entry key="M10" value="46.78199799005639" />
-      <entry key="M15" value="63.02078329980018" />
-      <entry key="M30" value="108.36398099368671" />
-      <entry key="H1" value="224.6835796148467" />
-      <entry key="H2" value="476.57072499497656" />
-      <entry key="H4" value="811.7893137574519" />
-      <entry key="D1" value="1384.6365163883745" />
-      <entry key="W1" value="1529.9733517505924" />
+      <entry key="MS100" value="1.849218681628107" />
+      <entry key="MS500" value="3.759303222381325" />
+      <entry key="S2" value="5.801295279665943" />
+      <entry key="S5" value="7.0058010167456155" />
+      <entry key="S10" value="11.073589210418842" />
+      <entry key="S30" value="38.57753905200508" />
+      <entry key="S60" value="62.41175864468253" />
+      <entry key="M2" value="80.91677457190532" />
+      <entry key="M5" value="96.63294242616696" />
+      <entry key="M10" value="114.02801718367806" />
+      <entry key="M15" value="131.54112438859036" />
+      <entry key="M30" value="169.18139092953757" />
+      <entry key="H1" value="217.6929904276107" />
+      <entry key="H2" value="349.7876056797085" />
+      <entry key="H4" value="656.7946821198886" />
+      <entry key="D1" value="1517.7189818885677" />
+      <entry key="W1" value="1799.0535491534451" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -144,67 +147,67 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "HTTP Request.db-live-test | #28 (1).executor": "Run",
-    "HTTP Request.db-live-test | #28.executor": "Run",
-    "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
-    "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1).executor": "Run",
-    "HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to.executor": "Run",
-    "HTTP Request.db-live-test | 11b. Put the test user in that tenant (keeps ADMIN).executor": "Run",
-    "HTTP Request.db-live-test | 11d. Create custom role \"Cleaning\".executor": "Run",
-    "HTTP Request.db-live-test | 11e. Create custom role \"Kitchen\".executor": "Run",
-    "HTTP Request.db-live-test | 11f. Assign both custom roles (replaces the whole set).executor": "Run",
-    "HTTP Request.db-live-test | 11g. Read back: customRoles lists both, roles still [\"ADMIN\"].executor": "Run",
-    "HTTP Request.db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged.executor": "Run",
-    "HTTP Request.db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first).executor": "Run",
-    "HTTP Request.db-live-test | 11j. Read back: only Kitchen remains.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (1).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (2).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1 (3).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#1.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#2 (1).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#2.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (1).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#3 (2).executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database#3.executor": "Run",
-    "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
-    "HTTP Request.db-live-test | 3. Login and store USER token (1).executor": "Run",
-    "HTTP Request.db-live-test | 3. Login and store USER token (2).executor": "Run",
-    "HTTP Request.db-live-test | 3. Login and store USER token (3).executor": "Run",
-    "HTTP Request.db-live-test | 3. Login and store USER token (4).executor": "Run",
-    "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
-    "HTTP Request.user-routes | Update user.executor": "Run",
-    "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
-    "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
-    "JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "fixingIsActiveState",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "rest.client.default.execution.environment": "dev",
-    "settings.editor.selected.configurable": "preferences.editor",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | #28 (1).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | #28.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 1. Check app is running.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11b. Put the test user in that tenant (keeps ADMIN).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11d. Create custom role \&quot;Cleaning\&quot;.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11e. Create custom role \&quot;Kitchen\&quot;.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11f. Assign both custom roles (replaces the whole set).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11g. Read back: customRoles lists both, roles still [\&quot;ADMIN\&quot;].executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11h. PUT without customRoleIds must leave assignments unchanged.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 11j. Read back: only Kitchen remains.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#1 (1).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#1 (2).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#1 (3).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#2 (1).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#3 (1).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#3 (2).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database#3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 2. Register a user in the live database.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 3. Login and store USER token (1).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 3. Login and store USER token (2).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 3. Login and store USER token (3).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 3. Login and store USER token (4).executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.db-live-test | 3. Login and store USER token.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.user-routes | Update user.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;updateRoles&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;rest.client.default.execution.environment&quot;: &quot;dev&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/app" />
@@ -219,18 +222,18 @@
         <entry key="HttpClient.HttpRequestRunConfigurationType">
           <value>
             <map>
-              <entry key="db-live-test | 2. Register a user in the live database#1 (1)" value="STOPPED" />
+              <entry key="db-live-test | 11a. Create a tenant to attach the test user to" value="STOPPED" />
+              <entry key="db-live-test | 11a. Create a tenant to attach the test user to (1)" value="STOPPED" />
+              <entry key="db-live-test | 2. Register a user in the live database#1" value="STOPPED" />
               <entry key="db-live-test | 3. Login and store USER token" value="STOPPED" />
-              <entry key="db-live-test | 3. Login and store USER token (1)" value="STOPPED" />
-              <entry key="db-live-test | 3. Login and store USER token (3)" value="STOPPED" />
-              <entry key="db-live-test | 3. Login and store USER token (4)" value="STOPPED" />
+              <entry key="db-live-test | 3. Login and store USER token (2)" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.db-live-test | 3. Login and store USER token (2)">
+  <component name="RunManager" selected="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
       <module name="SupaVisor" />
@@ -241,35 +244,35 @@
     <configuration default="true" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" environment="&lt;No Environment&gt;" path="">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 2. Register a user in the live database#1 (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
+    <configuration name="db-live-test | 11a. Create a tenant to attach the test user to (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11a. Create a tenant to attach the test user to" index="15" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 3. Login and store USER token (1)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
+    <configuration name="db-live-test | 11a. Create a tenant to attach the test user to" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="11a. Create a tenant to attach the test user to" index="15" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="db-live-test | 2. Register a user in the live database#1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database#1" index="2" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="db-live-test | 3. Login and store USER token (2)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 3. Login and store USER token (4)" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="5" runType="Run single request">
+    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="dev" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="6" runType="Run single request">
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
-      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (1)" />
+      <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to" />
+      <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1)" />
       <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (2)" />
-      <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (4)" />
+      <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1" />
       <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (2)" />
-        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (4)" />
-        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (1)" />
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1 (1)" />
+        <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to (1)" />
         <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
+        <item itemvalue="HTTP Request.db-live-test | 11a. Create a tenant to attach the test user to" />
+        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database#1" />
+        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token (2)" />
       </list>
     </recent_temporary>
   </component>

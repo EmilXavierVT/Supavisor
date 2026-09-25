@@ -55,6 +55,7 @@ public class Routes {
                 put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
                 put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
                 put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
+                put("/{id}/roles", userRoutes::updateUserRoles, Role.ADMIN);
                 put("/{id}/custom-roles", userRoutes::setCustomRoles, Role.ADMIN);
                 post("/{id}/custom-roles/{roleId}", userRoutes::addCustomRole, Role.ADMIN);
                 delete("/{id}/custom-roles/{roleId}", userRoutes::removeCustomRole, Role.ADMIN);
