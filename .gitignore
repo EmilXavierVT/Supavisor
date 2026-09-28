@@ -8,4 +8,4 @@ config.*
 .DS_Store
 
 # Build and test output
-target/
+.target/
