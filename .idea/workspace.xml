@@ -5,7 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="updated gitignore">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153054.409.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T153106.200.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/2026-09-21T155842.201.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/db-live-test.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/db-live-test.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requests/user-routes.http" beforeDir="false" afterPath="$PROJECT_DIR$/requests/user-routes.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/entityServices/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/config/HibernateConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/dao/UserDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/entityServices/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes$Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/Routes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/services/routeSecurity/routes/UserRoutes.class" afterDir="false" />
     </list>
     <list id="3f833543-8ac3-4875-a65c-7f2ea54fa5b8" name="Changes by shay" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,28 +56,87 @@
     &quot;assignee&quot;: &quot;EmilXavierVT&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/EmilXavierVT/Supavisor.git",
-    "accountId": "d529687c-2198-42f1-a77e-46dc5596888e"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/EmilXavierVT/Supavisor.git&quot;,
+    &quot;accountId&quot;: &quot;d529687c-2198-42f1-a77e-46dc5596888e&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "EmilXavierVT",
-    "repository": "Supavisor"
+    &quot;owner&quot;: &quot;EmilXavierVT&quot;,
+    &quot;repository&quot;: &quot;Supavisor&quot;
   }
-}]]></component>
-  <component name="HttpClientOnboardingState"><![CDATA[{
-  "isOnboardingCommentShown": true
-}]]></component>
+}</component>
+  <component name="HttpClientOnboardingState">{
+  &quot;isOnboardingCommentShown&quot;: true
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.000000129548891" />
+      <entry key="MS500" value="1.0419263208948926" />
+      <entry key="S2" value="1.4585841289966337" />
+      <entry key="S5" value="1.8580900425104967" />
+      <entry key="S10" value="2.2137516646079414" />
+      <entry key="S30" value="2.664313192824273" />
+      <entry key="S60" value="2.959987207171644" />
+      <entry key="M2" value="4.118389635900195" />
+      <entry key="M5" value="10.640063756443913" />
+      <entry key="M10" value="26.32194648581936" />
+      <entry key="M15" value="41.42785322446981" />
+      <entry key="M30" value="70.92080998878805" />
+      <entry key="H1" value="95.55200550448495" />
+      <entry key="H2" value="111.6503563850011" />
+      <entry key="H4" value="120.8783122506885" />
+      <entry key="D1" value="129.247214237906" />
+      <entry key="W1" value="130.74793800772773" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="1.16552964428882E-179" />
+      <entry key="S5" value="4.880475465946309E-72" />
+      <entry key="S10" value="3.822308839892883E-36" />
+      <entry key="S30" value="3.805978593448352E-12" />
+      <entry key="S60" value="4.484404306796019E-6" />
+      <entry key="M2" value="0.005548722474190642" />
+      <entry key="M5" value="0.44577384045294277" />
+      <entry key="M10" value="1.983915971289133" />
+      <entry key="M15" value="3.2769071466795503" />
+      <entry key="M30" value="5.424516070881133" />
+      <entry key="H1" value="6.985170266098135" />
+      <entry key="H2" value="7.928268771675406" />
+      <entry key="H4" value="8.447001390047186" />
+      <entry key="D1" value="8.905358831242317" />
+      <entry key="W1" value="8.98641794619201" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.0018478377852492467" />
+      <entry key="MS500" value="0.3209645359292191" />
+      <entry key="S2" value="1.174058611613931" />
+      <entry key="S5" value="1.7263656899375455" />
+      <entry key="S10" value="2.1413436901551983" />
+      <entry key="S30" value="2.637426514607749" />
+      <entry key="S60" value="2.944145541722346" />
+      <entry key="M2" value="4.108872124916915" />
+      <entry key="M5" value="11.063762359666832" />
+      <entry key="M10" value="28.280205721375165" />
+      <entry key="M15" value="44.68054169463613" />
+      <entry key="M30" value="76.32760772823603" />
+      <entry key="H1" value="102.52633364235619" />
+      <entry key="H2" value="119.57261135017137" />
+      <entry key="H4" value="129.32214448115516" />
+      <entry key="D1" value="138.15202104297725" />
+      <entry key="W1" value="139.73427649171757" />
+    </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -76,9 +152,11 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "HTTP Request.db-live-test | #30.executor": "Run",
     "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
     "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
     "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
+    "HTTP Request.user-routes | #8.executor": "Run",
     "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
     "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
     "JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor": "Run",
@@ -89,7 +167,8 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "project-entity-setup",
+    "git-widget-placeholder": "checkiflastadmin",
+    "git.auto.fetch.suggestion.counter": "1",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
@@ -113,6 +192,20 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
+  <component name="RunDashboard">
+    <option name="configurationStatuses">
+      <map>
+        <entry key="HttpClient.HttpRequestRunConfigurationType">
+          <value>
+            <map>
+              <entry key="db-live-test | #30" value="STOPPED" />
+              <entry key="user-routes | #8" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
@@ -127,10 +220,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="db-live-test | 2. Register a user in the live database" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="2. Register a user in the live database" index="2" runType="Run single request">
+    <configuration name="db-live-test | #30" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="#30" index="30" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="db-live-test | 3. Login and store USER token" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/db-live-test.http" executionIdentifier="3. Login and store USER token" index="3" runType="Run single request">
+    <configuration name="user-routes | #8" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/requests/user-routes.http" executionIdentifier="#8" index="8" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -165,13 +258,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="HTTP Request.db-live-test | #30" />
+      <item itemvalue="HTTP Request.user-routes | #8" />
+      <item itemvalue="JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" />
+      <item itemvalue="JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="HTTP Request.user-routes | #8" />
+        <item itemvalue="HTTP Request.db-live-test | #30" />
         <item itemvalue="JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId" />
         <item itemvalue="JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi" />
-        <item itemvalue="HTTP Request.db-live-test | 3. Login and store USER token" />
-        <item itemvalue="HTTP Request.db-live-test | 2. Register a user in the live database" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -351,5 +451,16 @@
     <MESSAGE value="test" />
     <MESSAGE value="Commit message:&#10;Add Project entity persistence and API flow&#10;&#10;- Annotate Project as a Hibernate entity&#10;- Add Project DTO, DAO, mapper, and service&#10;- Register Project with Hibernate&#10;- Expose basic Project CRUD routes&#10;- Make Role accessors explicit for Maven compilation" />
     <option name="LAST_COMMIT_MESSAGE" value="Commit message:&#10;Add Project entity persistence and API flow&#10;&#10;- Annotate Project as a Hibernate entity&#10;- Add Project DTO, DAO, mapper, and service&#10;- Register Project with Hibernate&#10;- Expose basic Project CRUD routes&#10;- Make Role accessors explicit for Maven compilation" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java</url>
+          <line>144</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
