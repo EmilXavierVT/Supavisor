@@ -1,4 +1,6 @@
-package app.services.routeSecurity.routes;
+package app.controller;
+
+
 
 import app.dto.AssignmentDTO;
 import app.dto.UserDTO;
@@ -7,11 +9,11 @@ import app.services.entityServices.AssignmentService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
-public class AssignmentRoutes {
+public class AssignmentController {
 
     private final AssignmentService assignmentService;
 
-    public AssignmentRoutes(EntityManagerFactory emf) {
+    public AssignmentController(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.assignmentService = new AssignmentService(emf);
     }

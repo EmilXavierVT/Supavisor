@@ -1,9 +1,6 @@
-package app.services.routeSecurity.routes;
+package app.controller;
 
-import app.dto.RoleDTO;
 import app.dto.UserDTO;
-import app.entities.Role;
-import app.entities.Tenant;
 import app.entities.User;
 import app.exceptions.ApiException;
 import app.exceptions.DuplicateUserException;
@@ -13,20 +10,19 @@ import app.services.dtoConverter.UserMapper;
 import app.services.entityServices.UserService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class UserRoutes {
+public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final RoleMapper roleMapper = new RoleMapper();
-    private static final Logger logger = LoggerFactory.getLogger(UserRoutes.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final Logger debugLogger = LoggerFactory.getLogger("app.services.apiServices.routes");
 
-    public UserRoutes(EntityManagerFactory emf) {
+    public UserController(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.userService = new UserService(emf);
         this.userMapper = new UserMapper(emf);
@@ -289,7 +285,7 @@ public class UserRoutes {
             throw new ApiException(403, "You cannot deactivate your own account");
         }
         try{
-        userService.reversActivation(employeeId);
+            userService.reversActivation(employeeId);
             respondWithUser(ctx, userService.getById(employeeId));
             ctx.status(200);
             ctx.json("User deactivated successfully");
