@@ -1,5 +1,8 @@
-package app.services.routeSecurity;
+package app.controller;
 
+import app.services.routeSecurity.ISecurityController;
+import app.services.routeSecurity.ITokenSecurity;
+import app.services.routeSecurity.TokenSecurity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -22,7 +25,7 @@ import java.text.ParseException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SecurityController implements ISecurityController{
+public class SecurityController implements ISecurityController {
     private static final String REFRESHED_TOKEN_HEADER = "X-Refresh-Token";
     private static final String DEFAULT_TOKEN_REFRESH_GRACE_TIME = "1800000";
     private ISecurityDAO userDAO;

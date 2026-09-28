@@ -1,12 +1,12 @@
 package app;
 
 import app.config.ApplicationConfig;
-import app.services.routeSecurity.routes.Routes;
+import app.services.routeSecurity.RoutePackage;
 
 public class Main {
     public static void main(String[] args) {
         int port = resolvePort(args);
-        Routes routes = new Routes();
+        RoutePackage routes = new RoutePackage();
 
         new ApplicationConfig()
                 .cors()
@@ -15,7 +15,6 @@ public class Main {
                 .notFound()
                 .security()
                 .route(routes.getRoutes())
-                .route(routes.getRouteResource("auth"))
                 .start(port);
     }
 
