@@ -1,5 +1,6 @@
 package app.dto;
 
+import app.entities.Assignment;
 import java.math.BigDecimal;
 
 public class AssignmentDTO {
@@ -24,13 +25,43 @@ public class AssignmentDTO {
         this.isActive = isActive;
     }
 
+
+    public AssignmentDTO(Assignment entity) {
+        if (entity != null) {
+            this.id = entity.getId();
+            this.name = entity.getName();
+            this.tenantId = entity.getTenantId();
+            this.isActive = entity.isActive(); // or entity.getIsActive() depending on your entity
+            this.isFlagged = entity.isFlagged();
+            this.address = entity.getAddress();
+            this.estimatedMinutes = entity.getEstimatedMinutes();
+            this.cost = entity.getCost();
+            this.assignedEmployeeId = entity.getAssignedEmployeeId();
+            this.missingEmployeeCount = entity.getMissingEmployeeCount();
+        }
+    }
+
+    public Assignment toEntity() {
+        Assignment entity = new Assignment();
+        entity.setId(this.id);
+        entity.setName(this.name);
+        entity.setTenantId(this.tenantId);
+        entity.setActive(this.isActive != null ? this.isActive : true);
+        entity.setFlagged(this.isFlagged != null ? this.isFlagged : false);
+        entity.setAddress(this.address);
+        entity.setEstimatedMinutes(this.estimatedMinutes);
+        entity.setCost(this.cost);
+        entity.setAssignedEmployeeId(this.assignedEmployeeId);
+        return entity;
+    }
+
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    // output only: the tenant always comes from the caller's token, never from the request body
     public Long getTenantId() { return tenantId; }
     public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
 

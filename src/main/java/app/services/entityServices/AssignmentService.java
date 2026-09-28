@@ -41,10 +41,8 @@ public class AssignmentService {
     }
 
     public Assignment create(Assignment assignment, String changedBy) {
-        // If your DAO create method takes (assignment, userId), adjust parameters accordingly
         Assignment created = assignmentDAO.getById(assignment.getId());
         if (created == null) {
-            // Standard fallback if creating directly through DAO
             created = assignment;
         }
 
@@ -166,21 +164,29 @@ public class AssignmentService {
     }
 
     public List<AssignmentHistory> getHistory(Long assignmentId, Long tenantId) {
-        getById(assignmentId, tenantId); // Validates existence and tenant access
+        getById(assignmentId, tenantId);
         return historyDAO.findByAssignmentId(assignmentId);
     }
 
-    private void saveAudit(Long assignmentId, String action, Long prevEmp, Long newEmp, String changedBy, String details) {
+    private void saveAudit(Long assignmentId, String action, Long preEmployee, Long newEmployee, String changedBy, String details) {
         AssignmentHistory history = new AssignmentHistory(
                 assignmentId,
                 action,
-                prevEmp,
-                newEmp,
+                preEmployee,
+                newEmployee,
                 changedBy != null ? changedBy : "SYSTEM",
                 Instant.now(),
                 details
         );
-        // Using create() for standalone service auditing
         historyDAO.create(history);
+    }
+
+    private Long parseUserId(String changedBy) {
+        if (changedBy == null) return 0L;
+        try {
+            return Long.parseLong(changedBy);
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
     }
 }

@@ -1,12 +1,16 @@
 package app.services.routeSecurity.routes;
 
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentHistoryDTO;
 import app.dto.UserDTO;
 import app.entities.Assignment;
+import app.entities.AssignmentHistory;
 import app.exceptions.ApiException;
 import app.services.entityServices.AssignmentService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+
+import java.util.List;
 
 public class AssignmentRoutes {
 
@@ -17,24 +21,31 @@ public class AssignmentRoutes {
         this.assignmentService = new AssignmentService(emf);
     }
 
-    /** Administrators see everything (or only the active ones with ?activeOnly=true); everyone else only the active ones. */
+    /** Administrators see everything; everyone else only the active ones. */
     public void getAll(Context ctx) {
         boolean activeOnly = !isAdmin(ctx) || Boolean.parseBoolean(ctx.queryParam("activeOnly"));
-        ctx.json(assignmentService.getAll(callerTenantId(ctx), activeOnly));
+        List<Assignment> entities = assignmentService.getAll(callerTenantId(ctx), activeOnly);
+
+        List<AssignmentDTO> dtos = entities.stream()
+                .map(AssignmentDTO::new)
+                .toList();
+
+        ctx.json(dtos);
     }
 
     public void getById(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        // Aligned: getById(id, tenantId) [2 parameters]
-        ctx.json(assignmentService.getById(id, callerTenantId(ctx)));
+        Assignment entity = assignmentService.getById(id, callerTenantId(ctx));
+
+        ctx.json(new AssignmentDTO(entity));
     }
 
     public void create(Context ctx) {
         AssignmentDTO dto = ctx.bodyValidator(AssignmentDTO.class).get();
         Assignment assignment = mapToEntity(dto, callerTenantId(ctx));
 
-        // Aligned: passes (Assignment, String changedBy)
-        ctx.status(201).json(assignmentService.create(assignment, callerUsername(ctx)));
+        Assignment createdEntity = assignmentService.create(assignment, callerUsername(ctx));
+        ctx.status(201).json(new AssignmentDTO(createdEntity));
     }
 
     public void update(Context ctx) {
@@ -43,49 +54,54 @@ public class AssignmentRoutes {
         Assignment assignment = mapToEntity(dto, callerTenantId(ctx));
         assignment.setId(id);
 
-        // Aligned: passes (Assignment, String changedBy)
-        ctx.json(assignmentService.update(assignment, callerUsername(ctx)));
+        Assignment updatedEntity = assignmentService.update(assignment, callerUsername(ctx));
+        ctx.json(new AssignmentDTO(updatedEntity));
     }
 
     public void deactivate(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        // Maps deactivate to service cancel workflow
-        ctx.json(assignmentService.cancel(id, callerTenantId(ctx), callerUsername(ctx)));
+        Assignment cancelledEntity = assignmentService.cancel(id, callerTenantId(ctx), callerUsername(ctx));
+        ctx.json(new AssignmentDTO(cancelledEntity));
     }
 
     public void activate(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         Assignment existing = assignmentService.getById(id, callerTenantId(ctx));
         existing.setActive(true);
-        ctx.json(assignmentService.update(existing, callerUsername(ctx)));
+        Assignment updatedEntity = assignmentService.update(existing, callerUsername(ctx));
+        ctx.json(new AssignmentDTO(updatedEntity));
     }
 
     public void delete(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        // Aligned: passes (id, tenantId, String changedBy)
         assignmentService.delete(id, callerTenantId(ctx), callerUsername(ctx));
         ctx.status(204);
     }
 
-    // PUT /assignments/{id}/reassign?employeeId=42
     public void reassign(Context ctx) {
         Long assignmentId = ctx.pathParamAsClass("id", Long.class).get();
         Long employeeId = ctx.queryParamAsClass("employeeId", Long.class).get();
 
-        // Aligned: passes 4 parameters (assignmentId, newEmployeeId, tenantId, String changedBy)
-        ctx.json(assignmentService.reassign(assignmentId, employeeId, callerTenantId(ctx), callerUsername(ctx)));
+        Assignment reassignedEntity = assignmentService.reassign(assignmentId, employeeId, callerTenantId(ctx), callerUsername(ctx));
+        ctx.json(new AssignmentDTO(reassignedEntity));
     }
 
-    // DELETE /assignments/{id}/employee
     public void removeEmployee(Context ctx) {
         Long assignmentId = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.removeEmployee(assignmentId, callerTenantId(ctx), callerUsername(ctx)));
+        Assignment updatedEntity = assignmentService.removeEmployee(assignmentId, callerTenantId(ctx), callerUsername(ctx));
+        ctx.json(new AssignmentDTO(updatedEntity));
     }
 
-    // GET /assignments/{id}/history
     public void getHistory(Context ctx) {
         Long assignmentId = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.getHistory(assignmentId, callerTenantId(ctx)));
+
+        List<AssignmentHistory> historyEntities = assignmentService.getHistory(assignmentId, callerTenantId(ctx));
+
+        List<AssignmentHistoryDTO> dtos = historyEntities.stream()
+                .map(AssignmentHistoryDTO::new)
+                .toList();
+
+        ctx.json(dtos);
     }
 
     // --- Helper Methods ---
@@ -112,7 +128,6 @@ public class AssignmentRoutes {
         return caller.getId() != null ? String.valueOf(caller.getId()) : "SYSTEM";
     }
 
-
     private static boolean isAdmin(Context ctx) {
         UserDTO caller = ctx.attribute("user");
         return caller != null && caller.getRoles() != null
@@ -124,12 +139,23 @@ public class AssignmentRoutes {
         if (dto.getId() != null) {
             assignment.setId(dto.getId());
         }
+        assignment.setName(dto.getName());
         assignment.setTenantId(tenantId);
         assignment.setAssignedEmployeeId(dto.getAssignedEmployeeId());
 
-        // Updated getter names
-        assignment.setActive(dto.getIsActive());
-        assignment.setFlagged(dto.getIsFlagged());
+        if (dto.getIsActive() != null) {
+            assignment.setActive(dto.getIsActive());
+        }
+        if (dto.getIsFlagged() != null) {
+            assignment.setFlagged(dto.getIsFlagged());
+        }
+        assignment.setAddress(dto.getAddress());
+        assignment.setEstimatedMinutes(dto.getEstimatedMinutes());
+        assignment.setCost(dto.getCost());
+
+        if (dto.getMissingEmployeeCount() != null) {
+            assignment.setMissingEmployeeCount(dto.getMissingEmployeeCount());
+        }
 
         return assignment;
     }

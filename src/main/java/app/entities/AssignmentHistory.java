@@ -69,4 +69,14 @@ public class AssignmentHistory {
 
     public String getDetails() { return details; }
     public void setDetails(String details) { this.details = details; }
+
+    public Long getPreEmployee() { return previousEmployeeId; }
+    public void setPreEmployee(Long preEmployeeId) { this.previousEmployeeId = preEmployeeId; }
+
+    public Long getNewEmployee() { return newEmployeeId; }
+    public void setNewEmployee(Long newEmployeeId) { this.newEmployeeId = newEmployeeId; }
+
+    public Instant getTimestamp() { return changedAt; }
+    public void setTimestamp(Instant timestamp) { this.changedAt = timestamp; }
+
 }

@@ -67,11 +67,11 @@ public class AssignmentDAO {
     public List<Assignment> getAll(Long tenantId, boolean activeOnly) {
         EntityManager em = emf.createEntityManager();
         try {
-            String jpql = "SELECT a FROM Assignment a WHERE a.tenantId = :tenantId";
+            String response = "SELECT a FROM Assignment a WHERE a.tenantId = :tenantId";
             if (activeOnly) {
-                jpql += " AND a.isActive = true";
+                response += " AND a.isActive = true";
             }
-            TypedQuery<Assignment> query = em.createQuery(jpql, Assignment.class);
+            TypedQuery<Assignment> query = em.createQuery(response, Assignment.class);
             query.setParameter("tenantId", tenantId);
             return query.getResultList();
         } finally {
