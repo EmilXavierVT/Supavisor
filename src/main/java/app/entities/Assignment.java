@@ -3,7 +3,7 @@ package app.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * A template for a recurring piece of work, e.g. "Cleaning at Main Street 1", that an administrator
@@ -37,7 +37,7 @@ public class Assignment {
     private BigDecimal cost;
 
     @Column(name = "assignment_date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     // the employee (user) this assignment is linked to; cleared when that user is deleted
     @Column(name = "assigned_employee_id")
@@ -75,8 +75,8 @@ public class Assignment {
     public BigDecimal getCost() { return cost; }
     public void setCost(BigDecimal cost) { this.cost = cost; }
 
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
+    public LocalDateTime getDate() { return date; }
+    public void setDate(LocalDateTime date) { this.date = date; }
 
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }

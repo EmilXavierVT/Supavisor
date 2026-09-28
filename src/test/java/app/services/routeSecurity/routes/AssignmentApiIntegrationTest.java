@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -161,30 +162,30 @@ class AssignmentApiIntegrationTest {
         String name = unique("Cleaning at Main Street");
 
         HttpResponse<String> created = send("POST", "/api/assignment", adminToken, "{\"name\":\"" + name
-                + "\",\"address\":\"Main Street 1\",\"date\":\"2026-10-05\",\"estimatedMinutes\":90,\"cost\":1250.5,\"assignedEmployeeId\":"
+                + "\",\"address\":\"Main Street 1\",\"date\":\"2026-10-05T14:30:00\",\"estimatedMinutes\":90,\"cost\":1250.5,\"assignedEmployeeId\":"
                 + first + "}");
         assertEquals(201, created.statusCode());
         JsonNode body = json(created);
         long id = body.get("id").asLong();
         assertEquals("Main Street 1", body.get("address").asText());
-        assertEquals("2026-10-05", body.get("date").asText());
+        assertEquals("2026-10-05T14:30:00", body.get("date").asText());
         assertEquals(90, body.get("estimatedMinutes").asInt());
         assertEquals(0, new BigDecimal("1250.50").compareTo(body.get("cost").decimalValue()));
         assertEquals(first, body.get("assignedEmployeeId").asLong());
 
         HttpResponse<String> read = send("GET", "/api/assignment/" + id, adminToken, null);
         assertEquals("Main Street 1", json(read).get("address").asText());
-        assertEquals("2026-10-05", json(read).get("date").asText());
+        assertEquals("2026-10-05T14:30:00", json(read).get("date").asText());
         assertEquals(first, json(read).get("assignedEmployeeId").asLong());
 
         HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name
-                + "\",\"address\":\"Second Street 2\",\"date\":\"2026-10-06\",\"estimatedMinutes\":120,\"cost\":99,\"assignedEmployeeId\":"
+                + "\",\"address\":\"Second Street 2\",\"date\":\"2026-10-06T09:15:00\",\"estimatedMinutes\":120,\"cost\":99,\"assignedEmployeeId\":"
                 + second + "}");
         assertEquals(200, updated.statusCode());
         assertEquals("Second Street 2", json(updated).get("address").asText());
-        assertEquals("2026-10-06", json(updated).get("date").asText());
+        assertEquals("2026-10-06T09:15:00", json(updated).get("date").asText());
         assertEquals(second, json(updated).get("assignedEmployeeId").asLong());
-        assertEquals("2026-10-06", dbDate(id));
+        assertEquals(LocalDateTime.of(2026, 10, 6, 9, 15), dbDate(id));
         assertEquals(second, dbEmployee(id));
 
         HttpResponse<String> cleared = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name + "\"}");
@@ -305,12 +306,15 @@ class AssignmentApiIntegrationTest {
         }
     }
 
-    private static String dbDate(long id) {
+    private static LocalDateTime dbDate(long id) {
         try (EntityManager em = emf.createEntityManager()) {
             Object value = em.createNativeQuery("SELECT assignment_date FROM assignments WHERE id = :id")
                     .setParameter("id", id)
                     .getSingleResult();
-            return value == null ? null : value.toString();
+            if (value instanceof java.sql.Timestamp timestamp) {
+                return timestamp.toLocalDateTime();
+            }
+            return (LocalDateTime) value;
         }
     }
 
