@@ -1,6 +1,7 @@
 package app.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class AssignmentDTO {
 
@@ -11,6 +12,7 @@ public class AssignmentDTO {
     private String address;
     private Integer estimatedMinutes;
     private BigDecimal cost;
+    private LocalDate date;
     private Long assignedEmployeeId;
 
     public AssignmentDTO() {}
@@ -43,6 +45,9 @@ public class AssignmentDTO {
 
     public BigDecimal getCost() { return cost; }
     public void setCost(BigDecimal cost) { this.cost = cost; }
+
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }

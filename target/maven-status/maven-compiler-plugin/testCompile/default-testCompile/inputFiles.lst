@@ -7,3 +7,4 @@
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/entityServices/UserServiceIntegrationTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/routeSecurity/TokenSecurityTest.java
 /Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/routeSecurity/routes/AssignmentApiIntegrationTest.java
+/Users/emilthorsen/Desktop/SupaVisor/src/test/java/app/services/routeSecurity/routes/UserRolesApiIntegrationTest.java

@@ -1,6 +1,79 @@
 POST http://localhost:7070/api/auth/register
 Content-Type: application/json
 Accept: application/json
+Content-Length: 136
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+
+{
+  "email": "test@test.dk",
+  "password": "DerErEtYndigtLand123",
+  "phoneNumber": "25715522",
+  "tenantId" : 1,
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-28T120441.201.json
+
+###
+
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
+Content-Length: 135
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+
+{
+  "email": "Luke@test.dk",
+  "password": "DerErEtYndigtLand123",
+  "phoneNumber": "45912492",
+  "tenantId" : 1,
+  "roles": ["USER"]
+}
+
+<> 2026-09-28T120245.201.json
+
+###
+
+PUT http://localhost:7070/api/user/4
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmdkB0di5kayIsInJvbGVzIjoiQURNSU4iLCJpc3MiOiJcInN1cGFhcGkgcHJvamVjdC1pY2UuZGtcIiIsInRlbmFudElkIjoxLCJpc0FjdGl2ZSI6dHJ1ZSwiZXhwIjoxNzkwNTkxNDA0LCJ1c2VySWQiOjQsImVtYWlsIjoiZnZAdHYuZGsifQ.7BUy9wsPJxdLKBo9pUCSbWG_aJjqNZD0Onl3eWWKOvM
+Content-Length: 110
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+
+{
+  "email": "fv@tv.dk",
+  "password": "secret-password!",
+  "phoneNumber": "12345678",
+  "roles": ["ADMIN"]
+}
+
+<> 2026-09-28T120137.500.json
+
+###
+
+POST http://localhost:7070/api/auth/login
+Content-Type: application/json
+Accept: application/json
+Content-Length: 47
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+
+{
+  "email": "fv@tv.dk",
+  "password": "1234"
+}
+
+<> 2026-09-28T120004.200.json
+
+###
+
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
+Accept: application/json
 Content-Length: 120
 User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2025.3.3
 Accept-Encoding: br, deflate, gzip, x-gzip
@@ -618,65 +691,5 @@ Accept: application/json
 }
 
 <> 2026-09-21T160551.401.json
-
-###
-POST http://localhost:7070/api/auth/register
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "frededv@test.dk",
-  "password": "1234",
-  "phoneNumber": "25715522",
-  "tenantId" : 1,
-  "roles": ["ADMIN"]
-}
-
-<> 2026-09-21T160119.201.json
-
-###
-POST http://localhost:7070/api/auth/register
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "Emil@test.dk",
-  "password": "1234",
-  "phoneNumber": "41821929",
-  "tenantId" : 1,
-  "roles": ["USER"]
-}
-
-<> 2026-09-21T153017.201.json
-
-###
-POST http://localhost:7070/api/auth/register
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "frededv@test.dk",
-  "password": "1234",
-  "phoneNumber": "25715522",
-  "tenantId" : 1,
-  "roles": ["ADMIN"]
-}
-
-<> 2026-09-21T153014.201.json
-
-###
-POST http://localhost:7070/api/auth/register
-Content-Type: application/json
-Accept: application/json
-
-{
-  "email": "Luke@test.dl",
-  "password": "1234",
-  "phoneNumber": "45912492",
-  "tenantId" : 1,
-  "roles": ["USER"]
-}
-
-<> 2026-09-21T153006.201.json
 
 ###

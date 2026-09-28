@@ -1,8 +1,8 @@
 
 
 @baseUrl = http://localhost:7070/api
-@email = db-live-{{$timestamp}}@example.com
-@password = secret-password
+@email = fv@tv.dk
+@password = secret-password!
 @newPassword = changed-secret-password
 @phoneNumber = 12345678
 
@@ -45,7 +45,7 @@ Accept: application/json
 
 {
   "email": "test@test.dk",
-  "password": "1234",
+  "password": "DerErEtYndigtLand123",
   "phoneNumber": "25715522",
   "tenantId" : 1,
   "roles": ["ADMIN"]
@@ -85,8 +85,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "frededv@test.dk",
-  "password": "DerErEtYndigtLand"
+  "email": "fv@tv.dk",
+  "password": "1234"
 }
 
 > {% client.global.set("db_live_token", response.body.token); %}
@@ -102,7 +102,7 @@ Accept: application/json
 Authorization: Bearer {{db_live_token}}
 
 ### 6. Update persisted fields and promote this test user to ADMIN
-PUT {{baseUrl}}/user/{{db_live_user_id}}
+PUT {{baseUrl}}/user/4
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{db_live_token}}

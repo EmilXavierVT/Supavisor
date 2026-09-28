@@ -70,7 +70,7 @@ public class AssignmentService {
     }
 
     /**
-     * Replaces the name and all details (address, estimated time, cost, employee): a field left out or
+     * Replaces the name and all details (address, date, estimated time, cost, employee): a field left out or
      * null is cleared. The active flag is only changed when the request carries one.
      */
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId) {
@@ -136,11 +136,13 @@ public class AssignmentService {
         String address = validAddress(dto.getAddress());
         Integer estimatedMinutes = validEstimatedMinutes(dto.getEstimatedMinutes());
         BigDecimal cost = validCost(dto.getCost());
+        var date = dto.getDate();
         Long employeeId = validEmployee(dto.getAssignedEmployeeId(), assignment.getAssignedEmployeeId(), tenantId);
 
         assignment.setAddress(address);
         assignment.setEstimatedMinutes(estimatedMinutes);
         assignment.setCost(cost);
+        assignment.setDate(date);
         assignment.setAssignedEmployeeId(employeeId);
     }
 

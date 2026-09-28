@@ -16,6 +16,7 @@ public class AssignmentMapper {
         dto.setAddress(entity.getAddress());
         dto.setEstimatedMinutes(entity.getEstimatedMinutes());
         dto.setCost(entity.getCost());
+        dto.setDate(entity.getDate());
         dto.setAssignedEmployeeId(entity.getAssignedEmployeeId());
         return dto;
     }

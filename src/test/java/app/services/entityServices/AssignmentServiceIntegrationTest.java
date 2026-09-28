@@ -15,6 +15,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -217,17 +218,20 @@ class AssignmentServiceIntegrationTest {
         assertEquals(0, dbCount(created.getId()));
     }
 
-    // ---- details: address, estimated time, cost, employee
+    // ---- details: address, date, estimated time, cost, employee
 
     @Test
-    void createStoresAddressEstimatedTimeCostAndEmployeeInTheDatabase() {
+    void createStoresAddressDateEstimatedTimeCostAndEmployeeInTheDatabase() {
         Long tenant = newTenantId();
         User employee = newEmployee(tenant, true);
 
-        AssignmentDTO created = service.create(
-                details("Cleaning at Main Street", "  Main Street 1, Aarhus ", 90, "1250.5", employee.getId()), tenant);
+        AssignmentDTO dto = details("Cleaning at Main Street", "  Main Street 1, Aarhus ", 90, "1250.5", employee.getId());
+        dto.setDate(LocalDate.of(2026, 10, 5));
+
+        AssignmentDTO created = service.create(dto, tenant);
 
         assertEquals("Main Street 1, Aarhus", created.getAddress());
+        assertEquals(LocalDate.of(2026, 10, 5), created.getDate());
         assertEquals(90, created.getEstimatedMinutes());
         assertEquals(0, new BigDecimal("1250.50").compareTo(created.getCost()));
         assertEquals(employee.getId(), created.getAssignedEmployeeId());
@@ -236,7 +240,9 @@ class AssignmentServiceIntegrationTest {
         assertEquals(90, ((Number) row[1]).intValue());
         assertEquals(0, new BigDecimal("1250.50").compareTo((BigDecimal) row[2]));
         assertEquals(employee.getId(), ((Number) row[3]).longValue());
+        assertEquals(LocalDate.of(2026, 10, 5), dbDate(row[4]));
         assertEquals(employee.getId(), service.getById(created.getId(), tenant, false).getAssignedEmployeeId());
+        assertEquals(LocalDate.of(2026, 10, 5), service.getById(created.getId(), tenant, false).getDate());
     }
 
     @Test
@@ -248,6 +254,7 @@ class AssignmentServiceIntegrationTest {
         assertNull(created.getAddress());
         assertNull(created.getEstimatedMinutes());
         assertNull(created.getCost());
+        assertNull(created.getDate());
         assertNull(created.getAssignedEmployeeId());
     }
 
@@ -303,25 +310,32 @@ class AssignmentServiceIntegrationTest {
         Long tenant = newTenantId();
         User first = newEmployee(tenant, true);
         User second = newEmployee(tenant, true);
-        AssignmentDTO created = service.create(details("Cleaning", "Old street 1", 30, "100", first.getId()), tenant);
+        AssignmentDTO createdDto = details("Cleaning", "Old street 1", 30, "100", first.getId());
+        createdDto.setDate(LocalDate.of(2026, 10, 5));
+        AssignmentDTO created = service.create(createdDto, tenant);
 
-        AssignmentDTO changed = service.update(
-                created.getId(), details("Cleaning", "New street 2", 120, "250.75", second.getId()), tenant);
+        AssignmentDTO updateDto = details("Cleaning", "New street 2", 120, "250.75", second.getId());
+        updateDto.setDate(LocalDate.of(2026, 10, 6));
+        AssignmentDTO changed = service.update(created.getId(), updateDto, tenant);
         assertEquals("New street 2", changed.getAddress());
+        assertEquals(LocalDate.of(2026, 10, 6), changed.getDate());
         assertEquals(120, changed.getEstimatedMinutes());
         assertEquals(second.getId(), changed.getAssignedEmployeeId());
         assertEquals("New street 2", dbDetails(created.getId())[0]);
+        assertEquals(LocalDate.of(2026, 10, 6), dbDate(dbDetails(created.getId())[4]));
 
         AssignmentDTO cleared = service.update(created.getId(), dto("Cleaning"), tenant);
         assertNull(cleared.getAddress());
         assertNull(cleared.getEstimatedMinutes());
         assertNull(cleared.getCost());
+        assertNull(cleared.getDate());
         assertNull(cleared.getAssignedEmployeeId());
         Object[] row = dbDetails(created.getId());
         assertNull(row[0]);
         assertNull(row[1]);
         assertNull(row[2]);
         assertNull(row[3]);
+        assertNull(row[4]);
     }
 
     @Test
@@ -395,14 +409,21 @@ class AssignmentServiceIntegrationTest {
                 null, tenantId, active, Set.of("USER")));
     }
 
-    /** address, estimated_minutes, cost, assigned_employee_id straight from the table. */
+    /** address, estimated_minutes, cost, assigned_employee_id, assignment_date straight from the table. */
     private static Object[] dbDetails(Long id) {
         try (EntityManager em = emf.createEntityManager()) {
             return (Object[]) em.createNativeQuery(
-                            "SELECT address, estimated_minutes, cost, assigned_employee_id FROM assignments WHERE id = :id")
+                            "SELECT address, estimated_minutes, cost, assigned_employee_id, assignment_date FROM assignments WHERE id = :id")
                     .setParameter("id", id)
                     .getSingleResult();
         }
+    }
+
+    private static LocalDate dbDate(Object value) {
+        if (value instanceof java.sql.Date date) {
+            return date.toLocalDate();
+        }
+        return (LocalDate) value;
     }
 
     private static AssignmentDTO dto(String name) {
