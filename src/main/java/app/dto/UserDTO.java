@@ -1,8 +1,11 @@
 package app.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
     private Long id;
     private String email;
@@ -15,6 +18,7 @@ public class UserDTO {
     private boolean isActive;
     // null = leave assignments untouched, empty set = clear them all
     private Set<Long> customRoleIds;
+
 
     public UserDTO() {
     }

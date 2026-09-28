@@ -1,10 +1,14 @@
 package app.services.routeSecurity.routes;
 
+import app.dto.RoleDTO;
 import app.dto.UserDTO;
+import app.entities.Role;
+import app.entities.Tenant;
 import app.entities.User;
 import app.exceptions.ApiException;
 import app.exceptions.DuplicateUserException;
 import app.exceptions.ValidationException;
+import app.services.dtoConverter.RoleMapper;
 import app.services.dtoConverter.UserMapper;
 import app.services.entityServices.UserService;
 import io.javalin.http.Context;
@@ -13,14 +17,12 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class UserRoutes {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final RoleMapper roleMapper = new RoleMapper();
     private static final Logger logger = LoggerFactory.getLogger(UserRoutes.class);
     private static final Logger debugLogger = LoggerFactory.getLogger("app.services.apiServices.routes");
 
@@ -119,6 +121,37 @@ public class UserRoutes {
             return;
         }
         ctx.json(userMapper.toDto(updated));
+    }
+
+    /**
+     * Admin-only: replaces a user's company-defined (custom) roles - e.g. Kitchen, Cleaning - with the
+     * given set. This is a full replace, not an addition: a role the user had before that is not in
+     * customRoleIds (e.g. Kitchen, when the new set is just Cleaning) is removed.
+     */
+    public void updateUserRoles(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        UserDTO caller = ctx.attribute("user");
+        if (caller == null) {
+            throw new ApiException(401, "Not authenticated");
+        }
+
+        UserDTO dto = ctx.bodyValidator(UserDTO.class).get();
+        Set<Long> customRoleIds = dto.getCustomRoleIds();
+        if (customRoleIds == null) {
+            throw new ApiException(400, "customRoleIds is required");
+        }
+
+        User target = userService.getById(id);
+        if (target == null || !Objects.equals(target.getTenantId(), caller.getTenantId())) {
+            ctx.status(404).result("User not found");
+            return;
+        }
+
+        try {
+            respondWithUser(ctx, userService.setCustomRoles(id, customRoleIds));
+        } catch (ValidationException e) {
+            throw new ApiException(400, e.getMessage());
+        }
     }
 
     public void delete(Context ctx) {
