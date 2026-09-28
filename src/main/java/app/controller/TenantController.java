@@ -1,4 +1,4 @@
-package app.services.routeSecurity.routes;
+package app.controller;
 
 import app.dto.TenantDTO;
 import app.entities.Tenant;
@@ -12,13 +12,13 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TenantRoutes {
+public class TenantController {
     private final TenantService tenantService;
     private final TenantMapper tenantMapper;
-    private static final Logger logger = LoggerFactory.getLogger(TenantRoutes.class);
+    private static final Logger logger = LoggerFactory.getLogger(TenantController.class);
     private static final Logger debugLogger = LoggerFactory.getLogger("app.services.apiServices.routes");
 
-    public TenantRoutes(EntityManagerFactory emf) {
+    public TenantController(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.tenantService = new TenantService(emf);
         this.tenantMapper = new TenantMapper(emf);

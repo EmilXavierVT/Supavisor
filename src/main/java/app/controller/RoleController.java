@@ -1,4 +1,4 @@
-package app.services.routeSecurity.routes;
+package app.controller;
 import app.dto.RoleDTO;
 import app.dto.UserDTO;
 import app.exceptions.ApiException;
@@ -8,18 +8,18 @@ import io.javalin.http.Context;
 
 import jakarta.persistence.EntityManagerFactory;
 
-public class RoleRoutes {
+public class RoleController {
 
     private final RoleService roleService;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public RoleRoutes(EntityManagerFactory emf) {
+    public RoleController(EntityManagerFactory emf) {
         this.roleService = new RoleService(emf);
     }
 
 
-    protected void getRolesByTenant(Context ctx) {
+    public void getRolesByTenant(Context ctx) {
         Long tenantId = Long.parseLong(ctx.pathParam("tenantId"));
         if (!tenantId.equals(callerTenantId(ctx))) {
             throw new ApiException(403, "You can only see your own company's roles");
@@ -27,14 +27,14 @@ public class RoleRoutes {
         ctx.json(roleService.getRolesByTenant(tenantId));
     }
 
-    protected void createRole(Context ctx) {
+    public void createRole(Context ctx) {
         Long tenantId = callerTenantId(ctx);
 
         RoleDTO roleDTO = ctx.bodyAsClass(RoleDTO.class);
         ctx.json(roleService.createRole(roleDTO, tenantId));
     }
 
-    protected void deleteRole(Context ctx) {
+    public void deleteRole(Context ctx) {
         Long roleId = Long.parseLong(ctx.pathParam("id"));
         // the tenant comes from the token, never from the request, so one company cannot delete another's roles
         roleService.deleteRole(roleId, callerTenantId(ctx));

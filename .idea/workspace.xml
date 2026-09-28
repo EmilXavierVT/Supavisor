@@ -5,7 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02b83d93-6c17-4cbe-88eb-dbc603422da2" name="Changes" comment="updated gitignore">
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/controller/ProjectController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/controller/RoleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/controller/TenantController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/ProjectRoutes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/RoleRoutes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/Routes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/TenantRoutes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/routeSecurity/routes/UserRoutes.java" beforeDir="false" />
     </list>
     <list id="3f833543-8ac3-4875-a65c-7f2ea54fa5b8" name="Changes by shay" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +29,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -64,61 +73,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.7793074576859342" />
-      <entry key="MS500" value="3.637402609257655" />
-      <entry key="S2" value="9.567316464442046" />
-      <entry key="S5" value="21.992980614844708" />
-      <entry key="S10" value="35.64120268148982" />
-      <entry key="S30" value="54.63135641036797" />
-      <entry key="S60" value="61.9821633459422" />
-      <entry key="M2" value="66.77073654806341" />
-      <entry key="M5" value="72.32771926648901" />
-      <entry key="M10" value="76.02826138492568" />
-      <entry key="M15" value="77.6970110225567" />
-      <entry key="M30" value="79.66557517245643" />
-      <entry key="H1" value="80.78238934290903" />
-      <entry key="H2" value="81.37795947562927" />
-      <entry key="H4" value="81.68558795618065" />
-      <entry key="D1" value="81.94711969811821" />
-      <entry key="W1" value="81.99243386258588" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0000345688828256" />
+      <entry key="S2" value="1.1069549810960906" />
+      <entry key="S5" value="1.6231325403327652" />
+      <entry key="S10" value="2.2778539748578175" />
+      <entry key="S30" value="3.6339435135675995" />
+      <entry key="S60" value="4.635380749831942" />
+      <entry key="M2" value="6.570912100694817" />
+      <entry key="M5" value="15.498347060721104" />
+      <entry key="M10" value="30.464941494134" />
+      <entry key="M15" value="43.69868180030843" />
+      <entry key="M30" value="71.24980607962698" />
+      <entry key="H1" value="96.462264646091" />
+      <entry key="H2" value="113.9675449972757" />
+      <entry key="H4" value="124.34451529308643" />
+      <entry key="D1" value="133.96160003738976" />
+      <entry key="W1" value="135.7063556872563" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="0.0" />
-      <entry key="S10" value="0.0" />
-      <entry key="S30" value="0.0" />
-      <entry key="S60" value="0.0" />
-      <entry key="M2" value="0.0" />
-      <entry key="M5" value="0.0" />
-      <entry key="M10" value="0.0" />
-      <entry key="M15" value="0.0" />
-      <entry key="M30" value="0.0" />
-      <entry key="H1" value="0.0" />
-      <entry key="H2" value="0.0" />
-      <entry key="H4" value="0.0" />
-      <entry key="D1" value="0.0" />
-      <entry key="W1" value="0.0" />
+      <entry key="MS500" value="7.209085003354154E-86" />
+      <entry key="S2" value="5.18167340705157E-22" />
+      <entry key="S5" value="3.060469210154255E-9" />
+      <entry key="S10" value="5.53215094092829E-5" />
+      <entry key="S30" value="0.03822390385416026" />
+      <entry key="S60" value="0.2062716403441475" />
+      <entry key="M2" value="0.5564313818033986" />
+      <entry key="M5" value="1.2844522806880652" />
+      <entry key="M10" value="1.8831251261420643" />
+      <entry key="M15" value="2.1771887462440924" />
+      <entry key="M30" value="2.542317226805795" />
+      <entry key="H1" value="2.7579919364954" />
+      <entry key="H2" value="2.8754785420915034" />
+      <entry key="H4" value="2.9368298766830363" />
+      <entry key="D1" value="2.9893427022919146" />
+      <entry key="W1" value="2.998474336057702" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.7029824819852386" />
-      <entry key="MS500" value="3.5821326196562313" />
-      <entry key="S2" value="9.540900279531577" />
-      <entry key="S5" value="21.974802537640507" />
-      <entry key="S10" value="35.62665762921554" />
-      <entry key="S30" value="54.622034842743815" />
-      <entry key="S60" value="61.97590463222514" />
-      <entry key="M2" value="66.76615963663771" />
-      <entry key="M5" value="72.32384860879279" />
-      <entry key="M10" value="76.02537588499334" />
-      <entry key="M15" value="77.69477988736594" />
-      <entry key="M30" value="79.66427267676643" />
-      <entry key="H1" value="80.78168402626545" />
-      <entry key="H2" value="81.37759227152831" />
-      <entry key="H4" value="81.68540058147258" />
-      <entry key="D1" value="81.94708793308598" />
-      <entry key="W1" value="81.99242931144154" />
+      <entry key="MS100" value="2.075554283371268E-7" />
+      <entry key="MS500" value="0.04610424972128019" />
+      <entry key="S2" value="0.5528563086178336" />
+      <entry key="S5" value="1.2884672878756505" />
+      <entry key="S10" value="2.0593204979076534" />
+      <entry key="S30" value="3.5725285365567614" />
+      <entry key="S60" value="4.777760035285415" />
+      <entry key="M2" value="7.080854189979568" />
+      <entry key="M5" value="16.74651008836658" />
+      <entry key="M10" value="32.32122162798576" />
+      <entry key="M15" value="45.85487585817457" />
+      <entry key="M30" value="73.77948709753943" />
+      <entry key="H1" value="99.21321340374669" />
+      <entry key="H2" value="116.83928341025985" />
+      <entry key="H4" value="127.27941446370276" />
+      <entry key="D1" value="136.9506119416888" />
+      <entry key="W1" value="138.70478253737878" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -132,41 +141,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.db-live-test | 1. Check app is running.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.db-live-test | 2. Register a user in the live database.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.db-live-test | 3. Login and store USER token.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;git.auto.fetch.suggestion.counter&quot;: &quot;3&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "HTTP Request.db-live-test | 1. Check app is running.executor": "Run",
+    "HTTP Request.db-live-test | 2. Register a user in the live database.executor": "Run",
+    "HTTP Request.db-live-test | 3. Login and store USER token.executor": "Run",
+    "JUnit.EconomicCustomerClientIntegrationTest.retrievesCustomersFromEconomicApi.executor": "Run",
+    "JUnit.EconomicProductClientIntegrationTest.retrievesProductsFromEconomicApi.executor": "Run",
+    "JUnit.UserDAOIntegrationTest.userDaoCanFetchUsersByTenantId.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "cleanup",
+    "git.auto.fetch.suggestion.counter": "3",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/emilthorsen/Desktop/SupaVisor/src/main/java/app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/app" />
@@ -416,10 +427,10 @@
     <MESSAGE value="Implemented tenant support without changing the existing project structure.&#10;Changed:&#10;- Added Tenant entity, TenantDTO, TenantDAO, TenantService, TenantMapper, and TenantRoutes.&#10;- Added tenantId to User and UserDTO.&#10;- Updated UserMapper and UserDAO.update() to preserve tenantId.&#10;- Registered Tenant in EntityRegistry.&#10;- Added tenant CRUD endpoints under /api/tenant:&#10;- GET /tenant/all&#10;- POST /tenant/&#10;- GET /tenant/{id}&#10;- PUT /tenant/{id}&#10;- DELETE /tenant/{id}" />
     <MESSAGE value="created endpoint + helper methods to retrieve user based on tenantId" />
     <MESSAGE value="added new Entity Role. this might have to be changed to CustomRoles as these describe the actual custom roles made by an admin user. the commit contains DAO + DTO + Entity. for now user has a role as a field. this might need to change so we have system roles and custom roles" />
-    <MESSAGE value="updated gitignore" />
     <MESSAGE value="test" />
     <MESSAGE value="Commit message:&#10;Add Project entity persistence and API flow&#10;&#10;- Annotate Project as a Hibernate entity&#10;- Add Project DTO, DAO, mapper, and service&#10;- Register Project with Hibernate&#10;- Expose basic Project CRUD routes&#10;- Make Role accessors explicit for Maven compilation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commit message:&#10;Add Project entity persistence and API flow&#10;&#10;- Annotate Project as a Hibernate entity&#10;- Add Project DTO, DAO, mapper, and service&#10;- Register Project with Hibernate&#10;- Expose basic Project CRUD routes&#10;- Make Role accessors explicit for Maven compilation" />
+    <MESSAGE value="updated gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated gitignore" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

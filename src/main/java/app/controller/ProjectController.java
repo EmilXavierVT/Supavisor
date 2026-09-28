@@ -1,4 +1,4 @@
-package app.services.routeSecurity.routes;
+package app.controller;
 
 import app.dto.ProjectDTO;
 import app.dto.UserDTO;
@@ -7,11 +7,11 @@ import app.services.entityServices.ProjectService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
-public class ProjectRoutes {
+public class ProjectController {
 
     private final ProjectService projectService;
 
-    public ProjectRoutes(EntityManagerFactory emf) {
+    public ProjectController(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.projectService = new ProjectService(emf);
     }

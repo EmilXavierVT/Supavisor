@@ -2,7 +2,7 @@ package app.services.routeSecurity.routes;
 
 
 import app.config.HibernateConfig;
-import app.controller.SystemController;
+import app.controller.*;
 import app.services.routeSecurity.ISecurityController;
 import app.services.routeSecurity.SecurityController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,11 +31,11 @@ public class Routes {
 
     public EndpointGroup getRoutes() {
 
-        UserRoutes userRoutes = new UserRoutes(emf);
-        TenantRoutes tenantRoutes = new TenantRoutes(emf);
-        RoleRoutes roleRoutes = new RoleRoutes(emf);
-        AssignmentRoutes assignmentRoutes = new AssignmentRoutes(emf);
-        ProjectRoutes projectRoutes = new ProjectRoutes(emf);
+        app.controller.UserController userController = new app.controller.UserController(emf);
+        TenantController tenantController = new TenantController(emf);
+        RoleController roleController = new RoleController(emf);
+        AssignmentController assignmentController = new AssignmentController(emf);
+        ProjectController projectController = new ProjectController(emf);
 
         SystemController systemController = new SystemController();
 
@@ -44,67 +44,67 @@ public class Routes {
             get("/health", systemController::health, Role.ANYONE);
 
             path("/user", () -> {
-                get("/all", userRoutes::getAll, Role.ADMIN, Role.USER);
-                post("/", userRoutes::createUser, Role.ADMIN);
-                get("/tenant/{tenantId}", userRoutes::getByTenantId, Role.USER, Role.ADMIN);
-                get("/{id}", userRoutes::getById, Role.USER, Role.ADMIN);
-                put("/{id}", userRoutes::update, Role.USER, Role.ADMIN);
-                delete("/{id}", userRoutes::delete, Role.ADMIN);
-                put("/{id}/admin", userRoutes::setAdmin, Role.ADMIN);
-                put("/{id}/employee", userRoutes::setEmployee, Role.ADMIN);
-                put("/{id}/cleaning-staff", userRoutes::setCleaningStaff, Role.ADMIN);
-                put("/{id}/cleaning-client", userRoutes::setCleaningClient, Role.ADMIN);
-                put("/{id}/subscriber", userRoutes::setSubscriber, Role.ADMIN);
-                put("/{id}/flex", userRoutes::setFlex, Role.ADMIN);
-                put("/{id}/roles", userRoutes::updateUserRoles, Role.ADMIN);
-                put("/{id}/custom-roles", userRoutes::setCustomRoles, Role.ADMIN);
-                post("/{id}/custom-roles/{roleId}", userRoutes::addCustomRole, Role.ADMIN);
-                delete("/{id}/custom-roles/{roleId}", userRoutes::removeCustomRole, Role.ADMIN);
+                get("/all", userController::getAll, Role.ADMIN, Role.USER);
+                post("/", userController::createUser, Role.ADMIN);
+                get("/tenant/{tenantId}", userController::getByTenantId, Role.USER, Role.ADMIN);
+                get("/{id}", userController::getById, Role.USER, Role.ADMIN);
+                put("/{id}", userController::update, Role.USER, Role.ADMIN);
+                delete("/{id}", userController::delete, Role.ADMIN);
+                put("/{id}/admin", userController::setAdmin, Role.ADMIN);
+                put("/{id}/employee", userController::setEmployee, Role.ADMIN);
+                put("/{id}/cleaning-staff", userController::setCleaningStaff, Role.ADMIN);
+                put("/{id}/cleaning-client", userController::setCleaningClient, Role.ADMIN);
+                put("/{id}/subscriber", userController::setSubscriber, Role.ADMIN);
+                put("/{id}/flex", userController::setFlex, Role.ADMIN);
+                put("/{id}/roles", userController::updateUserRoles, Role.ADMIN);
+                put("/{id}/custom-roles", userController::setCustomRoles, Role.ADMIN);
+                post("/{id}/custom-roles/{roleId}", userController::addCustomRole, Role.ADMIN);
+                delete("/{id}/custom-roles/{roleId}", userController::removeCustomRole, Role.ADMIN);
             });
 
             path("/tenant", () -> {
-                get("/all", tenantRoutes::getAll, Role.ADMIN, Role.USER);
-                post("/", tenantRoutes::create, Role.ADMIN);
-                get("/{id}", tenantRoutes::getById, Role.USER, Role.ADMIN);
-                put("/{id}", tenantRoutes::update, Role.ADMIN);
-                delete("/{id}", tenantRoutes::delete, Role.ADMIN);
+                get("/all", tenantController::getAll, Role.ADMIN, Role.USER);
+                post("/", tenantController::create, Role.ADMIN);
+                get("/{id}", tenantController::getById, Role.USER, Role.ADMIN);
+                put("/{id}", tenantController::update, Role.ADMIN);
+                delete("/{id}", tenantController::delete, Role.ADMIN);
             });
 
             path("/role", () -> {
-                get("/tenant/{tenantId}", roleRoutes::getRolesByTenant, Role.USER, Role.ADMIN);
-                post("/", roleRoutes::createRole, Role.ADMIN);
-                delete("/{id}", roleRoutes::deleteRole, Role.ADMIN);
+                get("/tenant/{tenantId}", roleController::getRolesByTenant, Role.USER, Role.ADMIN);
+                post("/", roleController::createRole, Role.ADMIN);
+                delete("/{id}", roleController::deleteRole, Role.ADMIN);
             });
 
             path("user", () -> {
-                put("/update", userRoutes::update, Role.ADMIN);
-                post("/create", userRoutes::createUser, Role.ADMIN);
-                put("/reversActivtion/{id}", userRoutes::reversActivation, Role.ADMIN);
+                put("/update", userController::update, Role.ADMIN);
+                post("/create", userController::createUser, Role.ADMIN);
+                put("/reversActivtion/{id}", userController::reversActivation, Role.ADMIN);
             });
 
             path("/assignment", () -> {
-                get("/all", assignmentRoutes::getAll, Role.ADMIN, Role.USER);
-                get("/{id}", assignmentRoutes::getById, Role.ADMIN, Role.USER);
-                post("/", assignmentRoutes::create, Role.ADMIN);
-                put("/{id}", assignmentRoutes::update, Role.ADMIN);
-                patch("/{id}/deactivate", assignmentRoutes::deactivate, Role.ADMIN);
-                patch("/{id}/activate", assignmentRoutes::activate, Role.ADMIN);
-                delete("/{id}", assignmentRoutes::delete, Role.ADMIN);
+                get("/all", assignmentController::getAll, Role.ADMIN, Role.USER);
+                get("/{id}", assignmentController::getById, Role.ADMIN, Role.USER);
+                post("/", assignmentController::create, Role.ADMIN);
+                put("/{id}", assignmentController::update, Role.ADMIN);
+                patch("/{id}/deactivate", assignmentController::deactivate, Role.ADMIN);
+                patch("/{id}/activate", assignmentController::activate, Role.ADMIN);
+                delete("/{id}", assignmentController::delete, Role.ADMIN);
             });
 
             path("/project", () -> {
-                get("/all", projectRoutes::getAll, Role.ADMIN, Role.USER);
-                get("/{id}/status-history", projectRoutes::getStatusHistory, Role.ADMIN, Role.USER);
-                get("/{id}", projectRoutes::getById, Role.ADMIN, Role.USER);
-                post("/", projectRoutes::create, Role.ADMIN);
-                put("/{id}", projectRoutes::update, Role.ADMIN);
-                delete("/{id}", projectRoutes::delete, Role.ADMIN);
+                get("/all", projectController::getAll, Role.ADMIN, Role.USER);
+                get("/{id}/status-history", projectController::getStatusHistory, Role.ADMIN, Role.USER);
+                get("/{id}", projectController::getById, Role.ADMIN, Role.USER);
+                post("/", projectController::create, Role.ADMIN);
+                put("/{id}", projectController::update, Role.ADMIN);
+                delete("/{id}", projectController::delete, Role.ADMIN);
             });
         };
     }
 
     public EndpointGroup getRouteResource(String resourceName) {
-        UserRoutes userRoutes = new UserRoutes(emf);
+        UserController userController = new UserController(emf);
         return switch (resourceName.toLowerCase()) {
             case "msg" -> () -> path("msg", () -> {
                 ObjectNode on = objectMapper.createObjectNode();
@@ -116,7 +116,7 @@ public class Routes {
             case "auth" -> () -> path("auth", () -> {
                 ObjectNode on = objectMapper.createObjectNode();
                 on.put("msg","HELLO FROM THE RESTRICTED AREA");
-                post("register", userRoutes::create ); //TODO add admin only later after testing
+                post("register", userController::create ); //TODO add admin only later after testing
                 post("login", securityController::login );
                 put("change-password", securityController::changePassword, Role.USER, Role.ADMIN, Role.EMPLOYEE, Role.CLEANING_STAFF, Role.CLEANING_CLIENT, Role.SUBSCRIBER, Role.FLEX);
                 get("protected",ctx->ctx.json(on).status(200),Role.USER);
