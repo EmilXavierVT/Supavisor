@@ -12,7 +12,8 @@ public class AssignmentDTO {
     private String address;
     private Integer estimatedMinutes;
     private BigDecimal cost;
-    private LocalDateTime date;
+    private LocalDateTime startTime;
+    private LocalDateTime estimatedEndTime;
     private Long assignedEmployeeId;
 
     public AssignmentDTO() {}
@@ -46,8 +47,11 @@ public class AssignmentDTO {
     public BigDecimal getCost() { return cost; }
     public void setCost(BigDecimal cost) { this.cost = cost; }
 
-    public LocalDateTime getDate() { return date; }
-    public void setDate(LocalDateTime date) { this.date = date; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+
+    public LocalDateTime getEstimatedEndTime() { return estimatedEndTime; }
+    public void setEstimatedEndTime(LocalDateTime estimatedEndTime) { this.estimatedEndTime = estimatedEndTime; }
 
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }

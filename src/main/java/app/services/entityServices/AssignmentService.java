@@ -70,7 +70,7 @@ public class AssignmentService {
     }
 
     /**
-     * Replaces the name and all details (address, date, estimated time, cost, employee): a field left out or
+     * Replaces the name and all details (address, time window, estimated time, cost, employee): a field left out or
      * null is cleared. The active flag is only changed when the request carries one.
      */
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId) {
@@ -136,14 +136,25 @@ public class AssignmentService {
         String address = validAddress(dto.getAddress());
         Integer estimatedMinutes = validEstimatedMinutes(dto.getEstimatedMinutes());
         BigDecimal cost = validCost(dto.getCost());
-        var date = dto.getDate();
+        var startTime = dto.getStartTime();
+        var estimatedEndTime = validEstimatedEndTime(startTime, dto.getEstimatedEndTime());
         Long employeeId = validEmployee(dto.getAssignedEmployeeId(), assignment.getAssignedEmployeeId(), tenantId);
 
         assignment.setAddress(address);
         assignment.setEstimatedMinutes(estimatedMinutes);
         assignment.setCost(cost);
-        assignment.setDate(date);
+        assignment.setStartTime(startTime);
+        assignment.setEstimatedEndTime(estimatedEndTime);
         assignment.setAssignedEmployeeId(employeeId);
+    }
+
+    private static java.time.LocalDateTime validEstimatedEndTime(
+            java.time.LocalDateTime startTime,
+            java.time.LocalDateTime estimatedEndTime) {
+        if (startTime != null && estimatedEndTime != null && !estimatedEndTime.isAfter(startTime)) {
+            throw new ApiException(400, "Estimated end time must be later than start time");
+        }
+        return estimatedEndTime;
     }
 
     private static String validName(String name) {

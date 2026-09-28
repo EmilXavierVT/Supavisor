@@ -153,46 +153,61 @@ class AssignmentApiIntegrationTest {
         assertTrue(duplicate.body().contains("already exists"));
     }
 
-    // ---- details: address, date, estimated time, cost, employee
+    // ---- details: address, time window, estimated time, cost, employee
 
     @Test
-    void adminCanFillInAndChangeAddressDateEstimatedTimeCostAndEmployee() throws Exception {
+    void adminCanFillInAndChangeAddressTimeWindowEstimatedTimeCostAndEmployee() throws Exception {
         long first = employeeId(TENANT);
         long second = employeeId(TENANT);
         String name = unique("Cleaning at Main Street");
 
         HttpResponse<String> created = send("POST", "/api/assignment", adminToken, "{\"name\":\"" + name
-                + "\",\"address\":\"Main Street 1\",\"date\":\"2026-10-05T14:30:00\",\"estimatedMinutes\":90,\"cost\":1250.5,\"assignedEmployeeId\":"
+                + "\",\"address\":\"Main Street 1\",\"startTime\":\"2026-10-05T14:30:00\",\"estimatedEndTime\":\"2026-10-05T16:00:00\",\"estimatedMinutes\":90,\"cost\":1250.5,\"assignedEmployeeId\":"
                 + first + "}");
         assertEquals(201, created.statusCode());
         JsonNode body = json(created);
         long id = body.get("id").asLong();
         assertEquals("Main Street 1", body.get("address").asText());
-        assertEquals("2026-10-05T14:30:00", body.get("date").asText());
+        assertEquals("2026-10-05T14:30:00", body.get("startTime").asText());
+        assertEquals("2026-10-05T16:00:00", body.get("estimatedEndTime").asText());
         assertEquals(90, body.get("estimatedMinutes").asInt());
         assertEquals(0, new BigDecimal("1250.50").compareTo(body.get("cost").decimalValue()));
         assertEquals(first, body.get("assignedEmployeeId").asLong());
 
         HttpResponse<String> read = send("GET", "/api/assignment/" + id, adminToken, null);
         assertEquals("Main Street 1", json(read).get("address").asText());
-        assertEquals("2026-10-05T14:30:00", json(read).get("date").asText());
+        assertEquals("2026-10-05T14:30:00", json(read).get("startTime").asText());
+        assertEquals("2026-10-05T16:00:00", json(read).get("estimatedEndTime").asText());
         assertEquals(first, json(read).get("assignedEmployeeId").asLong());
 
         HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name
-                + "\",\"address\":\"Second Street 2\",\"date\":\"2026-10-06T09:15:00\",\"estimatedMinutes\":120,\"cost\":99,\"assignedEmployeeId\":"
+                + "\",\"address\":\"Second Street 2\",\"startTime\":\"2026-10-06T09:15:00\",\"estimatedEndTime\":\"2026-10-06T11:15:00\",\"estimatedMinutes\":120,\"cost\":99,\"assignedEmployeeId\":"
                 + second + "}");
         assertEquals(200, updated.statusCode());
         assertEquals("Second Street 2", json(updated).get("address").asText());
-        assertEquals("2026-10-06T09:15:00", json(updated).get("date").asText());
+        assertEquals("2026-10-06T09:15:00", json(updated).get("startTime").asText());
+        assertEquals("2026-10-06T11:15:00", json(updated).get("estimatedEndTime").asText());
         assertEquals(second, json(updated).get("assignedEmployeeId").asLong());
-        assertEquals(LocalDateTime.of(2026, 10, 6, 9, 15), dbDate(id));
+        assertEquals(LocalDateTime.of(2026, 10, 6, 9, 15), dbDateTime(id, "start_time"));
+        assertEquals(LocalDateTime.of(2026, 10, 6, 11, 15), dbDateTime(id, "estimated_end_time"));
         assertEquals(second, dbEmployee(id));
 
         HttpResponse<String> cleared = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name + "\"}");
         assertEquals(200, cleared.statusCode());
         assertTrue(json(cleared).get("address").isNull());
-        assertTrue(json(cleared).get("date").isNull());
+        assertTrue(json(cleared).get("startTime").isNull());
+        assertTrue(json(cleared).get("estimatedEndTime").isNull());
         assertTrue(json(cleared).get("assignedEmployeeId").isNull());
+    }
+
+    @Test
+    void estimatedEndTimeMustBeLaterThanStartTime() throws Exception {
+        HttpResponse<String> response = send("POST", "/api/assignment", adminToken,
+                "{\"name\":\"" + unique("Bad time")
+                        + "\",\"startTime\":\"2026-10-05T14:30:00\",\"estimatedEndTime\":\"2026-10-05T14:30:00\"}");
+
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().contains("Estimated end time must be later than start time"));
     }
 
     @Test
@@ -306,9 +321,9 @@ class AssignmentApiIntegrationTest {
         }
     }
 
-    private static LocalDateTime dbDate(long id) {
+    private static LocalDateTime dbDateTime(long id, String column) {
         try (EntityManager em = emf.createEntityManager()) {
-            Object value = em.createNativeQuery("SELECT assignment_date FROM assignments WHERE id = :id")
+            Object value = em.createNativeQuery("SELECT " + column + " FROM assignments WHERE id = :id")
                     .setParameter("id", id)
                     .getSingleResult();
             if (value instanceof java.sql.Timestamp timestamp) {

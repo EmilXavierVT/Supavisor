@@ -218,20 +218,22 @@ class AssignmentServiceIntegrationTest {
         assertEquals(0, dbCount(created.getId()));
     }
 
-    // ---- details: address, date, estimated time, cost, employee
+    // ---- details: address, time window, estimated time, cost, employee
 
     @Test
-    void createStoresAddressDateEstimatedTimeCostAndEmployeeInTheDatabase() {
+    void createStoresAddressTimeWindowEstimatedTimeCostAndEmployeeInTheDatabase() {
         Long tenant = newTenantId();
         User employee = newEmployee(tenant, true);
 
         AssignmentDTO dto = details("Cleaning at Main Street", "  Main Street 1, Aarhus ", 90, "1250.5", employee.getId());
-        dto.setDate(LocalDateTime.of(2026, 10, 5, 14, 30));
+        dto.setStartTime(LocalDateTime.of(2026, 10, 5, 14, 30));
+        dto.setEstimatedEndTime(LocalDateTime.of(2026, 10, 5, 16, 0));
 
         AssignmentDTO created = service.create(dto, tenant);
 
         assertEquals("Main Street 1, Aarhus", created.getAddress());
-        assertEquals(LocalDateTime.of(2026, 10, 5, 14, 30), created.getDate());
+        assertEquals(LocalDateTime.of(2026, 10, 5, 14, 30), created.getStartTime());
+        assertEquals(LocalDateTime.of(2026, 10, 5, 16, 0), created.getEstimatedEndTime());
         assertEquals(90, created.getEstimatedMinutes());
         assertEquals(0, new BigDecimal("1250.50").compareTo(created.getCost()));
         assertEquals(employee.getId(), created.getAssignedEmployeeId());
@@ -240,9 +242,11 @@ class AssignmentServiceIntegrationTest {
         assertEquals(90, ((Number) row[1]).intValue());
         assertEquals(0, new BigDecimal("1250.50").compareTo((BigDecimal) row[2]));
         assertEquals(employee.getId(), ((Number) row[3]).longValue());
-        assertEquals(LocalDateTime.of(2026, 10, 5, 14, 30), dbDate(row[4]));
+        assertEquals(LocalDateTime.of(2026, 10, 5, 14, 30), dbDateTime(row[4]));
+        assertEquals(LocalDateTime.of(2026, 10, 5, 16, 0), dbDateTime(row[5]));
         assertEquals(employee.getId(), service.getById(created.getId(), tenant, false).getAssignedEmployeeId());
-        assertEquals(LocalDateTime.of(2026, 10, 5, 14, 30), service.getById(created.getId(), tenant, false).getDate());
+        assertEquals(LocalDateTime.of(2026, 10, 5, 14, 30), service.getById(created.getId(), tenant, false).getStartTime());
+        assertEquals(LocalDateTime.of(2026, 10, 5, 16, 0), service.getById(created.getId(), tenant, false).getEstimatedEndTime());
     }
 
     @Test
@@ -254,8 +258,26 @@ class AssignmentServiceIntegrationTest {
         assertNull(created.getAddress());
         assertNull(created.getEstimatedMinutes());
         assertNull(created.getCost());
-        assertNull(created.getDate());
+        assertNull(created.getStartTime());
+        assertNull(created.getEstimatedEndTime());
         assertNull(created.getAssignedEmployeeId());
+    }
+
+    @Test
+    void estimatedEndTimeMustBeLaterThanStartTime() {
+        Long tenant = newTenantId();
+
+        AssignmentDTO equal = details("Equal", null, null, null, null);
+        equal.setStartTime(LocalDateTime.of(2026, 10, 5, 14, 30));
+        equal.setEstimatedEndTime(LocalDateTime.of(2026, 10, 5, 14, 30));
+        assertEquals(400, code(() -> service.create(equal, tenant)));
+
+        AssignmentDTO earlier = details("Earlier", null, null, null, null);
+        earlier.setStartTime(LocalDateTime.of(2026, 10, 5, 14, 30));
+        earlier.setEstimatedEndTime(LocalDateTime.of(2026, 10, 5, 14, 29));
+        assertEquals(400, code(() -> service.create(earlier, tenant)));
+
+        assertTrue(service.getAll(tenant, false).isEmpty());
     }
 
     @Test
@@ -311,24 +333,29 @@ class AssignmentServiceIntegrationTest {
         User first = newEmployee(tenant, true);
         User second = newEmployee(tenant, true);
         AssignmentDTO createdDto = details("Cleaning", "Old street 1", 30, "100", first.getId());
-        createdDto.setDate(LocalDateTime.of(2026, 10, 5, 14, 30));
+        createdDto.setStartTime(LocalDateTime.of(2026, 10, 5, 14, 30));
+        createdDto.setEstimatedEndTime(LocalDateTime.of(2026, 10, 5, 16, 0));
         AssignmentDTO created = service.create(createdDto, tenant);
 
         AssignmentDTO updateDto = details("Cleaning", "New street 2", 120, "250.75", second.getId());
-        updateDto.setDate(LocalDateTime.of(2026, 10, 6, 9, 15));
+        updateDto.setStartTime(LocalDateTime.of(2026, 10, 6, 9, 15));
+        updateDto.setEstimatedEndTime(LocalDateTime.of(2026, 10, 6, 11, 15));
         AssignmentDTO changed = service.update(created.getId(), updateDto, tenant);
         assertEquals("New street 2", changed.getAddress());
-        assertEquals(LocalDateTime.of(2026, 10, 6, 9, 15), changed.getDate());
+        assertEquals(LocalDateTime.of(2026, 10, 6, 9, 15), changed.getStartTime());
+        assertEquals(LocalDateTime.of(2026, 10, 6, 11, 15), changed.getEstimatedEndTime());
         assertEquals(120, changed.getEstimatedMinutes());
         assertEquals(second.getId(), changed.getAssignedEmployeeId());
         assertEquals("New street 2", dbDetails(created.getId())[0]);
-        assertEquals(LocalDateTime.of(2026, 10, 6, 9, 15), dbDate(dbDetails(created.getId())[4]));
+        assertEquals(LocalDateTime.of(2026, 10, 6, 9, 15), dbDateTime(dbDetails(created.getId())[4]));
+        assertEquals(LocalDateTime.of(2026, 10, 6, 11, 15), dbDateTime(dbDetails(created.getId())[5]));
 
         AssignmentDTO cleared = service.update(created.getId(), dto("Cleaning"), tenant);
         assertNull(cleared.getAddress());
         assertNull(cleared.getEstimatedMinutes());
         assertNull(cleared.getCost());
-        assertNull(cleared.getDate());
+        assertNull(cleared.getStartTime());
+        assertNull(cleared.getEstimatedEndTime());
         assertNull(cleared.getAssignedEmployeeId());
         Object[] row = dbDetails(created.getId());
         assertNull(row[0]);
@@ -336,6 +363,26 @@ class AssignmentServiceIntegrationTest {
         assertNull(row[2]);
         assertNull(row[3]);
         assertNull(row[4]);
+        assertNull(row[5]);
+    }
+
+    @Test
+    void invalidTimeWindowOnUpdateLeavesTheRowUntouched() {
+        Long tenant = newTenantId();
+        AssignmentDTO createdDto = details("Cleaning", null, null, null, null);
+        createdDto.setStartTime(LocalDateTime.of(2026, 10, 5, 14, 30));
+        createdDto.setEstimatedEndTime(LocalDateTime.of(2026, 10, 5, 16, 0));
+        AssignmentDTO created = service.create(createdDto, tenant);
+
+        AssignmentDTO invalid = details("Renamed", null, null, null, null);
+        invalid.setStartTime(LocalDateTime.of(2026, 10, 6, 14, 30));
+        invalid.setEstimatedEndTime(LocalDateTime.of(2026, 10, 6, 14, 30));
+        assertEquals(400, code(() -> service.update(created.getId(), invalid, tenant)));
+
+        assertEquals("Cleaning", dbRow(created.getId())[0]);
+        Object[] row = dbDetails(created.getId());
+        assertEquals(LocalDateTime.of(2026, 10, 5, 14, 30), dbDateTime(row[4]));
+        assertEquals(LocalDateTime.of(2026, 10, 5, 16, 0), dbDateTime(row[5]));
     }
 
     @Test
@@ -409,17 +456,17 @@ class AssignmentServiceIntegrationTest {
                 null, tenantId, active, Set.of("USER")));
     }
 
-    /** address, estimated_minutes, cost, assigned_employee_id, assignment_date straight from the table. */
+    /** address, estimated_minutes, cost, assigned_employee_id, start_time, estimated_end_time straight from the table. */
     private static Object[] dbDetails(Long id) {
         try (EntityManager em = emf.createEntityManager()) {
             return (Object[]) em.createNativeQuery(
-                            "SELECT address, estimated_minutes, cost, assigned_employee_id, assignment_date FROM assignments WHERE id = :id")
+                            "SELECT address, estimated_minutes, cost, assigned_employee_id, start_time, estimated_end_time FROM assignments WHERE id = :id")
                     .setParameter("id", id)
                     .getSingleResult();
         }
     }
 
-    private static LocalDateTime dbDate(Object value) {
+    private static LocalDateTime dbDateTime(Object value) {
         if (value instanceof java.sql.Timestamp timestamp) {
             return timestamp.toLocalDateTime();
         }

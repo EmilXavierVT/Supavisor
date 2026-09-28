@@ -36,8 +36,11 @@ public class Assignment {
     @Column(precision = 12, scale = 2)
     private BigDecimal cost;
 
-    @Column(name = "assignment_date")
-    private LocalDateTime date;
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
+    @Column(name = "estimated_end_time")
+    private LocalDateTime estimatedEndTime;
 
     // the employee (user) this assignment is linked to; cleared when that user is deleted
     @Column(name = "assigned_employee_id")
@@ -75,8 +78,11 @@ public class Assignment {
     public BigDecimal getCost() { return cost; }
     public void setCost(BigDecimal cost) { this.cost = cost; }
 
-    public LocalDateTime getDate() { return date; }
-    public void setDate(LocalDateTime date) { this.date = date; }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+
+    public LocalDateTime getEstimatedEndTime() { return estimatedEndTime; }
+    public void setEstimatedEndTime(LocalDateTime estimatedEndTime) { this.estimatedEndTime = estimatedEndTime; }
 
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
