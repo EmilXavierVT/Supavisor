@@ -3,14 +3,17 @@ package app.services.entityServices;
 import app.dao.AssignmentDAO;
 import app.dao.ProjectDAO;
 import app.dto.ProjectDTO;
+import app.dto.ProjectStatusHistoryDTO;
 import app.entities.Assignment;
 import app.entities.Project;
 import app.entities.ProjectStatus;
+import app.entities.ProjectStatusHistory;
 import app.exceptions.ApiException;
 import app.services.dtoConverter.ProjectMapper;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 
+import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -39,37 +42,60 @@ public class ProjectService {
         return mapper.toDto(find(id, tenantId));
     }
 
-    public ProjectDTO create(ProjectDTO dto, Long tenantId) {
+    public ProjectDTO create(ProjectDTO dto, Long tenantId, String actor) {
         String name = validName(dto.getName());
         rejectDuplicate(tenantId, name, null);
 
+        Instant now = Instant.now();
         Project project = new Project();
         project.setTenantId(tenantId);
         project.setName(name);
         applyDetails(project, dto, tenantId);
+        project.setCreatedBy(actor);
+        project.setCreatedAt(now);
+        project.setUpdatedBy(actor);
+        project.setUpdatedAt(now);
+
+        ProjectStatusHistory history = new ProjectStatusHistory(null, null, project.getStatus(), actor, now);
 
         try {
-            return mapper.toDto(dao.create(project));
+            return mapper.toDto(dao.create(project, history));
         } catch (PersistenceException e) {
             rejectDuplicate(tenantId, name, null);
             throw e;
         }
     }
 
-    public ProjectDTO update(Long id, ProjectDTO dto, Long tenantId) {
+    public ProjectDTO update(Long id, ProjectDTO dto, Long tenantId, String actor) {
         Project existing = find(id, tenantId);
+        ProjectStatus previousStatus = existing.getStatus();
         String name = validName(dto.getName());
         rejectDuplicate(tenantId, name, id);
 
+        Instant now = Instant.now();
         existing.setName(name);
         applyDetails(existing, dto, tenantId);
+        existing.setUpdatedBy(actor);
+        existing.setUpdatedAt(now);
+
+        ProjectStatusHistory history = null;
+        if (previousStatus != existing.getStatus()) {
+            history = new ProjectStatusHistory(existing.getId(), previousStatus, existing.getStatus(), actor, now);
+        }
 
         try {
-            return mapper.toDto(dao.update(existing));
+            return mapper.toDto(dao.update(existing, history));
         } catch (PersistenceException e) {
             rejectDuplicate(tenantId, name, id);
             throw e;
         }
+    }
+
+    public List<ProjectStatusHistoryDTO> getStatusHistory(Long id, Long tenantId) {
+        Project project = find(id, tenantId);
+        return dao.getStatusHistory(project.getId()).stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     public void delete(Long id, Long tenantId) {

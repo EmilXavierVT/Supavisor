@@ -1,3 +1,11 @@
-.agents
+.agents/
+
+# Local configuration
 config.*
-.idea.*
+
+# IDE/user-local files
+.idea/
+.DS_Store
+
+# Build and test output
+target/
