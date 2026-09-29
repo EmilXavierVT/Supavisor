@@ -3,6 +3,7 @@ package app.controller;
 
 
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentStateUpdateDTO;
 import app.dto.UserDTO;
 import app.exceptions.ApiException;
 import app.services.entityServices.AssignmentService;
@@ -50,6 +51,27 @@ public class AssignmentController {
         ctx.json(assignmentService.activate(id, callerTenantId(ctx)));
     }
 
+    public void changeState(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        AssignmentStateUpdateDTO dto = ctx.bodyValidator(AssignmentStateUpdateDTO.class).get();
+        ctx.json(assignmentService.changeState(id, dto.getState(), callerTenantId(ctx), callerSource(ctx)));
+    }
+
+    public void checkIn(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(assignmentService.checkIn(id, callerTenantId(ctx), callerSource(ctx)));
+    }
+
+    public void checkOut(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(assignmentService.checkOut(id, callerTenantId(ctx), callerSource(ctx)));
+    }
+
+    public void getStateHistory(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(assignmentService.getStateHistory(id, callerTenantId(ctx)));
+    }
+
     public void delete(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         assignmentService.delete(id, callerTenantId(ctx));
@@ -69,5 +91,13 @@ public class AssignmentController {
         UserDTO caller = ctx.attribute("user");
         return caller != null && caller.getRoles() != null
                 && caller.getRoles().stream().anyMatch("ADMIN"::equalsIgnoreCase);
+    }
+
+    private static String callerSource(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        if (caller == null || caller.getEmail() == null || caller.getEmail().isBlank()) {
+            return "api";
+        }
+        return caller.getEmail();
     }
 }

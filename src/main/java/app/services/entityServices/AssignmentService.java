@@ -4,7 +4,10 @@ import app.dao.AssignmentDAO;
 import app.dao.ProductDAO;
 import app.dao.UserDAO;
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentStateHistoryDTO;
 import app.entities.Assignment;
+import app.entities.AssignmentState;
+import app.entities.AssignmentStateHistory;
 import app.entities.Product;
 import app.entities.User;
 import app.exceptions.ApiException;
@@ -14,6 +17,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -29,12 +34,18 @@ public class AssignmentService {
     private final UserDAO userDAO;
     private final ProductDAO productDAO;
     private final AssignmentMapper mapper = new AssignmentMapper();
+    private final Clock clock;
 
     public AssignmentService(EntityManagerFactory emf) {
+        this(emf, Clock.systemUTC());
+    }
+
+    AssignmentService(EntityManagerFactory emf, Clock clock) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.dao = new AssignmentDAO(emf);
         this.userDAO = new UserDAO(emf);
         this.productDAO = new ProductDAO(emf);
+        this.clock = clock == null ? Clock.systemUTC() : clock;
     }
 
 
@@ -61,9 +72,13 @@ public class AssignmentService {
         assignment.setName(name);
         assignment.setTenantId(tenantId);
         assignment.setActive(dto.getIsActive() == null || dto.getIsActive());
+        assignment.setState(dto.getState() == null ? AssignmentState.PLANNED : dto.getState());
         applyDetails(assignment, dto, tenantId);
+        Instant now = Instant.now(clock);
+        AssignmentStateHistory history = new AssignmentStateHistory(
+                null, null, assignment.getState(), "system", now);
         try {
-            return mapper.toDto(dao.create(assignment));
+            return mapper.toDto(dao.create(assignment, history));
         } catch (PersistenceException e) {
 
             rejectDuplicate(tenantId, name, null);
@@ -99,6 +114,50 @@ public class AssignmentService {
         return setActive(id, tenantId, true);
     }
 
+    public AssignmentDTO changeState(Long id, AssignmentState nextState, Long tenantId, String source) {
+        if (nextState == null) {
+            throw new ApiException(400, "Assignment state is required");
+        }
+        Assignment existing = find(id, tenantId);
+        return changeState(existing, nextState, source);
+    }
+
+    public AssignmentDTO checkIn(Long id, Long tenantId, String source) {
+        Assignment existing = find(id, tenantId);
+        if (existing.getCheckInAt() != null) {
+            throw new ApiException(409, "Assignment is already checked in");
+        }
+        Instant now = Instant.now(clock);
+        existing.setCheckInAt(now);
+        if (existing.getState() != AssignmentState.IN_PROGRESS) {
+            return changeState(existing, AssignmentState.IN_PROGRESS, source, now);
+        }
+        return mapper.toDto(dao.update(existing));
+    }
+
+    public AssignmentDTO checkOut(Long id, Long tenantId, String source) {
+        Assignment existing = find(id, tenantId);
+        if (existing.getCheckInAt() == null) {
+            throw new ApiException(409, "Assignment must be checked in before checkout");
+        }
+        if (existing.getCheckOutAt() != null) {
+            throw new ApiException(409, "Assignment is already checked out");
+        }
+        Instant now = Instant.now(clock);
+        existing.setCheckOutAt(now);
+        if (existing.getState() != AssignmentState.COMPLETED) {
+            return changeState(existing, AssignmentState.COMPLETED, source, now);
+        }
+        return mapper.toDto(dao.update(existing));
+    }
+
+    public List<AssignmentStateHistoryDTO> getStateHistory(Long id, Long tenantId) {
+        Assignment assignment = find(id, tenantId);
+        return dao.getStateHistory(assignment.getId()).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
 
     public void delete(Long id, Long tenantId) {
         find(id, tenantId);
@@ -118,6 +177,24 @@ public class AssignmentService {
         return mapper.toDto(existing);
     }
 
+    private AssignmentDTO changeState(Assignment assignment, AssignmentState nextState, String source) {
+        return changeState(assignment, nextState, source, Instant.now(clock));
+    }
+
+    private AssignmentDTO changeState(Assignment assignment, AssignmentState nextState, String source, Instant changedAt) {
+        AssignmentState previous = assignment.getState() == null ? AssignmentState.PLANNED : assignment.getState();
+        if (previous == nextState) {
+            return mapper.toDto(assignment);
+        }
+        if (!previous.canTransitionTo(nextState)) {
+            throw new ApiException(409, "Assignment state cannot transition from " + previous + " to " + nextState);
+        }
+        assignment.setState(nextState);
+        AssignmentStateHistory history = new AssignmentStateHistory(
+                assignment.getId(), previous, nextState, validSource(source), changedAt);
+        return mapper.toDto(dao.update(assignment, history));
+    }
+
     private Assignment find(Long id, Long tenantId) {
         Assignment assignment = id == null ? null : dao.getById(id);
         if (assignment == null || !assignment.getTenantId().equals(tenantId)) {
@@ -128,6 +205,11 @@ public class AssignmentService {
 
     private static ApiException notFound() {
         return new ApiException(404, "Assignment not found");
+    }
+
+    private static String validSource(String source) {
+        String trimmed = source == null ? "" : source.trim();
+        return trimmed.isEmpty() ? "system" : trimmed;
     }
 
 

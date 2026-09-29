@@ -22,12 +22,14 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Talks to a real Javalin server over HTTP, so it covers routing, token security and role checks. */
@@ -241,6 +243,102 @@ class AssignmentApiIntegrationTest {
         assertEquals(404, send("PATCH", "/api/assignment/" + id + "/activate", otherTenantAdminToken, null).statusCode());
     }
 
+    // ---- assignment states and attendance timestamps
+
+    @Test
+    void assignmentsExposeDefaultStateAndInitialStateHistory() throws Exception {
+        HttpResponse<String> created = send("POST", "/api/assignment", adminToken,
+                "{\"name\":\"" + unique("Stateful") + "\"}");
+        assertEquals(201, created.statusCode());
+        JsonNode body = json(created);
+        long id = body.get("id").asLong();
+
+        assertEquals("PLANNED", body.get("state").asText());
+        assertTrue(body.get("checkInAt").isNull());
+        assertTrue(body.get("checkOutAt").isNull());
+
+        HttpResponse<String> history = send("GET", "/api/assignment/" + id + "/state-history", adminToken, null);
+        assertEquals(200, history.statusCode());
+        JsonNode entries = json(history);
+        assertEquals(1, entries.size());
+        assertTrue(entries.get(0).get("fromState").isNull());
+        assertEquals("PLANNED", entries.get(0).get("toState").asText());
+        assertEquals("system", entries.get(0).get("source").asText());
+        assertNotNull(entries.get(0).get("changedAt").asText());
+    }
+
+    @Test
+    void adminCanChangeAssignmentStateAndInvalidTransitionsAreRejected() throws Exception {
+        long id = create(adminToken, unique("Transition"));
+
+        HttpResponse<String> acknowledged = send("PATCH", "/api/assignment/" + id + "/state", adminToken,
+                "{\"state\":\"ACKNOWLEDGED\"}");
+        assertEquals(200, acknowledged.statusCode());
+        assertEquals("ACKNOWLEDGED", json(acknowledged).get("state").asText());
+
+        HttpResponse<String> invalid = send("PATCH", "/api/assignment/" + id + "/state", adminToken,
+                "{\"state\":\"COMPLETED\"}");
+        assertEquals(409, invalid.statusCode());
+        assertTrue(invalid.body().contains("cannot transition"));
+
+        HttpResponse<String> history = send("GET", "/api/assignment/" + id + "/state-history", adminToken, null);
+        assertEquals(200, history.statusCode());
+        JsonNode entries = json(history);
+        assertEquals(2, entries.size());
+        assertEquals("PLANNED", entries.get(0).get("fromState").asText());
+        assertEquals("ACKNOWLEDGED", entries.get(0).get("toState").asText());
+        assertEquals("ACKNOWLEDGED", json(send("GET", "/api/assignment/" + id, adminToken, null))
+                .get("state").asText());
+    }
+
+    @Test
+    void checkInAndCheckOutUseServerTimestampsAndReturnStoredValues() throws Exception {
+        long id = create(adminToken, unique("Attendance"));
+
+        Instant beforeCheckIn = Instant.now().minusSeconds(1);
+        HttpResponse<String> checkedIn = send("PATCH", "/api/assignment/" + id + "/check-in", userToken,
+                "{\"checkInAt\":\"2001-01-01T00:00:00Z\"}");
+        Instant afterCheckIn = Instant.now().plusSeconds(1);
+        assertEquals(200, checkedIn.statusCode());
+        JsonNode checkInBody = json(checkedIn);
+        Instant checkInAt = Instant.parse(checkInBody.get("checkInAt").asText());
+        assertTrue(!checkInAt.isBefore(beforeCheckIn) && !checkInAt.isAfter(afterCheckIn));
+        assertEquals("IN_PROGRESS", checkInBody.get("state").asText());
+
+        JsonNode readAfterCheckIn = json(send("GET", "/api/assignment/" + id, adminToken, null));
+        assertEquals(checkInAt, Instant.parse(readAfterCheckIn.get("checkInAt").asText()));
+        assertEquals("IN_PROGRESS", readAfterCheckIn.get("state").asText());
+
+        Instant beforeCheckOut = Instant.now().minusSeconds(1);
+        HttpResponse<String> checkedOut = send("PATCH", "/api/assignment/" + id + "/check-out", userToken,
+                "{\"checkOutAt\":\"2001-01-01T00:00:00Z\"}");
+        Instant afterCheckOut = Instant.now().plusSeconds(1);
+        assertEquals(200, checkedOut.statusCode());
+        JsonNode checkOutBody = json(checkedOut);
+        Instant checkOutAt = Instant.parse(checkOutBody.get("checkOutAt").asText());
+        assertTrue(!checkOutAt.isBefore(beforeCheckOut) && !checkOutAt.isAfter(afterCheckOut));
+        assertEquals("COMPLETED", checkOutBody.get("state").asText());
+
+        JsonNode readAfterCheckOut = json(send("GET", "/api/assignment/" + id, adminToken, null));
+        assertEquals(checkInAt, Instant.parse(readAfterCheckOut.get("checkInAt").asText()));
+        assertEquals(checkOutAt, Instant.parse(readAfterCheckOut.get("checkOutAt").asText()));
+        assertEquals("COMPLETED", readAfterCheckOut.get("state").asText());
+    }
+
+    @Test
+    void checkOutRequiresCheckInAndAttendanceTimestampsCannotBeSetThroughUpdate() throws Exception {
+        long id = create(adminToken, unique("Protected attendance"));
+
+        assertEquals(409, send("PATCH", "/api/assignment/" + id + "/check-out", userToken, null).statusCode());
+
+        HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken,
+                "{\"name\":\"Protected attendance renamed\",\"checkInAt\":\"2001-01-01T00:00:00Z\",\"checkOutAt\":\"2001-01-01T01:00:00Z\"}");
+
+        assertEquals(200, updated.statusCode());
+        assertTrue(json(updated).get("checkInAt").isNull());
+        assertTrue(json(updated).get("checkOutAt").isNull());
+    }
+
     // ---- role permissions
 
     @Test
@@ -257,6 +355,7 @@ class AssignmentApiIntegrationTest {
         assertEquals(403, send("POST", "/api/assignment", userToken, "{\"name\":\"Sneaky\"}").statusCode());
         assertEquals(403, send("PUT", "/api/assignment/" + id, userToken, "{\"name\":\"Sneaky\"}").statusCode());
         assertEquals(403, send("PATCH", "/api/assignment/" + id + "/deactivate", userToken, null).statusCode());
+        assertEquals(403, send("PATCH", "/api/assignment/" + id + "/state", userToken, "{\"state\":\"CANCELLED\"}").statusCode());
         assertEquals(403, send("DELETE", "/api/assignment/" + id, userToken, null).statusCode());
 
         // nothing changed

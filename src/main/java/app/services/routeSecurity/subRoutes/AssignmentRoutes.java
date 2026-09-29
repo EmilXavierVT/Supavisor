@@ -26,6 +26,10 @@ public class AssignmentRoutes {
             put("/{id}", assignmentController::update, Role.ADMIN);
             patch("/{id}/deactivate", assignmentController::deactivate, Role.ADMIN);
             patch("/{id}/activate", assignmentController::activate, Role.ADMIN);
+            patch("/{id}/state", assignmentController::changeState, Role.ADMIN);
+            patch("/{id}/check-in", assignmentController::checkIn, Role.ADMIN, Role.USER);
+            patch("/{id}/check-out", assignmentController::checkOut, Role.ADMIN, Role.USER);
+            get("/{id}/state-history", assignmentController::getStateHistory, Role.ADMIN, Role.USER);
             delete("/{id}", assignmentController::delete, Role.ADMIN);
         });
 
