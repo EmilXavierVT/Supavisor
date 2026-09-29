@@ -17,10 +17,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-/**
- * Everything is scoped to a tenant: a tenant only ever sees and touches its own assignments,
- * and an assignment of another tenant is reported as not found.
- */
+
 public class AssignmentService {
 
     private static final int MAX_NAME_LENGTH = 100;
@@ -40,14 +37,14 @@ public class AssignmentService {
         this.productDAO = new ProductDAO(emf);
     }
 
-    /** @param activeOnly true for the list a picker should offer: deactivated assignments are left out */
+
     public List<AssignmentDTO> getAll(Long tenantId, boolean activeOnly) {
         return dao.getAll(tenantId, activeOnly).stream()
                 .map(mapper::toDto)
                 .toList();
     }
 
-    /** @param activeOnly when true a deactivated assignment is reported as not found */
+
     public AssignmentDTO getById(Long id, Long tenantId, boolean activeOnly) {
         Assignment assignment = find(id, tenantId);
         if (activeOnly && !assignment.isActive()) {
@@ -68,16 +65,13 @@ public class AssignmentService {
         try {
             return mapper.toDto(dao.create(assignment));
         } catch (PersistenceException e) {
-            // lost a race against another request using the same name
+
             rejectDuplicate(tenantId, name, null);
             throw e;
         }
     }
 
-    /**
-     * Replaces the name and all details (address, time window, estimated time, cost, employee): a field left out or
-     * null is cleared. The active flag is only changed when the request carries one.
-     */
+    
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId) {
         Assignment existing = find(id, tenantId);
         String name = validName(dto.getName());
@@ -96,7 +90,7 @@ public class AssignmentService {
         }
     }
 
-    /** Only flips the flag, so everything that already references the assignment keeps it. */
+
     public AssignmentDTO deactivate(Long id, Long tenantId) {
         return setActive(id, tenantId, false);
     }
@@ -105,7 +99,7 @@ public class AssignmentService {
         return setActive(id, tenantId, true);
     }
 
-    /** Refuses with 409 while other records still reference the assignment; deactivate it instead. */
+
     public void delete(Long id, Long tenantId) {
         find(id, tenantId);
         try {
@@ -136,7 +130,7 @@ public class AssignmentService {
         return new ApiException(404, "Assignment not found");
     }
 
-    /** Validates and copies the optional details; nothing is changed on the entity if any of them is invalid. */
+
     private void applyDetails(Assignment assignment, AssignmentDTO dto, Long tenantId) {
         String address = validAddress(dto.getAddress());
         Integer estimatedMinutes = validEstimatedMinutes(dto.getEstimatedMinutes());
@@ -218,10 +212,7 @@ public class AssignmentService {
         return cost.setScale(2);
     }
 
-    /**
-     * The employee has to be a user of the same tenant. A deactivated employee cannot be newly assigned,
-     * but one who is already linked stays linked (history is preserved) when other details are edited.
-     */
+    
     private Long validEmployee(Long employeeId, Long currentEmployeeId, Long tenantId) {
         if (employeeId == null) {
             return null;
@@ -253,7 +244,7 @@ public class AssignmentService {
         return List.copyOf(uniqueIds);
     }
 
-    /** Names are unique per tenant, ignoring case. {@code ownId} is the assignment being renamed, if any. */
+
     private void rejectDuplicate(Long tenantId, String name, Long ownId) {
         boolean taken = dao.findByName(tenantId, name).stream()
                 .anyMatch(other -> !other.getId().equals(ownId));
