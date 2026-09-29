@@ -59,7 +59,7 @@ public class AssignmentController {
 
     public void checkIn(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.checkIn(id, callerTenantId(ctx), callerSource(ctx)));
+        ctx.json(assignmentService.checkIn(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx), callerSource(ctx)));
     }
 
     public void checkOut(Context ctx) {
@@ -91,6 +91,14 @@ public class AssignmentController {
         UserDTO caller = ctx.attribute("user");
         return caller != null && caller.getRoles() != null
                 && caller.getRoles().stream().anyMatch("ADMIN"::equalsIgnoreCase);
+    }
+
+    private static Long callerId(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        if (caller == null || caller.getId() == null) {
+            throw new ApiException(401, "Not authenticated or userId missing from token");
+        }
+        return caller.getId();
     }
 
     private static String callerSource(Context ctx) {

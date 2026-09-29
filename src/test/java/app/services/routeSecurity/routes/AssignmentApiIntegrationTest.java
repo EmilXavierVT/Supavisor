@@ -54,6 +54,8 @@ class AssignmentApiIntegrationTest {
     private static String userToken;
     private static String otherTenantAdminToken;
 
+    private record TokenUser(String token, long userId) {}
+
     @BeforeAll
     static void setUp() throws Exception {
         emf = TestEntityManagerFactory.create(POSTGRES);
@@ -293,10 +295,11 @@ class AssignmentApiIntegrationTest {
 
     @Test
     void checkInAndCheckOutUseServerTimestampsAndReturnStoredValues() throws Exception {
-        long id = create(adminToken, unique("Attendance"));
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        long id = assignedAssignment(employee.userId(), unique("Attendance"));
 
         Instant beforeCheckIn = Instant.now().minusSeconds(1);
-        HttpResponse<String> checkedIn = send("PATCH", "/api/assignment/" + id + "/check-in", userToken,
+        HttpResponse<String> checkedIn = send("PATCH", "/api/assignment/" + id + "/check-in", employee.token(),
                 "{\"checkInAt\":\"2001-01-01T00:00:00Z\"}");
         Instant afterCheckIn = Instant.now().plusSeconds(1);
         assertEquals(200, checkedIn.statusCode());
@@ -309,8 +312,14 @@ class AssignmentApiIntegrationTest {
         assertEquals(checkInAt, Instant.parse(readAfterCheckIn.get("checkInAt").asText()));
         assertEquals("IN_PROGRESS", readAfterCheckIn.get("state").asText());
 
+        HttpResponse<String> duplicate = send("PATCH", "/api/assignment/" + id + "/check-in", employee.token(), null);
+        assertEquals(409, duplicate.statusCode());
+        assertTrue(duplicate.body().contains("already checked in"));
+        assertEquals(checkInAt, Instant.parse(json(send("GET", "/api/assignment/" + id, adminToken, null))
+                .get("checkInAt").asText()));
+
         Instant beforeCheckOut = Instant.now().minusSeconds(1);
-        HttpResponse<String> checkedOut = send("PATCH", "/api/assignment/" + id + "/check-out", userToken,
+        HttpResponse<String> checkedOut = send("PATCH", "/api/assignment/" + id + "/check-out", employee.token(),
                 "{\"checkOutAt\":\"2001-01-01T00:00:00Z\"}");
         Instant afterCheckOut = Instant.now().plusSeconds(1);
         assertEquals(200, checkedOut.statusCode());
@@ -337,6 +346,40 @@ class AssignmentApiIntegrationTest {
         assertEquals(200, updated.statusCode());
         assertTrue(json(updated).get("checkInAt").isNull());
         assertTrue(json(updated).get("checkOutAt").isNull());
+    }
+
+    @Test
+    void onlyAssignedEmployeeCanCheckIn() throws Exception {
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        TokenUser otherEmployee = tokenUserFor("USER", TENANT);
+        long assigned = assignedAssignment(employee.userId(), unique("Assigned attendance"));
+        long unassigned = create(adminToken, unique("Unassigned attendance"));
+
+        assertEquals(200, send("PATCH", "/api/assignment/" + assigned + "/check-in", employee.token(), null).statusCode());
+        assertEquals(404, send("PATCH", "/api/assignment/" + assigned + "/check-in", otherEmployee.token(), null).statusCode());
+        assertEquals(404, send("PATCH", "/api/assignment/" + unassigned + "/check-in", employee.token(), null).statusCode());
+    }
+
+    @Test
+    void checkInRejectsAssignmentsInTerminalStates() throws Exception {
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        String[] terminalStates = {"CANCELLED", "DECLINED", "COMPLETED"};
+
+        for (String state : terminalStates) {
+            HttpResponse<String> created = send("POST", "/api/assignment", adminToken,
+                    "{\"name\":\"" + unique(state) + "\",\"state\":\"" + state
+                            + "\",\"assignedEmployeeId\":" + employee.userId() + "}");
+            assertEquals(201, created.statusCode());
+            long id = json(created).get("id").asLong();
+
+            HttpResponse<String> rejected = send("PATCH", "/api/assignment/" + id + "/check-in", employee.token(), null);
+
+            assertEquals(409, rejected.statusCode());
+            assertTrue(rejected.body().contains("not eligible"));
+            JsonNode unchanged = json(send("GET", "/api/assignment/" + id, adminToken, null));
+            assertEquals(state, unchanged.get("state").asText());
+            assertTrue(unchanged.get("checkInAt").isNull());
+        }
     }
 
     // ---- role permissions
@@ -438,18 +481,29 @@ class AssignmentApiIntegrationTest {
         return json(response).get("id").asLong();
     }
 
+    private static long assignedAssignment(long employeeId, String name) throws Exception {
+        HttpResponse<String> response = send("POST", "/api/assignment", adminToken,
+                "{\"name\":\"" + name + "\",\"assignedEmployeeId\":" + employeeId + "}");
+        assertEquals(201, response.statusCode());
+        return json(response).get("id").asLong();
+    }
+
     private static String unique(String prefix) {
         return prefix + "-" + UUID.randomUUID().toString().substring(0, 8);
     }
 
     private static String tokenFor(String role, long tenantId) throws Exception {
+        return tokenUserFor(role, tenantId).token();
+    }
+
+    private static TokenUser tokenUserFor(String role, long tenantId) throws Exception {
         String email = UUID.randomUUID() + "@example.com";
-        new UserDAO(emf).create(new User(null, email, PASSWORD, null, tenantId, true, Set.of(role)));
+        User user = new UserDAO(emf).create(new User(null, email, PASSWORD, null, tenantId, true, Set.of(role)));
 
         HttpResponse<String> login = send("POST", "/api/auth/login", null,
                 "{\"email\":\"" + email + "\",\"password\":\"" + PASSWORD + "\"}");
         assertEquals(200, login.statusCode());
-        return json(login).get("token").asText();
+        return new TokenUser(json(login).get("token").asText(), user.getId());
     }
 
     private static HttpResponse<String> send(String method, String path, String token, String body) throws Exception {

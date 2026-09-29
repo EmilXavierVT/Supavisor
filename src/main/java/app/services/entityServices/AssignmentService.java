@@ -122,8 +122,19 @@ public class AssignmentService {
         return changeState(existing, nextState, source);
     }
 
-    public AssignmentDTO checkIn(Long id, Long tenantId, String source) {
+    public AssignmentDTO checkIn(Long id, Long tenantId, Long callerId, boolean admin, String source) {
         Assignment existing = find(id, tenantId);
+        if (!admin) {
+            if (!existing.isActive() || callerId == null || !callerId.equals(existing.getAssignedEmployeeId())) {
+                throw notFound();
+            }
+        }
+        if (existing.getCheckInAt() != null && existing.getCheckOutAt() == null) {
+            throw new ApiException(409, "Assignment is already checked in");
+        }
+        if (!isCheckInEligible(existing.getState())) {
+            throw new ApiException(409, "Assignment is not eligible for check-in");
+        }
         if (existing.getCheckInAt() != null) {
             throw new ApiException(409, "Assignment is already checked in");
         }
@@ -193,6 +204,13 @@ public class AssignmentService {
         AssignmentStateHistory history = new AssignmentStateHistory(
                 assignment.getId(), previous, nextState, validSource(source), changedAt);
         return mapper.toDto(dao.update(assignment, history));
+    }
+
+    private static boolean isCheckInEligible(AssignmentState state) {
+        AssignmentState current = state == null ? AssignmentState.PLANNED : state;
+        return current == AssignmentState.PLANNED
+                || current == AssignmentState.ACKNOWLEDGED
+                || current == AssignmentState.AUTO_ACCEPTED;
     }
 
     private Assignment find(Long id, Long tenantId) {
