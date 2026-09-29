@@ -2,7 +2,7 @@ package app.config;
 
 import app.exceptions.ApiException;
 import app.services.routeSecurity.ISecurityController;
-import app.services.routeSecurity.SecurityController;
+import app.controller.SecurityController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;

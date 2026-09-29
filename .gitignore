@@ -6,6 +6,10 @@ config.*
 # IDE/user-local files
 .idea/
 .DS_Store
-
+idea/
 # Build and test output
-.target/
+target/
+build/
+*.log
+*.out
+*.err
