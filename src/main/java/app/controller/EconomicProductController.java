@@ -1,4 +1,4 @@
-package app.services.routeSecurity.routes;
+package app.controller;
 
 import app.dto.CreateProductRequest;
 import app.dto.UpdateProductRequest;
@@ -8,10 +8,10 @@ import app.services.entityServices.EconomicProductService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
-public class EconomicProductRoutes {
+public class EconomicProductController {
     private final EconomicProductService productService;
 
-    public EconomicProductRoutes(EntityManagerFactory emf) {
+    public EconomicProductController(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.productService = new EconomicProductService(emf);
     }

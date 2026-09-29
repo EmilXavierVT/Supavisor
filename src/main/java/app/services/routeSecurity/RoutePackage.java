@@ -1,16 +1,9 @@
 package app.services.routeSecurity;
 
 import app.config.HibernateConfig;
-import app.services.routeSecurity.routes.EconomicCustomerRoutes;
-import app.services.routeSecurity.routes.EconomicProductRoutes;
 import app.services.routeSecurity.subRoutes.*;
 import io.javalin.apibuilder.EndpointGroup;
 import jakarta.persistence.EntityManagerFactory;
-
-import static io.javalin.apibuilder.ApiBuilder.get;
-import static io.javalin.apibuilder.ApiBuilder.path;
-import static io.javalin.apibuilder.ApiBuilder.post;
-import static io.javalin.apibuilder.ApiBuilder.put;
 
 public class RoutePackage {
 
@@ -34,26 +27,8 @@ public class RoutePackage {
             new RoleRoutes(emf).getRoutes().addEndpoints();
             new ProjectRoutes(emf).getRoutes().addEndpoints();
             new AssignmentRoutes(emf).getRoutes().addEndpoints();
-            addEconomicRoutes();
+            new EconomicCustomerRoutes(emf).getRoutes().addEndpoints();
+            new EconomicProductRoutes(emf).getRoutes().addEndpoints();
         };
-    }
-
-    private void addEconomicRoutes() {
-        EconomicCustomerRoutes customerRoutes = new EconomicCustomerRoutes(emf);
-        EconomicProductRoutes productRoutes = new EconomicProductRoutes(emf);
-
-        path("/economic", () -> {
-            path("/customers", () -> {
-                get("/", customerRoutes::listEconomicCustomers, Role.ADMIN, Role.USER);
-                get("/{customerNumber}", customerRoutes::getEconomicCustomer, Role.ADMIN, Role.USER);
-                post("/", customerRoutes::createCustomer, Role.ADMIN);
-            });
-            path("/products", () -> {
-                get("/", productRoutes::listProducts, Role.ADMIN, Role.USER);
-                get("/{productNumber}", productRoutes::getProduct, Role.ADMIN, Role.USER);
-                post("/", productRoutes::createProduct, Role.ADMIN);
-                put("/{productNumber}", productRoutes::updateProduct, Role.ADMIN);
-            });
-        });
     }
 }
