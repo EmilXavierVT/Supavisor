@@ -265,6 +265,18 @@ class AssignmentApiIntegrationTest {
     }
 
     @Test
+    void anExistingAdminTokenLosesAdminAccessAfterTheUserIsDemoted() throws Exception {
+        String email = UUID.randomUUID() + "@example.com";
+        User admin = new UserDAO(emf).create(new User(null, email, PASSWORD, null,
+                TENANT, true, Set.of("ADMIN")));
+        String staleAdminToken = login(email);
+
+        new UserDAO(emf).setRole(admin.getId(), "USER");
+
+        assertEquals(403, send("POST", "/api/assignment", staleAdminToken, "{\"name\":\"Nope\"}").statusCode());
+    }
+
+    @Test
     void aNonAdministratorOnlySeesActiveAssignments() throws Exception {
         String active = unique("Visible");
         String inactive = unique("Hidden");
@@ -347,6 +359,10 @@ class AssignmentApiIntegrationTest {
         String email = UUID.randomUUID() + "@example.com";
         new UserDAO(emf).create(new User(null, email, PASSWORD, null, tenantId, true, Set.of(role)));
 
+        return login(email);
+    }
+
+    private static String login(String email) throws Exception {
         HttpResponse<String> login = send("POST", "/api/auth/login", null,
                 "{\"email\":\"" + email + "\",\"password\":\"" + PASSWORD + "\"}");
         assertEquals(200, login.statusCode());

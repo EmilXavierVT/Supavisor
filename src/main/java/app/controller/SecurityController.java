@@ -229,14 +229,15 @@ public class SecurityController implements ISecurityController {
             }
 
             UserDTO tokenUser = tokenSecurity.getUserWithRolesFromToken(token);
+            UserDTO currentUser = loadCurrentUser(tokenUser);
             if (tokenSecurity.tokenNotExpired(token)) {
-                return tokenUser;
+                return currentUser;
             }
 
             long refreshGraceTime = Long.parseLong(getOptionalConfigValue("TOKEN_REFRESH_GRACE_TIME", DEFAULT_TOKEN_REFRESH_GRACE_TIME));
             if (tokenSecurity.tokenExpiredWithin(token, refreshGraceTime)) {
-                ctx.header(REFRESHED_TOKEN_HEADER, createToken(tokenUser));
-                return tokenUser;
+                ctx.header(REFRESHED_TOKEN_HEADER, createToken(currentUser));
+                return currentUser;
             }
 
             throw new ApiException(403, "Token is expired");
@@ -246,6 +247,24 @@ public class SecurityController implements ISecurityController {
         } catch (TokenVerificationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private UserDTO loadCurrentUser(UserDTO tokenUser) {
+        User user = null;
+        if (tokenUser.getId() != null) {
+            user = userDAO.getById(tokenUser.getId());
+        }
+        if (user == null && tokenUser.getEmail() != null) {
+            user = userDAO.getByEmail(tokenUser.getEmail());
+        }
+        if (user == null || !user.getIsActive()) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED.getCode(), "Unauthorized. User is not active");
+        }
+
+        UserDTO currentUser = new UserDTO(user.getEmail(), user.getRoles(), user.getIsActive());
+        currentUser.setId(user.getId());
+        currentUser.setTenantId(user.getTenantId());
+        return currentUser;
     }
 
     private boolean isDeployed() {
