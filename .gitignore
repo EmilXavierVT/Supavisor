@@ -4,6 +4,7 @@
 config.*
 
 # IDE/user-local files
+.idea
 .idea/
 .DS_Store
 idea/
