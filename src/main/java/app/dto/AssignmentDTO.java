@@ -1,6 +1,9 @@
 package app.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AssignmentDTO {
 
@@ -11,7 +14,10 @@ public class AssignmentDTO {
     private String address;
     private Integer estimatedMinutes;
     private BigDecimal cost;
+    private LocalDateTime startTime;
+    private LocalDateTime estimatedEndTime;
     private Long assignedEmployeeId;
+    private List<Long> productIds = new ArrayList<>();
 
     public AssignmentDTO() {}
 
@@ -44,6 +50,17 @@ public class AssignmentDTO {
     public BigDecimal getCost() { return cost; }
     public void setCost(BigDecimal cost) { this.cost = cost; }
 
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+
+    public LocalDateTime getEstimatedEndTime() { return estimatedEndTime; }
+    public void setEstimatedEndTime(LocalDateTime estimatedEndTime) { this.estimatedEndTime = estimatedEndTime; }
+
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
+
+    public List<Long> getProductIds() { return productIds; }
+    public void setProductIds(List<Long> productIds) {
+        this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
+    }
 }

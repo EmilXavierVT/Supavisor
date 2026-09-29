@@ -37,6 +37,9 @@ public class Project {
     @Column(length = 1000)
     private String description;
 
+    @Column(name = "customer_id")
+    private Long customerId;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "project_assignments", joinColumns = @JoinColumn(name = "project_id"))
     @OrderColumn(name = "assignment_order")
@@ -83,6 +86,9 @@ public class Project {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
 
     public List<Long> getAssignmentIds() { return assignmentIds; }
     public void setAssignmentIds(List<Long> assignmentIds) {

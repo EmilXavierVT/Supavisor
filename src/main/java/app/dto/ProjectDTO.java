@@ -12,6 +12,7 @@ public class ProjectDTO {
     private Long tenantId;
     private String name;
     private String description;
+    private Long customerId;
     private List<Long> assignmentIds = new ArrayList<>();
     private ProjectStatus status;
     private String createdBy;
@@ -40,6 +41,9 @@ public class ProjectDTO {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
 
     public List<Long> getAssignmentIds() { return assignmentIds; }
     public void setAssignmentIds(List<Long> assignmentIds) {

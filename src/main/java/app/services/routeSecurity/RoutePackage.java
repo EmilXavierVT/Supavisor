@@ -27,6 +27,8 @@ public class RoutePackage {
             new RoleRoutes(emf).getRoutes().addEndpoints();
             new ProjectRoutes(emf).getRoutes().addEndpoints();
             new AssignmentRoutes(emf).getRoutes().addEndpoints();
+            new EconomicCustomerRoutes(emf).getRoutes().addEndpoints();
+            new EconomicProductRoutes(emf).getRoutes().addEndpoints();
         };
     }
 }

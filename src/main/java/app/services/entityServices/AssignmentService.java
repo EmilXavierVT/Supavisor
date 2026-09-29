@@ -1,9 +1,11 @@
 package app.services.entityServices;
 
 import app.dao.AssignmentDAO;
+import app.dao.ProductDAO;
 import app.dao.UserDAO;
 import app.dto.AssignmentDTO;
 import app.entities.Assignment;
+import app.entities.Product;
 import app.entities.User;
 import app.exceptions.ApiException;
 import app.exceptions.AssignmentInUseException;
@@ -12,12 +14,10 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
 import java.util.List;
 
-/**
- * Everything is scoped to a tenant: a tenant only ever sees and touches its own assignments,
- * and an assignment of another tenant is reported as not found.
- */
+
 public class AssignmentService {
 
     private static final int MAX_NAME_LENGTH = 100;
@@ -27,22 +27,24 @@ public class AssignmentService {
 
     private final AssignmentDAO dao;
     private final UserDAO userDAO;
+    private final ProductDAO productDAO;
     private final AssignmentMapper mapper = new AssignmentMapper();
 
     public AssignmentService(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.dao = new AssignmentDAO(emf);
         this.userDAO = new UserDAO(emf);
+        this.productDAO = new ProductDAO(emf);
     }
 
-    /** @param activeOnly true for the list a picker should offer: deactivated assignments are left out */
+
     public List<AssignmentDTO> getAll(Long tenantId, boolean activeOnly) {
         return dao.getAll(tenantId, activeOnly).stream()
                 .map(mapper::toDto)
                 .toList();
     }
 
-    /** @param activeOnly when true a deactivated assignment is reported as not found */
+
     public AssignmentDTO getById(Long id, Long tenantId, boolean activeOnly) {
         Assignment assignment = find(id, tenantId);
         if (activeOnly && !assignment.isActive()) {
@@ -63,16 +65,13 @@ public class AssignmentService {
         try {
             return mapper.toDto(dao.create(assignment));
         } catch (PersistenceException e) {
-            // lost a race against another request using the same name
+
             rejectDuplicate(tenantId, name, null);
             throw e;
         }
     }
 
-    /**
-     * Replaces the name and all details (address, estimated time, cost, employee): a field left out or
-     * null is cleared. The active flag is only changed when the request carries one.
-     */
+    
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId) {
         Assignment existing = find(id, tenantId);
         String name = validName(dto.getName());
@@ -91,7 +90,7 @@ public class AssignmentService {
         }
     }
 
-    /** Only flips the flag, so everything that already references the assignment keeps it. */
+
     public AssignmentDTO deactivate(Long id, Long tenantId) {
         return setActive(id, tenantId, false);
     }
@@ -100,7 +99,7 @@ public class AssignmentService {
         return setActive(id, tenantId, true);
     }
 
-    /** Refuses with 409 while other records still reference the assignment; deactivate it instead. */
+
     public void delete(Long id, Long tenantId) {
         find(id, tenantId);
         try {
@@ -131,17 +130,32 @@ public class AssignmentService {
         return new ApiException(404, "Assignment not found");
     }
 
-    /** Validates and copies the optional details; nothing is changed on the entity if any of them is invalid. */
+
     private void applyDetails(Assignment assignment, AssignmentDTO dto, Long tenantId) {
         String address = validAddress(dto.getAddress());
         Integer estimatedMinutes = validEstimatedMinutes(dto.getEstimatedMinutes());
         BigDecimal cost = validCost(dto.getCost());
+        var startTime = dto.getStartTime();
+        var estimatedEndTime = validEstimatedEndTime(startTime, dto.getEstimatedEndTime());
         Long employeeId = validEmployee(dto.getAssignedEmployeeId(), assignment.getAssignedEmployeeId(), tenantId);
+        List<Long> productIds = validProductIds(dto.getProductIds(), tenantId);
 
         assignment.setAddress(address);
         assignment.setEstimatedMinutes(estimatedMinutes);
         assignment.setCost(cost);
+        assignment.setStartTime(startTime);
+        assignment.setEstimatedEndTime(estimatedEndTime);
         assignment.setAssignedEmployeeId(employeeId);
+        assignment.setProductIds(productIds);
+    }
+
+    private static java.time.LocalDateTime validEstimatedEndTime(
+            java.time.LocalDateTime startTime,
+            java.time.LocalDateTime estimatedEndTime) {
+        if (startTime != null && estimatedEndTime != null && !estimatedEndTime.isAfter(startTime)) {
+            throw new ApiException(400, "Estimated end time must be later than start time");
+        }
+        return estimatedEndTime;
     }
 
     private static String validName(String name) {
@@ -198,10 +212,7 @@ public class AssignmentService {
         return cost.setScale(2);
     }
 
-    /**
-     * The employee has to be a user of the same tenant. A deactivated employee cannot be newly assigned,
-     * but one who is already linked stays linked (history is preserved) when other details are edited.
-     */
+    
     private Long validEmployee(Long employeeId, Long currentEmployeeId, Long tenantId) {
         if (employeeId == null) {
             return null;
@@ -216,7 +227,24 @@ public class AssignmentService {
         return employeeId;
     }
 
-    /** Names are unique per tenant, ignoring case. {@code ownId} is the assignment being renamed, if any. */
+    private List<Long> validProductIds(List<Long> productIds, Long tenantId) {
+        if (productIds == null || productIds.isEmpty()) {
+            return List.of();
+        }
+        LinkedHashSet<Long> uniqueIds = new LinkedHashSet<>(productIds);
+        if (uniqueIds.contains(null)) {
+            throw new ApiException(400, "Product id is required");
+        }
+        for (Long productId : uniqueIds) {
+            Product product = productDAO.findById(productId);
+            if (product == null || !tenantId.equals(product.getTenantId())) {
+                throw new ApiException(400, "Product not found, it may not belong to you");
+            }
+        }
+        return List.copyOf(uniqueIds);
+    }
+
+
     private void rejectDuplicate(Long tenantId, String name, Long ownId) {
         boolean taken = dao.findByName(tenantId, name).stream()
                 .anyMatch(other -> !other.getId().equals(ownId));

@@ -3,6 +3,9 @@ package app.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A template for a recurring piece of work, e.g. "Cleaning at Main Street 1", that an administrator
@@ -35,9 +38,21 @@ public class Assignment {
     @Column(precision = 12, scale = 2)
     private BigDecimal cost;
 
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
+    @Column(name = "estimated_end_time")
+    private LocalDateTime estimatedEndTime;
+
     // the employee (user) this assignment is linked to; cleared when that user is deleted
     @Column(name = "assigned_employee_id")
     private Long assignedEmployeeId;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "assignment_products", joinColumns = @JoinColumn(name = "assignment_id"))
+    @OrderColumn(name = "product_order")
+    @Column(name = "product_id", nullable = false)
+    private List<Long> productIds = new ArrayList<>();
 
     public Assignment() {
         this.isActive = true;
@@ -71,6 +86,17 @@ public class Assignment {
     public BigDecimal getCost() { return cost; }
     public void setCost(BigDecimal cost) { this.cost = cost; }
 
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
+
+    public LocalDateTime getEstimatedEndTime() { return estimatedEndTime; }
+    public void setEstimatedEndTime(LocalDateTime estimatedEndTime) { this.estimatedEndTime = estimatedEndTime; }
+
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
+
+    public List<Long> getProductIds() { return productIds; }
+    public void setProductIds(List<Long> productIds) {
+        this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
+    }
 }
