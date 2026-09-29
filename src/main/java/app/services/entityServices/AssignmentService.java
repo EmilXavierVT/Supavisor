@@ -122,12 +122,20 @@ public class AssignmentService {
         return changeState(existing, nextState, source);
     }
 
-    public AssignmentDTO checkIn(Long id, Long tenantId, String source) {
+    public AssignmentDTO checkIn(Long id, Long tenantId, Long callerId, boolean admin, String source) {
         Assignment existing = find(id, tenantId);
+        Long employeeId = attendanceEmployeeId(existing, callerId, admin);
+        Assignment active = dao.findActiveCheckInForEmployee(tenantId, employeeId, existing.getId());
+        if (active != null) {
+            throw new ApiException(409, "Employee already has an active attendance record for assignment " + active.getId());
+        }
         if (existing.getCheckInAt() != null) {
             throw new ApiException(409, "Assignment is already checked in");
         }
         Instant now = Instant.now(clock);
+        if (existing.getAssignedEmployeeId() == null) {
+            existing.setAssignedEmployeeId(employeeId);
+        }
         existing.setCheckInAt(now);
         if (existing.getState() != AssignmentState.IN_PROGRESS) {
             return changeState(existing, AssignmentState.IN_PROGRESS, source, now);
@@ -135,8 +143,9 @@ public class AssignmentService {
         return mapper.toDto(dao.update(existing));
     }
 
-    public AssignmentDTO checkOut(Long id, Long tenantId, String source) {
+    public AssignmentDTO checkOut(Long id, Long tenantId, Long callerId, boolean admin, String source) {
         Assignment existing = find(id, tenantId);
+        attendanceEmployeeId(existing, callerId, admin);
         if (existing.getCheckInAt() == null) {
             throw new ApiException(409, "Assignment must be checked in before checkout");
         }
@@ -201,6 +210,23 @@ public class AssignmentService {
             throw notFound();
         }
         return assignment;
+    }
+
+    private Long attendanceEmployeeId(Assignment assignment, Long callerId, boolean admin) {
+        Long employeeId = assignment.getAssignedEmployeeId();
+        if (employeeId == null) {
+            employeeId = callerId;
+        }
+        if (employeeId == null) {
+            throw new ApiException(400, "Employee is required for attendance");
+        }
+        if (!admin && assignment.getAssignedEmployeeId() != null && !employeeId.equals(callerId)) {
+            throw notFound();
+        }
+        if (!admin && !assignment.isActive()) {
+            throw notFound();
+        }
+        return employeeId;
     }
 
     private static ApiException notFound() {
