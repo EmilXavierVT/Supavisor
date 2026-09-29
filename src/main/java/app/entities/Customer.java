@@ -1,6 +1,11 @@
 package app.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,6 +15,11 @@ import java.util.UUID;
         @UniqueConstraint(name = "uk_customers_tenant_economic_customer_number", columnNames = {"tenant_id", "economic_customer_number"}),
         @UniqueConstraint(name = "uk_customers_tenant_idempotency_key", columnNames = {"tenant_id", "idempotency_key"})
 })
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,28 +50,6 @@ public class Customer {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Customer() {
-    }
-
-    public Customer(Long id, Long tenantId, String name, String email, String address, String postalCode, String city, String country,
-                     String corporateIdentificationNumber, String currency, Integer economicCustomerNumber,
-                     String idempotencyKey, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.tenantId = tenantId;
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.country = country;
-        this.corporateIdentificationNumber = corporateIdentificationNumber;
-        this.currency = currency;
-        this.economicCustomerNumber = economicCustomerNumber;
-        this.idempotencyKey = idempotencyKey;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
     @PrePersist
     public void beforeCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -76,33 +64,4 @@ public class Customer {
     public void beforeUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Long getTenantId() { return tenantId; }
-    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-    public String getPostalCode() { return postalCode; }
-    public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
-    public String getCorporateIdentificationNumber() { return corporateIdentificationNumber; }
-    public void setCorporateIdentificationNumber(String corporateIdentificationNumber) { this.corporateIdentificationNumber = corporateIdentificationNumber; }
-    public String getCurrency() { return currency; }
-    public void setCurrency(String currency) { this.currency = currency; }
-    public Integer getEconomicCustomerNumber() { return economicCustomerNumber; }
-    public void setEconomicCustomerNumber(Integer economicCustomerNumber) { this.economicCustomerNumber = economicCustomerNumber; }
-    public String getIdempotencyKey() { return idempotencyKey; }
-    public void setIdempotencyKey(String idempotencyKey) { this.idempotencyKey = idempotencyKey; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

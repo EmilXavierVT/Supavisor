@@ -1,6 +1,12 @@
 package app.entities;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +21,11 @@ import java.util.List;
 @Entity
 @Table(name = "assignments",
         uniqueConstraints = @UniqueConstraint(columnNames = {"tenant_id", "name"}))
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Assignment {
 
     @Id
@@ -28,7 +39,10 @@ public class Assignment {
     private Long tenantId;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private boolean isActive = true;
 
     private String address;
 
@@ -52,11 +66,8 @@ public class Assignment {
     @CollectionTable(name = "assignment_products", joinColumns = @JoinColumn(name = "assignment_id"))
     @OrderColumn(name = "product_order")
     @Column(name = "product_id", nullable = false)
+    @Setter(AccessLevel.NONE)
     private List<Long> productIds = new ArrayList<>();
-
-    public Assignment() {
-        this.isActive = true;
-    }
 
     public Assignment(Long id, String name, Long tenantId, boolean isActive) {
         this.id = id;
@@ -65,37 +76,9 @@ public class Assignment {
         this.isActive = isActive;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public Long getTenantId() { return tenantId; }
-    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
-
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public Integer getEstimatedMinutes() { return estimatedMinutes; }
-    public void setEstimatedMinutes(Integer estimatedMinutes) { this.estimatedMinutes = estimatedMinutes; }
-
-    public BigDecimal getCost() { return cost; }
-    public void setCost(BigDecimal cost) { this.cost = cost; }
-
-    public LocalDateTime getStartTime() { return startTime; }
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
-
-    public LocalDateTime getEstimatedEndTime() { return estimatedEndTime; }
-    public void setEstimatedEndTime(LocalDateTime estimatedEndTime) { this.estimatedEndTime = estimatedEndTime; }
-
-    public Long getAssignedEmployeeId() { return assignedEmployeeId; }
-    public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
-
-    public List<Long> getProductIds() { return productIds; }
     public void setProductIds(List<Long> productIds) {
         this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
     }

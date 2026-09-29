@@ -4,7 +4,18 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AssignmentDTO {
 
     private Long id;
@@ -17,9 +28,9 @@ public class AssignmentDTO {
     private LocalDateTime startTime;
     private LocalDateTime estimatedEndTime;
     private Long assignedEmployeeId;
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
     private List<Long> productIds = new ArrayList<>();
-
-    public AssignmentDTO() {}
 
     public AssignmentDTO(Long id, String name, Long tenantId, Boolean isActive) {
         this.id = id;
@@ -28,38 +39,6 @@ public class AssignmentDTO {
         this.isActive = isActive;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    // output only: the tenant always comes from the caller's token, never from the request body
-    public Long getTenantId() { return tenantId; }
-    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
-
-    public Boolean getIsActive() { return isActive; }
-    public void setIsActive(Boolean active) { isActive = active; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public Integer getEstimatedMinutes() { return estimatedMinutes; }
-    public void setEstimatedMinutes(Integer estimatedMinutes) { this.estimatedMinutes = estimatedMinutes; }
-
-    public BigDecimal getCost() { return cost; }
-    public void setCost(BigDecimal cost) { this.cost = cost; }
-
-    public LocalDateTime getStartTime() { return startTime; }
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
-
-    public LocalDateTime getEstimatedEndTime() { return estimatedEndTime; }
-    public void setEstimatedEndTime(LocalDateTime estimatedEndTime) { this.estimatedEndTime = estimatedEndTime; }
-
-    public Long getAssignedEmployeeId() { return assignedEmployeeId; }
-    public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
-
-    public List<Long> getProductIds() { return productIds; }
     public void setProductIds(List<Long> productIds) {
         this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
     }

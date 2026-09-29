@@ -8,11 +8,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "project_status_history")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProjectStatusHistory {
 
     @Id
@@ -36,8 +46,6 @@ public class ProjectStatusHistory {
     @Column(name = "changed_at", nullable = false)
     private Instant changedAt;
 
-    public ProjectStatusHistory() {}
-
     public ProjectStatusHistory(Long projectId, ProjectStatus fromStatus, ProjectStatus toStatus, String changedBy, Instant changedAt) {
         this.projectId = projectId;
         this.fromStatus = fromStatus;
@@ -45,22 +53,4 @@ public class ProjectStatusHistory {
         this.changedBy = changedBy;
         this.changedAt = changedAt;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getProjectId() { return projectId; }
-    public void setProjectId(Long projectId) { this.projectId = projectId; }
-
-    public ProjectStatus getFromStatus() { return fromStatus; }
-    public void setFromStatus(ProjectStatus fromStatus) { this.fromStatus = fromStatus; }
-
-    public ProjectStatus getToStatus() { return toStatus; }
-    public void setToStatus(ProjectStatus toStatus) { this.toStatus = toStatus; }
-
-    public String getChangedBy() { return changedBy; }
-    public void setChangedBy(String changedBy) { this.changedBy = changedBy; }
-
-    public Instant getChangedAt() { return changedAt; }
-    public void setChangedAt(Instant changedAt) { this.changedAt = changedAt; }
 }
