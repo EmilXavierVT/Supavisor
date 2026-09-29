@@ -34,6 +34,9 @@ public class User {
 
     private String phoneNumber;
 
+    @Column(name = "primary_category")
+    private String primaryCategory;
+
     @Column(name = "tenant_id")
     private Long tenantId;
 

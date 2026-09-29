@@ -3,9 +3,13 @@ package app.services.entityServices;
 import app.dao.AssignmentDAO;
 import app.dao.ProductDAO;
 import app.dao.UserDAO;
+import app.dto.AssignmentAuditHistoryDTO;
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentOverlapDTO;
 import app.dto.AssignmentStateHistoryDTO;
+import app.dto.AttendanceCorrectionDTO;
 import app.entities.Assignment;
+import app.entities.AssignmentAuditHistory;
 import app.entities.AssignmentState;
 import app.entities.AssignmentStateHistory;
 import app.entities.Product;
@@ -21,6 +25,8 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class AssignmentService {
@@ -55,6 +61,17 @@ public class AssignmentService {
                 .toList();
     }
 
+    public List<AssignmentDTO> getVisibleToUser(Long tenantId, Long callerId, boolean activeOnly) {
+        User caller = userDAO.getById(callerId);
+        if (caller == null || !Objects.equals(caller.getTenantId(), tenantId)) {
+            throw notFound();
+        }
+        String category = caller.getPrimaryCategory();
+        return dao.getVisibleForCategory(tenantId, category, activeOnly).stream()
+                .map(this::toCategoryScheduleDto)
+                .toList();
+    }
+
 
     public AssignmentDTO getById(Long id, Long tenantId, boolean activeOnly) {
         Assignment assignment = find(id, tenantId);
@@ -64,7 +81,27 @@ public class AssignmentService {
         return mapper.toDto(assignment);
     }
 
+    public AssignmentDTO getVisibleById(Long id, Long tenantId, Long callerId) {
+        Assignment assignment = find(id, tenantId);
+        if (!assignment.isActive()) {
+            throw notFound();
+        }
+        User caller = userDAO.getById(callerId);
+        User assigned = assignment.getAssignedEmployeeId() == null ? null : userDAO.getById(assignment.getAssignedEmployeeId());
+        if (caller == null || assigned == null
+                || !Objects.equals(caller.getTenantId(), tenantId)
+                || !Objects.equals(assigned.getTenantId(), tenantId)
+                || !sameCategory(caller.getPrimaryCategory(), assigned.getPrimaryCategory())) {
+            throw notFound();
+        }
+        return toCategoryScheduleDto(assignment);
+    }
+
     public AssignmentDTO create(AssignmentDTO dto, Long tenantId) {
+        return create(dto, tenantId, null, "system");
+    }
+
+    public AssignmentDTO create(AssignmentDTO dto, Long tenantId, Long actorUserId, String actorSource) {
         String name = validName(dto.getName());
         rejectDuplicate(tenantId, name, null);
 
@@ -74,11 +111,18 @@ public class AssignmentService {
         assignment.setActive(dto.getIsActive() == null || dto.getIsActive());
         assignment.setState(dto.getState() == null ? AssignmentState.PLANNED : dto.getState());
         applyDetails(assignment, dto, tenantId);
+        List<Assignment> conflicts = overlappingAssignments(assignment, null);
+        AssignmentAuditHistory overlapAudit = overlapAudit(dto.getOverrideReason(), conflicts, actorUserId, actorSource);
         Instant now = Instant.now(clock);
         AssignmentStateHistory history = new AssignmentStateHistory(
                 null, null, assignment.getState(), "system", now);
         try {
-            return mapper.toDto(dao.create(assignment, history));
+            Assignment created = dao.create(assignment, history);
+            if (overlapAudit != null) {
+                overlapAudit.setAssignmentId(created.getId());
+                dao.update(created, overlapAudit);
+            }
+            return mapper.toDto(created);
         } catch (PersistenceException e) {
 
             rejectDuplicate(tenantId, name, null);
@@ -88,6 +132,10 @@ public class AssignmentService {
 
     
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId) {
+        return update(id, dto, tenantId, null, "system");
+    }
+
+    public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId, Long actorUserId, String actorSource) {
         Assignment existing = find(id, tenantId);
         String name = validName(dto.getName());
         rejectDuplicate(tenantId, name, id);
@@ -97,8 +145,10 @@ public class AssignmentService {
         if (dto.getIsActive() != null) {
             existing.setActive(dto.getIsActive());
         }
+        List<Assignment> conflicts = overlappingAssignments(existing, id);
+        AssignmentAuditHistory overlapAudit = overlapAudit(dto.getOverrideReason(), conflicts, actorUserId, actorSource);
         try {
-            return mapper.toDto(dao.update(existing));
+            return mapper.toDto(dao.update(existing, overlapAudit));
         } catch (PersistenceException e) {
             rejectDuplicate(tenantId, name, id);
             throw e;
@@ -172,6 +222,48 @@ public class AssignmentService {
         return dao.getStateHistory(assignment.getId()).stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    public List<AssignmentAuditHistoryDTO> getAttendanceHistory(Long id, Long tenantId, Long callerId, boolean admin) {
+        Assignment assignment = find(id, tenantId);
+        if (!admin && (callerId == null || !callerId.equals(assignment.getAssignedEmployeeId()))) {
+            throw notFound();
+        }
+        return dao.getAuditHistory(assignment.getId(), "ATTENDANCE_CORRECTION").stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    public List<AssignmentOverlapDTO> previewOverlaps(AssignmentDTO dto, Long tenantId, Long ownId) {
+        Assignment probe = new Assignment();
+        probe.setTenantId(tenantId);
+        applyDetails(probe, dto, tenantId);
+        return overlappingAssignments(probe, ownId).stream()
+                .map(this::toOverlapDto)
+                .toList();
+    }
+
+    public AssignmentDTO correctAttendance(Long id, Long tenantId, Long actorUserId, String actorSource,
+                                           AttendanceCorrectionDTO dto) {
+        Assignment existing = find(id, tenantId);
+        if (dto == null) {
+            throw new ApiException(400, "Attendance correction is required");
+        }
+        String reason = validCorrectionReason(dto.getReason());
+        Instant nextCheckIn = dto.getCheckInAt() == null ? existing.getCheckInAt() : dto.getCheckInAt();
+        Instant nextCheckOut = dto.getCheckOutAt() == null ? existing.getCheckOutAt() : dto.getCheckOutAt();
+        if (dto.getCheckInAt() == null && dto.getCheckOutAt() == null) {
+            throw new ApiException(400, "Corrected check-in or check-out time is required");
+        }
+        if (nextCheckIn != null && nextCheckOut != null && !nextCheckOut.isAfter(nextCheckIn)) {
+            throw new ApiException(400, "Check-out must be after check-in");
+        }
+        String details = "checkInAt: " + existing.getCheckInAt() + " -> " + nextCheckIn
+                + "; checkOutAt: " + existing.getCheckOutAt() + " -> " + nextCheckOut;
+        existing.setCheckInAt(nextCheckIn);
+        existing.setCheckOutAt(nextCheckOut);
+        AssignmentAuditHistory audit = audit("ATTENDANCE_CORRECTION", actorUserId, actorSource, reason, details);
+        return mapper.toDto(dao.update(existing, audit));
     }
 
 
@@ -254,6 +346,62 @@ public class AssignmentService {
         assignment.setProductIds(productIds);
     }
 
+    private List<Assignment> overlappingAssignments(Assignment assignment, Long ownId) {
+        return dao.findOverlappingAssignments(
+                assignment.getTenantId(),
+                assignment.getAssignedEmployeeId(),
+                assignment.getStartTime(),
+                assignment.getEstimatedEndTime(),
+                ownId);
+    }
+
+    private AssignmentAuditHistory overlapAudit(String overrideReason, List<Assignment> conflicts,
+                                                Long actorUserId, String actorSource) {
+        if (conflicts.isEmpty()) {
+            return null;
+        }
+        String details = conflicts.stream()
+                .map(conflict -> conflict.getId() + " " + conflict.getName()
+                        + " " + conflict.getStartTime() + "-" + conflict.getEstimatedEndTime())
+                .collect(Collectors.joining("; "));
+        String reason = overlapReason(overrideReason, details);
+        return audit("OVERLAP_OVERRIDE", actorUserId, actorSource, reason, details);
+    }
+
+    private AssignmentAuditHistory audit(String type, Long actorUserId, String actorSource, String reason, String details) {
+        return AssignmentAuditHistory.builder()
+                .auditType(type)
+                .actorUserId(actorUserId)
+                .actorSource(validSource(actorSource))
+                .reason(reason)
+                .details(details)
+                .createdAt(Instant.now(clock))
+                .build();
+    }
+
+    private AssignmentDTO toCategoryScheduleDto(Assignment assignment) {
+        AssignmentDTO dto = mapper.toDto(assignment);
+        dto.setCost(null);
+        dto.setProductIds(List.of());
+        return dto;
+    }
+
+    private AssignmentOverlapDTO toOverlapDto(Assignment assignment) {
+        return new AssignmentOverlapDTO(
+                assignment.getId(),
+                assignment.getName(),
+                assignment.getAssignedEmployeeId(),
+                assignment.getStartTime(),
+                assignment.getEstimatedEndTime());
+    }
+
+    private static boolean sameCategory(String first, String second) {
+        if (first == null || first.isBlank() || second == null || second.isBlank()) {
+            return false;
+        }
+        return first.trim().equalsIgnoreCase(second.trim());
+    }
+
     private static java.time.LocalDateTime validEstimatedEndTime(
             java.time.LocalDateTime startTime,
             java.time.LocalDateTime estimatedEndTime) {
@@ -261,6 +409,36 @@ public class AssignmentService {
             throw new ApiException(400, "Estimated end time must be later than start time");
         }
         return estimatedEndTime;
+    }
+
+    private static String validReason(String reason) {
+        String trimmed = reason == null ? "" : reason.trim();
+        if (trimmed.isEmpty()) {
+            throw new ApiException(409, "Overlap override or attendance correction reason is required");
+        }
+        if (trimmed.length() > 1000) {
+            throw new ApiException(400, "Reason must be at most 1000 characters");
+        }
+        return trimmed;
+    }
+
+    private static String overlapReason(String reason, String details) {
+        String trimmed = reason == null ? "" : reason.trim();
+        if (trimmed.isEmpty()) {
+            throw new ApiException(409, "Assignment overlaps with: " + details);
+        }
+        return validReason(reason);
+    }
+
+    private static String validCorrectionReason(String reason) {
+        String trimmed = reason == null ? "" : reason.trim();
+        if (trimmed.isEmpty()) {
+            throw new ApiException(400, "Attendance correction reason is required");
+        }
+        if (trimmed.length() > 1000) {
+            throw new ApiException(400, "Reason must be at most 1000 characters");
+        }
+        return trimmed;
     }
 
     private static String validName(String name) {
