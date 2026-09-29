@@ -64,7 +64,7 @@ public class AssignmentController {
 
     public void checkOut(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.checkOut(id, callerTenantId(ctx), callerSource(ctx)));
+        ctx.json(assignmentService.checkOut(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx), callerSource(ctx)));
     }
 
     public void getStateHistory(Context ctx) {

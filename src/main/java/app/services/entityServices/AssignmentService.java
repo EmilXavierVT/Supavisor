@@ -146,10 +146,15 @@ public class AssignmentService {
         return mapper.toDto(dao.update(existing));
     }
 
-    public AssignmentDTO checkOut(Long id, Long tenantId, String source) {
+    public AssignmentDTO checkOut(Long id, Long tenantId, Long callerId, boolean admin, String source) {
         Assignment existing = find(id, tenantId);
+        if (!admin) {
+            if (!existing.isActive() || callerId == null || !callerId.equals(existing.getAssignedEmployeeId())) {
+                throw notFound();
+            }
+        }
         if (existing.getCheckInAt() == null) {
-            throw new ApiException(409, "Assignment must be checked in before checkout");
+            throw new ApiException(409, "Assignment has no active check-in");
         }
         if (existing.getCheckOutAt() != null) {
             throw new ApiException(409, "Assignment is already checked out");
