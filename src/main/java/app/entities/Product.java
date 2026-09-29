@@ -9,15 +9,18 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "products", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_products_product_number", columnNames = "product_number"),
-        @UniqueConstraint(name = "uk_products_idempotency_key", columnNames = "idempotency_key")
+        @UniqueConstraint(name = "uk_products_tenant_product_number", columnNames = {"tenant_id", "product_number"}),
+        @UniqueConstraint(name = "uk_products_tenant_idempotency_key", columnNames = {"tenant_id", "idempotency_key"})
 })
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_number", nullable = false, unique = true)
+    @Column(name = "tenant_id", nullable = false)
+    private Long tenantId;
+
+    @Column(name = "product_number", nullable = false)
     private String productNumber;
 
     @Column(nullable = false)
@@ -38,7 +41,7 @@ public class Product {
     private String unitName;
     private String self;
 
-    @Column(name = "idempotency_key", nullable = false, unique = true)
+    @Column(name = "idempotency_key", nullable = false)
     private String idempotencyKey;
 
     private LocalDateTime createdAt;
@@ -47,12 +50,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String productNumber, String name, String description, BigDecimal salesPrice,
+    public Product(Long id, Long tenantId, String productNumber, String name, String description, BigDecimal salesPrice,
                    BigDecimal costPrice, BigDecimal recommendedPrice, String barCode, Boolean barred,
                    OffsetDateTime economicLastUpdated, Integer productGroupNumber, String productGroupName,
                    Integer unitNumber, String unitName, String self, String idempotencyKey,
                    LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
+        this.tenantId = tenantId;
         this.productNumber = productNumber;
         this.name = name;
         this.description = description;
@@ -89,6 +93,8 @@ public class Product {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public Long getTenantId() { return tenantId; }
+    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
     public String getProductNumber() { return productNumber; }
     public void setProductNumber(String productNumber) { this.productNumber = productNumber; }
     public String getName() { return name; }

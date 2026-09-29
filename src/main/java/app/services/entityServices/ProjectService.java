@@ -1,10 +1,12 @@
 package app.services.entityServices;
 
 import app.dao.AssignmentDAO;
+import app.dao.CustomerDAO;
 import app.dao.ProjectDAO;
 import app.dto.ProjectDTO;
 import app.dto.ProjectStatusHistoryDTO;
 import app.entities.Assignment;
+import app.entities.Customer;
 import app.entities.Project;
 import app.entities.ProjectStatus;
 import app.entities.ProjectStatusHistory;
@@ -24,12 +26,14 @@ public class ProjectService {
 
     private final ProjectDAO dao;
     private final AssignmentDAO assignmentDAO;
+    private final CustomerDAO customerDAO;
     private final ProjectMapper mapper = new ProjectMapper();
 
     public ProjectService(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.dao = new ProjectDAO(emf);
         this.assignmentDAO = new AssignmentDAO(emf);
+        this.customerDAO = new CustomerDAO(emf);
     }
 
     public List<ProjectDTO> getAll(Long tenantId) {
@@ -113,6 +117,7 @@ public class ProjectService {
 
     private void applyDetails(Project project, ProjectDTO dto, Long tenantId) {
         project.setDescription(validDescription(dto.getDescription()));
+        project.setCustomerId(validCustomerId(dto.getCustomerId(), tenantId));
         project.setAssignmentIds(validAssignmentIds(dto.getAssignmentIds(), tenantId));
         project.setStatus(dto.getStatus() == null ? ProjectStatus.DRAFT : dto.getStatus());
     }
@@ -162,6 +167,17 @@ public class ProjectService {
             }
         }
         return List.copyOf(uniqueIds);
+    }
+
+    private Long validCustomerId(Long customerId, Long tenantId) {
+        if (customerId == null) {
+            return null;
+        }
+        Customer customer = customerDAO.findById(customerId);
+        if (customer == null || !tenantId.equals(customer.getTenantId())) {
+            throw new ApiException(400, "Customer not found, it may not belong to you");
+        }
+        return customerId;
     }
 
     private void rejectDuplicate(Long tenantId, String name, Long ownId) {

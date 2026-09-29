@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A template for a recurring piece of work, e.g. "Cleaning at Main Street 1", that an administrator
@@ -46,6 +48,12 @@ public class Assignment {
     @Column(name = "assigned_employee_id")
     private Long assignedEmployeeId;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "assignment_products", joinColumns = @JoinColumn(name = "assignment_id"))
+    @OrderColumn(name = "product_order")
+    @Column(name = "product_id", nullable = false)
+    private List<Long> productIds = new ArrayList<>();
+
     public Assignment() {
         this.isActive = true;
     }
@@ -86,4 +94,9 @@ public class Assignment {
 
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
     public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
+
+    public List<Long> getProductIds() { return productIds; }
+    public void setProductIds(List<Long> productIds) {
+        this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
+    }
 }

@@ -22,7 +22,7 @@ class EconomicCustomerMapperTest {
         request.setPaymentTermsNumber(2);
         request.setVatZoneNumber(3);
 
-        Customer customer = mapper.fromCreateRequest(request);
+        Customer customer = mapper.fromCreateRequest(request, 1L);
         EconomicCustomerRequest economicRequest = mapper.toEconomicRequest(customer, request);
         EconomicCustomerResponse economicResponse = new EconomicCustomerResponse();
         economicResponse.setCustomerNumber(99);

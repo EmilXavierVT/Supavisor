@@ -43,15 +43,16 @@ public class EconomicCustomerService {
         return client.getCustomer(customerNumber);
     }
 
-    public CustomerResponse createCustomer(CreateCustomerRequest request) {
+    public CustomerResponse createCustomer(CreateCustomerRequest request, Long tenantId) {
+        validateTenantId(tenantId);
         validateCreateRequest(request);
 
-        Customer existing = customerDAO.findByIdempotencyKey(request.getIdempotencyKey());
+        Customer existing = customerDAO.findByIdempotencyKey(tenantId, request.getIdempotencyKey());
         if (existing != null && existing.getEconomicCustomerNumber() != null) {
             return mapper.toResponse(existing);
         }
 
-        Customer customer = existing == null ? customerDAO.save(mapper.fromCreateRequest(request)) : existing;
+        Customer customer = existing == null ? customerDAO.save(mapper.fromCreateRequest(request, tenantId)) : existing;
         EconomicCustomerRequest economicRequest = mapper.toEconomicRequest(customer, request);
         EconomicCustomerResponse economicResponse = client.createCustomer(economicRequest, customer.getIdempotencyKey());
 
@@ -59,7 +60,7 @@ public class EconomicCustomerService {
             logger.warn("operation=createEconomicCustomer localCustomerId={} upstreamStatus=201 economicLogId=missing", customer.getId());
             throw new ApiException(502, "e-conomic did not return a customer number");
         }
-        Customer mappedCustomer = customerDAO.findByEconomicCustomerNumber(economicResponse.getCustomerNumber());
+        Customer mappedCustomer = customerDAO.findByEconomicCustomerNumber(tenantId, economicResponse.getCustomerNumber());
         if (mappedCustomer != null && !mappedCustomer.getId().equals(customer.getId())) {
             throw new ApiException(409, "e-conomic customer number is already mapped");
         }
@@ -67,6 +68,10 @@ public class EconomicCustomerService {
         mapper.applyEconomicResponse(customer, economicResponse);
         Customer saved = customerDAO.save(customer);
         return mapper.toResponse(saved);
+    }
+
+    private void validateTenantId(Long tenantId) {
+        if (tenantId == null) throw new ApiException(401, "Not authenticated or tenantId missing from token");
     }
 
     private int validatePageSize(int pageSize) {

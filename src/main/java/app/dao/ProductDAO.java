@@ -30,16 +30,19 @@ public class ProductDAO {
         }
     }
 
-    public List<Product> findAll() {
+    public List<Product> findAll(Long tenantId) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT p FROM Product p ORDER BY p.productNumber", Product.class).getResultList();
+            return em.createQuery("SELECT p FROM Product p WHERE p.tenantId = :tenantId ORDER BY p.productNumber", Product.class)
+                    .setParameter("tenantId", tenantId)
+                    .getResultList();
         }
     }
 
-    public Product findByProductNumber(String productNumber) {
+    public Product findByProductNumber(Long tenantId, String productNumber) {
         if (productNumber == null || productNumber.isBlank()) return null;
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT p FROM Product p WHERE p.productNumber = :productNumber", Product.class)
+            return em.createQuery("SELECT p FROM Product p WHERE p.tenantId = :tenantId AND p.productNumber = :productNumber", Product.class)
+                    .setParameter("tenantId", tenantId)
                     .setParameter("productNumber", productNumber)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -47,10 +50,11 @@ public class ProductDAO {
         }
     }
 
-    public Product findByIdempotencyKey(String idempotencyKey) {
+    public Product findByIdempotencyKey(Long tenantId, String idempotencyKey) {
         if (idempotencyKey == null || idempotencyKey.isBlank()) return null;
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT p FROM Product p WHERE p.idempotencyKey = :idempotencyKey", Product.class)
+            return em.createQuery("SELECT p FROM Product p WHERE p.tenantId = :tenantId AND p.idempotencyKey = :idempotencyKey", Product.class)
+                    .setParameter("tenantId", tenantId)
                     .setParameter("idempotencyKey", idempotencyKey)
                     .getSingleResult();
         } catch (NoResultException e) {

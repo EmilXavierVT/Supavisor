@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 class CustomerDAOIntegrationTest {
+    private static final Long TENANT_ID = 1L;
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
             .withDatabaseName("supavisor_customer_test")
@@ -35,7 +36,7 @@ class CustomerDAOIntegrationTest {
     @Test
     void savesAndFindsCustomerByIdEconomicNumberAndIdempotencyKey() {
         CustomerDAO dao = new CustomerDAO(emf);
-        Customer customer = new Customer(null, "Example Company", "billing@example.com", "Street 1", "2100",
+        Customer customer = new Customer(null, TENANT_ID, "Example Company", "billing@example.com", "Street 1", "2100",
                 "Copenhagen", "Denmark", "12345678", "DKK", 1001, "idem-1", null, null);
 
         Customer saved = dao.save(customer);
@@ -43,8 +44,8 @@ class CustomerDAOIntegrationTest {
         assertNotNull(saved.getId());
         assertNotNull(saved.getCreatedAt());
         assertEquals(saved.getId(), dao.findById(saved.getId()).getId());
-        assertEquals(saved.getId(), dao.findByEconomicCustomerNumber(1001).getId());
-        assertEquals(saved.getId(), dao.findByIdempotencyKey("idem-1").getId());
-        assertTrue(dao.existsByEconomicCustomerNumber(1001));
+        assertEquals(saved.getId(), dao.findByEconomicCustomerNumber(TENANT_ID, 1001).getId());
+        assertEquals(saved.getId(), dao.findByIdempotencyKey(TENANT_ID, "idem-1").getId());
+        assertTrue(dao.existsByEconomicCustomerNumber(TENANT_ID, 1001));
     }
 }

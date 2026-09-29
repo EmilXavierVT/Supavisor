@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 class EconomicProductServiceTest {
+    private static final Long TENANT_ID = 1L;
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
             .withDatabaseName("supavisor_economic_product_service_test")
@@ -53,11 +54,11 @@ class EconomicProductServiceTest {
         client.listResponse = List.of(economicProduct("P-SVC-1", "Listed Product"));
         EconomicProductService service = new EconomicProductService(dao, new EconomicProductMapper(), client);
 
-        List<ProductResponse> products = service.listProducts(20, 0);
+        List<ProductResponse> products = service.listProducts(TENANT_ID, 20, 0);
 
         assertEquals(1, products.size());
         assertEquals("P-SVC-1", products.get(0).getProductNumber());
-        assertNotNull(dao.findByProductNumber("P-SVC-1"));
+        assertNotNull(dao.findByProductNumber(TENANT_ID, "P-SVC-1"));
     }
 
     @Test
@@ -67,10 +68,10 @@ class EconomicProductServiceTest {
         client.getResponse = economicProduct("P-SVC-2", "Fetched Product");
         EconomicProductService service = new EconomicProductService(dao, new EconomicProductMapper(), client);
 
-        ProductResponse response = service.getProduct("P-SVC-2");
+        ProductResponse response = service.getProduct(TENANT_ID, "P-SVC-2");
 
         assertEquals("P-SVC-2", response.getProductNumber());
-        assertNotNull(dao.findByProductNumber("P-SVC-2"));
+        assertNotNull(dao.findByProductNumber(TENANT_ID, "P-SVC-2"));
     }
 
     @Test
@@ -80,9 +81,9 @@ class EconomicProductServiceTest {
         client.createResponse = economicProduct("P-SVC-3", "Created Product");
         EconomicProductService service = new EconomicProductService(dao, new EconomicProductMapper(), client);
 
-        ProductResponse response = service.createProduct(validCreateRequest("P-SVC-3"));
+        ProductResponse response = service.createProduct(validCreateRequest("P-SVC-3"), TENANT_ID);
 
-        Product saved = dao.findByProductNumber("P-SVC-3");
+        Product saved = dao.findByProductNumber(TENANT_ID, "P-SVC-3");
         assertEquals("P-SVC-3", response.getProductNumber());
         assertEquals("product-P-SVC-3", client.lastIdempotencyKey);
         assertEquals(saved.getId(), response.getId());
@@ -91,14 +92,14 @@ class EconomicProductServiceTest {
     @Test
     void updatesProductAndPersistsReturnedProduct() {
         ProductDAO dao = new ProductDAO(emf);
-        dao.save(new Product(null, "P-SVC-4", "Old", null, null, null, null, null, false, null,
+        dao.save(new Product(null, TENANT_ID, "P-SVC-4", "Old", null, null, null, null, null, false, null,
                 1, null, null, null, null, "idem-product-4", null, null));
         FakeClient client = new FakeClient();
         client.updateResponse = economicProduct("P-SVC-4", "Updated Product");
         EconomicProductService service = new EconomicProductService(dao, new EconomicProductMapper(), client);
 
         UpdateProductRequest request = validUpdateRequest("P-SVC-4");
-        ProductResponse response = service.updateProduct("P-SVC-4", request);
+        ProductResponse response = service.updateProduct(TENANT_ID, "P-SVC-4", request);
 
         assertEquals("Updated Product", response.getName());
         assertEquals("P-SVC-4", client.lastUpdatedProductNumber);
@@ -110,7 +111,7 @@ class EconomicProductServiceTest {
         CreateProductRequest request = validCreateRequest("P-SVC-5");
         request.setName(null);
 
-        ApiException exception = assertThrows(ApiException.class, () -> service.createProduct(request));
+        ApiException exception = assertThrows(ApiException.class, () -> service.createProduct(request, TENANT_ID));
 
         assertEquals(400, exception.getCode());
     }

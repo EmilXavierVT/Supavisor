@@ -1,9 +1,11 @@
 package app.services.entityServices;
 
 import app.dao.AssignmentDAO;
+import app.dao.ProductDAO;
 import app.dao.UserDAO;
 import app.dto.AssignmentDTO;
 import app.entities.Assignment;
+import app.entities.Product;
 import app.entities.User;
 import app.exceptions.ApiException;
 import app.exceptions.AssignmentInUseException;
@@ -12,6 +14,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -27,12 +30,14 @@ public class AssignmentService {
 
     private final AssignmentDAO dao;
     private final UserDAO userDAO;
+    private final ProductDAO productDAO;
     private final AssignmentMapper mapper = new AssignmentMapper();
 
     public AssignmentService(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.dao = new AssignmentDAO(emf);
         this.userDAO = new UserDAO(emf);
+        this.productDAO = new ProductDAO(emf);
     }
 
     /** @param activeOnly true for the list a picker should offer: deactivated assignments are left out */
@@ -139,6 +144,7 @@ public class AssignmentService {
         var startTime = dto.getStartTime();
         var estimatedEndTime = validEstimatedEndTime(startTime, dto.getEstimatedEndTime());
         Long employeeId = validEmployee(dto.getAssignedEmployeeId(), assignment.getAssignedEmployeeId(), tenantId);
+        List<Long> productIds = validProductIds(dto.getProductIds(), tenantId);
 
         assignment.setAddress(address);
         assignment.setEstimatedMinutes(estimatedMinutes);
@@ -146,6 +152,7 @@ public class AssignmentService {
         assignment.setStartTime(startTime);
         assignment.setEstimatedEndTime(estimatedEndTime);
         assignment.setAssignedEmployeeId(employeeId);
+        assignment.setProductIds(productIds);
     }
 
     private static java.time.LocalDateTime validEstimatedEndTime(
@@ -227,6 +234,23 @@ public class AssignmentService {
             throw new ApiException(400, "Employee is deactivated and cannot be assigned");
         }
         return employeeId;
+    }
+
+    private List<Long> validProductIds(List<Long> productIds, Long tenantId) {
+        if (productIds == null || productIds.isEmpty()) {
+            return List.of();
+        }
+        LinkedHashSet<Long> uniqueIds = new LinkedHashSet<>(productIds);
+        if (uniqueIds.contains(null)) {
+            throw new ApiException(400, "Product id is required");
+        }
+        for (Long productId : uniqueIds) {
+            Product product = productDAO.findById(productId);
+            if (product == null || !tenantId.equals(product.getTenantId())) {
+                throw new ApiException(400, "Product not found, it may not belong to you");
+            }
+        }
+        return List.copyOf(uniqueIds);
     }
 
     /** Names are unique per tenant, ignoring case. {@code ownId} is the assignment being renamed, if any. */

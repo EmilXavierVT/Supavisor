@@ -7,10 +7,11 @@ import app.dto.EconomicCustomerResponse;
 import app.entities.Customer;
 
 public class EconomicCustomerMapper {
-    public Customer fromCreateRequest(CreateCustomerRequest request) {
+    public Customer fromCreateRequest(CreateCustomerRequest request, Long tenantId) {
         if (request == null) return null;
         return new Customer(
                 null,
+                tenantId,
                 request.getName(),
                 request.getEmail(),
                 request.getAddress(),
@@ -52,6 +53,7 @@ public class EconomicCustomerMapper {
         if (customer == null) return null;
         return new CustomerResponse(
                 customer.getId(),
+                customer.getTenantId(),
                 customer.getName(),
                 customer.getEmail(),
                 customer.getAddress(),

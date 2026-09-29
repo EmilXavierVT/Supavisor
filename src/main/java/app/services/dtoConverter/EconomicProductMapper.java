@@ -8,8 +8,8 @@ import app.dto.UpdateProductRequest;
 import app.entities.Product;
 
 public class EconomicProductMapper {
-    public Product fromCreateRequest(CreateProductRequest request) {
-        return new Product(null, request.getProductNumber(), request.getName(), request.getDescription(),
+    public Product fromCreateRequest(CreateProductRequest request, Long tenantId) {
+        return new Product(null, tenantId, request.getProductNumber(), request.getName(), request.getDescription(),
                 request.getSalesPrice(), request.getCostPrice(), request.getRecommendedPrice(), request.getBarCode(),
                 request.getBarred(), null, request.getProductGroupNumber(), null, request.getUnitNumber(), null,
                 null, request.getIdempotencyKey(), null, null);
@@ -61,7 +61,7 @@ public class EconomicProductMapper {
     }
 
     public ProductResponse toResponse(Product product) {
-        return new ProductResponse(product.getId(), product.getProductNumber(), product.getName(), product.getDescription(),
+        return new ProductResponse(product.getId(), product.getTenantId(), product.getProductNumber(), product.getName(), product.getDescription(),
                 product.getSalesPrice(), product.getCostPrice(), product.getRecommendedPrice(), product.getBarCode(),
                 product.getBarred(), product.getEconomicLastUpdated(), product.getProductGroupNumber(),
                 product.getProductGroupName(), product.getUnitNumber(), product.getUnitName(), product.getSelf());

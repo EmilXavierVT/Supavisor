@@ -19,6 +19,7 @@ public class AssignmentMapper {
         dto.setStartTime(entity.getStartTime());
         dto.setEstimatedEndTime(entity.getEstimatedEndTime());
         dto.setAssignedEmployeeId(entity.getAssignedEmployeeId());
+        dto.setProductIds(entity.getProductIds());
         return dto;
     }
 }

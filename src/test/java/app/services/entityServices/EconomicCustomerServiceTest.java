@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 class EconomicCustomerServiceTest {
+    private static final Long TENANT_ID = 1L;
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
             .withDatabaseName("supavisor_economic_service_test")
@@ -47,7 +48,7 @@ class EconomicCustomerServiceTest {
         FakeClient client = new FakeClient(7001);
         EconomicCustomerService service = new EconomicCustomerService(dao, new EconomicCustomerMapper(), client);
 
-        Long localId = service.createCustomer(validRequest("service-idem-1")).getId();
+        Long localId = service.createCustomer(validRequest("service-idem-1"), TENANT_ID).getId();
 
         Customer saved = dao.findById(localId);
         assertEquals(7001, saved.getEconomicCustomerNumber());
@@ -60,8 +61,8 @@ class EconomicCustomerServiceTest {
         FakeClient client = new FakeClient(7002);
         EconomicCustomerService service = new EconomicCustomerService(dao, new EconomicCustomerMapper(), client);
 
-        service.createCustomer(validRequest("service-idem-2"));
-        service.createCustomer(validRequest("service-idem-2"));
+        service.createCustomer(validRequest("service-idem-2"), TENANT_ID);
+        service.createCustomer(validRequest("service-idem-2"), TENANT_ID);
 
         assertEquals(1, client.createCalls);
     }
@@ -69,10 +70,10 @@ class EconomicCustomerServiceTest {
     @Test
     void preventsDuplicateEconomicCustomerNumberMapping() {
         CustomerDAO dao = new CustomerDAO(emf);
-        dao.save(new Customer(null, "Existing", null, null, null, null, null, null, "DKK", 7003, "existing-idem", null, null));
+        dao.save(new Customer(null, TENANT_ID, "Existing", null, null, null, null, null, null, "DKK", 7003, "existing-idem", null, null));
         EconomicCustomerService service = new EconomicCustomerService(dao, new EconomicCustomerMapper(), new FakeClient(7003));
 
-        ApiException exception = assertThrows(ApiException.class, () -> service.createCustomer(validRequest("service-idem-3")));
+        ApiException exception = assertThrows(ApiException.class, () -> service.createCustomer(validRequest("service-idem-3"), TENANT_ID));
 
         assertEquals(409, exception.getCode());
     }
@@ -83,7 +84,7 @@ class EconomicCustomerServiceTest {
         CreateCustomerRequest request = validRequest("service-idem-4");
         request.setName(null);
 
-        ApiException exception = assertThrows(ApiException.class, () -> service.createCustomer(request));
+        ApiException exception = assertThrows(ApiException.class, () -> service.createCustomer(request, TENANT_ID));
 
         assertEquals(400, exception.getCode());
     }

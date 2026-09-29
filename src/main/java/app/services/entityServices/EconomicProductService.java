@@ -30,33 +30,36 @@ public class EconomicProductService {
         this.client = client;
     }
 
-    public List<ProductResponse> listProducts(int pageSize, int skipPages) {
+    public List<ProductResponse> listProducts(Long tenantId, int pageSize, int skipPages) {
+        validateTenantId(tenantId);
         int safePageSize = validatePageSize(pageSize);
         int safeSkipPages = validateSkipPages(skipPages);
         EconomicProductListResponse economicResponse = client.listProducts(safePageSize, safeSkipPages);
         return economicResponse.getCollection().stream()
-                .map(this::saveEconomicProduct)
+                .map(response -> saveEconomicProduct(tenantId, response))
                 .map(mapper::toResponse)
                 .toList();
     }
 
-    public ProductResponse getProduct(String productNumber) {
+    public ProductResponse getProduct(Long tenantId, String productNumber) {
+        validateTenantId(tenantId);
         validateProductNumber(productNumber);
         EconomicProductResponse economicResponse = client.getProduct(productNumber);
-        return mapper.toResponse(saveEconomicProduct(economicResponse));
+        return mapper.toResponse(saveEconomicProduct(tenantId, economicResponse));
     }
 
-    public ProductResponse createProduct(CreateProductRequest request) {
+    public ProductResponse createProduct(CreateProductRequest request, Long tenantId) {
+        validateTenantId(tenantId);
         validateCreateRequest(request);
         String idempotencyKey = stableIdempotencyKey(request);
         request.setIdempotencyKey(idempotencyKey);
 
-        Product existingByKey = productDAO.findByIdempotencyKey(idempotencyKey);
+        Product existingByKey = productDAO.findByIdempotencyKey(tenantId, idempotencyKey);
         if (existingByKey != null && existingByKey.getSelf() != null) {
             return mapper.toResponse(existingByKey);
         }
 
-        Product localProduct = existingByKey == null ? mapper.fromCreateRequest(request) : existingByKey;
+        Product localProduct = existingByKey == null ? mapper.fromCreateRequest(request, tenantId) : existingByKey;
         if (existingByKey == null) {
             localProduct = productDAO.save(localProduct);
         }
@@ -67,24 +70,30 @@ public class EconomicProductService {
         return mapper.toResponse(productDAO.save(localProduct));
     }
 
-    public ProductResponse updateProduct(String productNumber, UpdateProductRequest request) {
+    public ProductResponse updateProduct(Long tenantId, String productNumber, UpdateProductRequest request) {
+        validateTenantId(tenantId);
         validateUpdateRequest(productNumber, request);
         EconomicProductRequest economicRequest = mapper.toEconomicRequest(productNumber, request);
         EconomicProductResponse economicResponse = client.updateProduct(productNumber, economicRequest);
-        return mapper.toResponse(saveEconomicProduct(economicResponse));
+        return mapper.toResponse(saveEconomicProduct(tenantId, economicResponse));
     }
 
-    private Product saveEconomicProduct(EconomicProductResponse response) {
+    private Product saveEconomicProduct(Long tenantId, EconomicProductResponse response) {
         if (response.getProductNumber() == null || response.getProductNumber().isBlank()) {
             throw new ApiException(502, "e-conomic did not return a product number");
         }
-        Product product = productDAO.findByProductNumber(response.getProductNumber());
+        Product product = productDAO.findByProductNumber(tenantId, response.getProductNumber());
         if (product == null) {
             product = mapper.toProduct(response);
+            product.setTenantId(tenantId);
         } else {
             mapper.applyEconomicResponse(product, response);
         }
         return productDAO.save(product);
+    }
+
+    private void validateTenantId(Long tenantId) {
+        if (tenantId == null) throw new ApiException(401, "Not authenticated or tenantId missing from token");
     }
 
     private void validateCreateRequest(CreateProductRequest request) {

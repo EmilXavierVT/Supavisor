@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class CustomerResponse {
     private Long id;
+    private Long tenantId;
     private String name;
     private String email;
     private String address;
@@ -19,10 +20,11 @@ public class CustomerResponse {
     public CustomerResponse() {
     }
 
-    public CustomerResponse(Long id, String name, String email, String address, String postalCode, String city,
-                            String country, String corporateIdentificationNumber, String currency,
-                            Integer economicCustomerNumber, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public CustomerResponse(Long id, Long tenantId, String name, String email, String address, String postalCode, String city,
+                             String country, String corporateIdentificationNumber, String currency,
+                             Integer economicCustomerNumber, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
+        this.tenantId = tenantId;
         this.name = name;
         this.email = email;
         this.address = address;
@@ -38,6 +40,8 @@ public class CustomerResponse {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public Long getTenantId() { return tenantId; }
+    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }

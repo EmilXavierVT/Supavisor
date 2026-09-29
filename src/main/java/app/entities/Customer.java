@@ -7,13 +7,16 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "customers", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_customers_economic_customer_number", columnNames = "economic_customer_number"),
-        @UniqueConstraint(name = "uk_customers_idempotency_key", columnNames = "idempotency_key")
+        @UniqueConstraint(name = "uk_customers_tenant_economic_customer_number", columnNames = {"tenant_id", "economic_customer_number"}),
+        @UniqueConstraint(name = "uk_customers_tenant_idempotency_key", columnNames = {"tenant_id", "idempotency_key"})
 })
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "tenant_id", nullable = false)
+    private Long tenantId;
 
     @Column(nullable = false)
     private String name;
@@ -28,10 +31,10 @@ public class Customer {
     @Column(nullable = false)
     private String currency;
 
-    @Column(name = "economic_customer_number", unique = true)
+    @Column(name = "economic_customer_number")
     private Integer economicCustomerNumber;
 
-    @Column(name = "idempotency_key", nullable = false, unique = true)
+    @Column(name = "idempotency_key", nullable = false)
     private String idempotencyKey;
 
     private LocalDateTime createdAt;
@@ -40,10 +43,11 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, String name, String email, String address, String postalCode, String city, String country,
-                    String corporateIdentificationNumber, String currency, Integer economicCustomerNumber,
-                    String idempotencyKey, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Customer(Long id, Long tenantId, String name, String email, String address, String postalCode, String city, String country,
+                     String corporateIdentificationNumber, String currency, Integer economicCustomerNumber,
+                     String idempotencyKey, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
+        this.tenantId = tenantId;
         this.name = name;
         this.email = email;
         this.address = address;
@@ -75,6 +79,8 @@ public class Customer {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public Long getTenantId() { return tenantId; }
+    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }

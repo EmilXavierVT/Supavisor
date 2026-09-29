@@ -21,6 +21,7 @@ public class ProjectMapper {
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedBy(entity.getUpdatedBy());
         dto.setUpdatedAt(entity.getUpdatedAt());
+        dto.setCustomerId(entity.getCustomerId());
         return dto;
     }
 

@@ -1,6 +1,8 @@
 package app.services.routeSecurity.routes;
 
 import app.dto.CreateCustomerRequest;
+import app.dto.UserDTO;
+import app.exceptions.ApiException;
 import app.services.entityServices.EconomicCustomerService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
@@ -26,6 +28,14 @@ public class EconomicCustomerRoutes {
 
     public void createCustomer(Context ctx) {
         CreateCustomerRequest request = ctx.bodyValidator(CreateCustomerRequest.class).get();
-        ctx.status(201).json(customerService.createCustomer(request));
+        ctx.status(201).json(customerService.createCustomer(request, callerTenantId(ctx)));
+    }
+
+    private static Long callerTenantId(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        if (caller == null || caller.getTenantId() == null) {
+            throw new ApiException(401, "Not authenticated or tenantId missing from token");
+        }
+        return caller.getTenantId();
     }
 }

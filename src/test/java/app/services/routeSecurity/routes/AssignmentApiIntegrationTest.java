@@ -4,6 +4,7 @@ import app.config.ApplicationConfig;
 import app.config.TestEntityManagerFactory;
 import app.dao.UserDAO;
 import app.entities.User;
+import app.services.routeSecurity.RoutePackage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
@@ -54,7 +55,7 @@ class AssignmentApiIntegrationTest {
     @BeforeAll
     static void setUp() throws Exception {
         emf = TestEntityManagerFactory.create(POSTGRES);
-        Routes routes = new Routes(emf);
+        RoutePackage routes = new RoutePackage(emf);
         applicationConfig = new ApplicationConfig(emf);
         app = applicationConfig
                 .cors()
@@ -63,7 +64,6 @@ class AssignmentApiIntegrationTest {
                 .notFound()
                 .security()
                 .route(routes.getRoutes())
-                .route(routes.getRouteResource("auth"))
                 .start(0);
         httpClient = HttpClient.newHttpClient();
         objectMapper = new ObjectMapper();

@@ -28,9 +28,10 @@ public class CustomerDAO {
         }
     }
 
-    public Customer findByEconomicCustomerNumber(Integer customerNumber) {
+    public Customer findByEconomicCustomerNumber(Long tenantId, Integer customerNumber) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT c FROM Customer c WHERE c.economicCustomerNumber = :customerNumber", Customer.class)
+            return em.createQuery("SELECT c FROM Customer c WHERE c.tenantId = :tenantId AND c.economicCustomerNumber = :customerNumber", Customer.class)
+                    .setParameter("tenantId", tenantId)
                     .setParameter("customerNumber", customerNumber)
                     .getSingleResult();
         } catch (NoResultException e) {
@@ -38,14 +39,15 @@ public class CustomerDAO {
         }
     }
 
-    public boolean existsByEconomicCustomerNumber(Integer customerNumber) {
-        return findByEconomicCustomerNumber(customerNumber) != null;
+    public boolean existsByEconomicCustomerNumber(Long tenantId, Integer customerNumber) {
+        return findByEconomicCustomerNumber(tenantId, customerNumber) != null;
     }
 
-    public Customer findByIdempotencyKey(String idempotencyKey) {
+    public Customer findByIdempotencyKey(Long tenantId, String idempotencyKey) {
         if (idempotencyKey == null || idempotencyKey.isBlank()) return null;
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT c FROM Customer c WHERE c.idempotencyKey = :idempotencyKey", Customer.class)
+            return em.createQuery("SELECT c FROM Customer c WHERE c.tenantId = :tenantId AND c.idempotencyKey = :idempotencyKey", Customer.class)
+                    .setParameter("tenantId", tenantId)
                     .setParameter("idempotencyKey", idempotencyKey)
                     .getSingleResult();
         } catch (NoResultException e) {

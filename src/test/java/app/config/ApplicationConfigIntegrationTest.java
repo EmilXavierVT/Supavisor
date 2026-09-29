@@ -1,5 +1,6 @@
 package app.config;
 
+import app.services.routeSecurity.RoutePackage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
@@ -36,7 +37,7 @@ class ApplicationConfigIntegrationTest {
     @BeforeAll
     static void setUp() {
         emf = TestEntityManagerFactory.create(POSTGRES);
-        Routes routes = new Routes(emf);
+        RoutePackage routes = new RoutePackage(emf);
         applicationConfig = new ApplicationConfig(emf);
         app = applicationConfig
                 .cors()
@@ -45,7 +46,6 @@ class ApplicationConfigIntegrationTest {
                 .notFound()
                 .security()
                 .route(routes.getRoutes())
-                .route(routes.getRouteResource("auth"))
                 .start(0);
         httpClient = HttpClient.newHttpClient();
         objectMapper = new ObjectMapper();
@@ -63,7 +63,7 @@ class ApplicationConfigIntegrationTest {
 
     @Test
     void javalinServerStartsAndExposesHealthEndpoint() throws Exception {
-        HttpRequest request = HttpRequest.newBuilder(uri("/api/health")).GET().build();
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/system/health")).GET().build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 

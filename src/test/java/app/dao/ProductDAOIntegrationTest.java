@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 class ProductDAOIntegrationTest {
+    private static final Long TENANT_ID = 1L;
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
             .withDatabaseName("supavisor_product_test")
@@ -37,7 +38,7 @@ class ProductDAOIntegrationTest {
     @Test
     void savesAndFindsProductByIdProductNumberAndIdempotencyKey() {
         ProductDAO dao = new ProductDAO(emf);
-        Product product = new Product(null, "P-1", "Example Product", "Description", new BigDecimal("100.00"),
+        Product product = new Product(null, TENANT_ID, "P-1", "Example Product", "Description", new BigDecimal("100.00"),
                 new BigDecimal("50.00"), new BigDecimal("120.00"), "1234567890", false, null,
                 1, "Goods", 2, "pcs", "https://restapi.e-conomic.com/products/P-1", "idem-product-1", null, null);
 
@@ -46,8 +47,8 @@ class ProductDAOIntegrationTest {
         assertNotNull(saved.getId());
         assertNotNull(saved.getCreatedAt());
         assertEquals(saved.getId(), dao.findById(saved.getId()).getId());
-        assertEquals(saved.getId(), dao.findByProductNumber("P-1").getId());
-        assertEquals(saved.getId(), dao.findByIdempotencyKey("idem-product-1").getId());
-        assertEquals(1, dao.findAll().size());
+        assertEquals(saved.getId(), dao.findByProductNumber(TENANT_ID, "P-1").getId());
+        assertEquals(saved.getId(), dao.findByIdempotencyKey(TENANT_ID, "idem-product-1").getId());
+        assertEquals(1, dao.findAll(TENANT_ID).size());
     }
 }

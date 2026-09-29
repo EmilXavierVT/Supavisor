@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 
 public class ProductResponse {
     private Long id;
+    private Long tenantId;
     private String productNumber;
     private String name;
     private String description;
@@ -23,11 +24,12 @@ public class ProductResponse {
     public ProductResponse() {
     }
 
-    public ProductResponse(Long id, String productNumber, String name, String description, BigDecimal salesPrice,
-                           BigDecimal costPrice, BigDecimal recommendedPrice, String barCode, Boolean barred,
-                           OffsetDateTime economicLastUpdated, Integer productGroupNumber, String productGroupName,
-                           Integer unitNumber, String unitName, String self) {
+    public ProductResponse(Long id, Long tenantId, String productNumber, String name, String description, BigDecimal salesPrice,
+                            BigDecimal costPrice, BigDecimal recommendedPrice, String barCode, Boolean barred,
+                            OffsetDateTime economicLastUpdated, Integer productGroupNumber, String productGroupName,
+                            Integer unitNumber, String unitName, String self) {
         this.id = id;
+        this.tenantId = tenantId;
         this.productNumber = productNumber;
         this.name = name;
         this.description = description;
@@ -46,6 +48,8 @@ public class ProductResponse {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+    public Long getTenantId() { return tenantId; }
+    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
     public String getProductNumber() { return productNumber; }
     public void setProductNumber(String productNumber) { this.productNumber = productNumber; }
     public String getName() { return name; }
