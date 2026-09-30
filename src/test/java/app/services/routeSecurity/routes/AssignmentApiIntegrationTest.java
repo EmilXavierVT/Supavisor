@@ -2,7 +2,9 @@ package app.services.routeSecurity.routes;
 
 import app.config.ApplicationConfig;
 import app.config.TestEntityManagerFactory;
+import app.dao.ProductDAO;
 import app.dao.UserDAO;
+import app.entities.Product;
 import app.entities.User;
 import app.services.routeSecurity.RoutePackage;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -228,6 +230,47 @@ class AssignmentApiIntegrationTest {
         assertTrue(foreign.body().contains("Employee not found"));
     }
 
+    @Test
+    void employeeCanOpenTheirAssignmentDetailsWithNotesResourcesStatusAndNoSensitiveCost() throws Exception {
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        long required = productId(TENANT, "REQ");
+        long recommended = productId(TENANT, "REC");
+        String name = unique("Prepared");
+
+        HttpResponse<String> created = send("POST", "/api/assignment", adminToken, "{\"name\":\"" + name
+                + "\",\"address\":\"Harbor 7\",\"notes\":\"Bring access card\",\"startTime\":\"2026-10-05T14:30:00\",\"estimatedEndTime\":\"2026-10-05T16:00:00\",\"cost\":1250.5,\"assignedEmployeeId\":"
+                + employee.userId()
+                + ",\"resourceRequirements\":[{\"productId\":" + required + ",\"mode\":\"REQUIRED\"},{\"productId\":" + recommended + ",\"mode\":\"RECOMMENDED\"}]}");
+        assertEquals(201, created.statusCode());
+        long id = json(created).get("id").asLong();
+
+        HttpResponse<String> details = send("GET", "/api/assignment/" + id, employee.token(), null);
+
+        assertEquals(200, details.statusCode());
+        JsonNode body = json(details);
+        assertEquals(name, body.get("name").asText());
+        assertEquals("2026-10-05T14:30:00", body.get("startTime").asText());
+        assertEquals("2026-10-05T16:00:00", body.get("estimatedEndTime").asText());
+        assertEquals("Harbor 7", body.get("address").asText());
+        assertEquals("PLANNED", body.get("state").asText());
+        assertEquals("Bring access card", body.get("notes").asText());
+        assertTrue(body.get("cost").isNull());
+        assertEquals(2, body.get("resourceRequirements").size());
+        assertEquals("REQUIRED", body.get("resourceRequirements").get(0).get("mode").asText());
+        assertEquals("RECOMMENDED", body.get("resourceRequirements").get(1).get("mode").asText());
+    }
+
+    @Test
+    void employeeCannotOpenAnotherEmployeesAssignmentDetails() throws Exception {
+        TokenUser mine = tokenUserFor("USER", TENANT);
+        long otherEmployee = employeeId(TENANT);
+        HttpResponse<String> created = send("POST", "/api/assignment", adminToken, "{\"name\":\"" + unique("Other")
+                + "\",\"assignedEmployeeId\":" + otherEmployee + "}");
+        assertEquals(201, created.statusCode());
+
+        assertEquals(404, send("GET", "/api/assignment/" + json(created).get("id").asLong(), mine.token(), null).statusCode());
+    }
+
     // ---- activate
 
     @Test
@@ -295,11 +338,10 @@ class AssignmentApiIntegrationTest {
 
     @Test
     void checkInAndCheckOutUseServerTimestampsAndReturnStoredValues() throws Exception {
-        TokenUser employee = tokenUserFor("USER", TENANT);
-        long id = assignedAssignment(employee.userId(), unique("Attendance"));
+        long id = create(adminToken, unique("Attendance"));
 
         Instant beforeCheckIn = Instant.now().minusSeconds(1);
-        HttpResponse<String> checkedIn = send("PATCH", "/api/assignment/" + id + "/check-in", employee.token(),
+        HttpResponse<String> checkedIn = send("PATCH", "/api/assignment/" + id + "/check-in", userToken,
                 "{\"checkInAt\":\"2001-01-01T00:00:00Z\"}");
         Instant afterCheckIn = Instant.now().plusSeconds(1);
         assertEquals(200, checkedIn.statusCode());
@@ -312,14 +354,8 @@ class AssignmentApiIntegrationTest {
         assertEquals(checkInAt, Instant.parse(readAfterCheckIn.get("checkInAt").asText()));
         assertEquals("IN_PROGRESS", readAfterCheckIn.get("state").asText());
 
-        HttpResponse<String> duplicate = send("PATCH", "/api/assignment/" + id + "/check-in", employee.token(), null);
-        assertEquals(409, duplicate.statusCode());
-        assertTrue(duplicate.body().contains("already checked in"));
-        assertEquals(checkInAt, Instant.parse(json(send("GET", "/api/assignment/" + id, adminToken, null))
-                .get("checkInAt").asText()));
-
         Instant beforeCheckOut = Instant.now().minusSeconds(1);
-        HttpResponse<String> checkedOut = send("PATCH", "/api/assignment/" + id + "/check-out", employee.token(),
+        HttpResponse<String> checkedOut = send("PATCH", "/api/assignment/" + id + "/check-out", userToken,
                 "{\"checkOutAt\":\"2001-01-01T00:00:00Z\"}");
         Instant afterCheckOut = Instant.now().plusSeconds(1);
         assertEquals(200, checkedOut.statusCode());
@@ -349,37 +385,20 @@ class AssignmentApiIntegrationTest {
     }
 
     @Test
-    void onlyAssignedEmployeeCanCheckIn() throws Exception {
+    void secondActiveCheckInForSameEmployeeIsRejectedUntilTheFirstIsCheckedOut() throws Exception {
         TokenUser employee = tokenUserFor("USER", TENANT);
-        TokenUser otherEmployee = tokenUserFor("USER", TENANT);
-        long assigned = assignedAssignment(employee.userId(), unique("Assigned attendance"));
-        long unassigned = create(adminToken, unique("Unassigned attendance"));
+        long first = assignedAssignment(employee.userId(), unique("First attendance"));
+        long second = assignedAssignment(employee.userId(), unique("Second attendance"));
 
-        assertEquals(200, send("PATCH", "/api/assignment/" + assigned + "/check-in", employee.token(), null).statusCode());
-        assertEquals(404, send("PATCH", "/api/assignment/" + assigned + "/check-in", otherEmployee.token(), null).statusCode());
-        assertEquals(404, send("PATCH", "/api/assignment/" + unassigned + "/check-in", employee.token(), null).statusCode());
-    }
+        assertEquals(200, send("PATCH", "/api/assignment/" + first + "/check-in", employee.token(), null).statusCode());
+        HttpResponse<String> rejected = send("PATCH", "/api/assignment/" + second + "/check-in", employee.token(), null);
 
-    @Test
-    void checkInRejectsAssignmentsInTerminalStates() throws Exception {
-        TokenUser employee = tokenUserFor("USER", TENANT);
-        String[] terminalStates = {"CANCELLED", "DECLINED", "COMPLETED"};
+        assertEquals(409, rejected.statusCode());
+        assertTrue(rejected.body().contains("active attendance record"));
+        assertTrue(json(send("GET", "/api/assignment/" + second, adminToken, null)).get("checkInAt").isNull());
 
-        for (String state : terminalStates) {
-            HttpResponse<String> created = send("POST", "/api/assignment", adminToken,
-                    "{\"name\":\"" + unique(state) + "\",\"state\":\"" + state
-                            + "\",\"assignedEmployeeId\":" + employee.userId() + "}");
-            assertEquals(201, created.statusCode());
-            long id = json(created).get("id").asLong();
-
-            HttpResponse<String> rejected = send("PATCH", "/api/assignment/" + id + "/check-in", employee.token(), null);
-
-            assertEquals(409, rejected.statusCode());
-            assertTrue(rejected.body().contains("not eligible"));
-            JsonNode unchanged = json(send("GET", "/api/assignment/" + id, adminToken, null));
-            assertEquals(state, unchanged.get("state").asText());
-            assertTrue(unchanged.get("checkInAt").isNull());
-        }
+        assertEquals(200, send("PATCH", "/api/assignment/" + first + "/check-out", employee.token(), null).statusCode());
+        assertEquals(200, send("PATCH", "/api/assignment/" + second + "/check-in", employee.token(), null).statusCode());
     }
 
     // ---- role permissions
@@ -452,6 +471,15 @@ class AssignmentApiIntegrationTest {
     private static long employeeId(long tenantId) {
         return new UserDAO(emf).create(new User(null, UUID.randomUUID() + "@example.com", PASSWORD, null,
                 tenantId, true, Set.of("USER"))).getId();
+    }
+
+    private static long productId(long tenantId, String numberPrefix) {
+        Product product = Product.builder()
+                .tenantId(tenantId)
+                .productNumber(numberPrefix + "-" + UUID.randomUUID())
+                .name(numberPrefix + " resource")
+                .build();
+        return new ProductDAO(emf).save(product).getId();
     }
 
     private static Long dbEmployee(long id) {

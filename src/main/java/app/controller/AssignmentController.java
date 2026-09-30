@@ -27,7 +27,7 @@ public class AssignmentController {
 
     public void getById(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.getById(id, callerTenantId(ctx), !isAdmin(ctx)));
+        ctx.json(assignmentService.getEmployeeDetails(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx)));
     }
 
     public void create(Context ctx) {
@@ -64,7 +64,7 @@ public class AssignmentController {
 
     public void checkOut(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.checkOut(id, callerTenantId(ctx), callerSource(ctx)));
+        ctx.json(assignmentService.checkOut(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx), callerSource(ctx)));
     }
 
     public void getStateHistory(Context ctx) {
@@ -87,6 +87,14 @@ public class AssignmentController {
         return caller.getTenantId();
     }
 
+    private static Long callerId(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        if (caller == null || caller.getId() == null) {
+            throw new ApiException(401, "Not authenticated or userId missing from token");
+        }
+        return caller.getId();
+    }
+
     private static boolean isAdmin(Context ctx) {
         UserDTO caller = ctx.attribute("user");
         return caller != null && caller.getRoles() != null
@@ -95,10 +103,7 @@ public class AssignmentController {
 
     private static Long callerId(Context ctx) {
         UserDTO caller = ctx.attribute("user");
-        if (caller == null || caller.getId() == null) {
-            throw new ApiException(401, "Not authenticated or userId missing from token");
-        }
-        return caller.getId();
+        return caller == null ? null : caller.getId();
     }
 
     private static String callerSource(Context ctx) {
