@@ -233,7 +233,7 @@ public class UserDAO implements ISecurityDAO {
         if (getByEmail(email) != null) {
             throw new ValidationException("User already exists");
         }
-        return create(new User(null, email, password, phoneNumber, tenantId, java.util.Set.of("USER")));
+        return create(new User(null, email, password, phoneNumber, tenantId, true, java.util.Set.of("USER")));
     }
 
     @Override
@@ -243,6 +243,9 @@ public class UserDAO implements ISecurityDAO {
                 .orElseThrow(() -> new ValidationException("Invalid email or password"));
         if (!BCrypt.checkpw(password, user.getPassword())) {
             throw new ValidationException("Invalid email or password");
+        }
+        if (!user.getIsActive()) {
+            throw new ValidationException("User is inactive");
         }
         return user;
     }
