@@ -2,7 +2,9 @@ package app.services.routeSecurity.routes;
 
 import app.config.ApplicationConfig;
 import app.config.TestEntityManagerFactory;
+import app.dao.ProductDAO;
 import app.dao.UserDAO;
+import app.entities.Product;
 import app.entities.User;
 import app.services.routeSecurity.RoutePackage;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -53,6 +55,8 @@ class AssignmentApiIntegrationTest {
     private static String adminToken;
     private static String userToken;
     private static String otherTenantAdminToken;
+
+    private record TokenUser(String token, long userId) {}
 
     @BeforeAll
     static void setUp() throws Exception {
@@ -224,6 +228,47 @@ class AssignmentApiIntegrationTest {
                 "{\"name\":\"" + unique("A") + "\",\"assignedEmployeeId\":" + employeeOfAnotherTenant + "}");
         assertEquals(400, foreign.statusCode());
         assertTrue(foreign.body().contains("Employee not found"));
+    }
+
+    @Test
+    void employeeCanOpenTheirAssignmentDetailsWithNotesResourcesStatusAndNoSensitiveCost() throws Exception {
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        long required = productId(TENANT, "REQ");
+        long recommended = productId(TENANT, "REC");
+        String name = unique("Prepared");
+
+        HttpResponse<String> created = send("POST", "/api/assignment", adminToken, "{\"name\":\"" + name
+                + "\",\"address\":\"Harbor 7\",\"notes\":\"Bring access card\",\"startTime\":\"2026-10-05T14:30:00\",\"estimatedEndTime\":\"2026-10-05T16:00:00\",\"cost\":1250.5,\"assignedEmployeeId\":"
+                + employee.userId()
+                + ",\"resourceRequirements\":[{\"productId\":" + required + ",\"mode\":\"REQUIRED\"},{\"productId\":" + recommended + ",\"mode\":\"RECOMMENDED\"}]}");
+        assertEquals(201, created.statusCode());
+        long id = json(created).get("id").asLong();
+
+        HttpResponse<String> details = send("GET", "/api/assignment/" + id, employee.token(), null);
+
+        assertEquals(200, details.statusCode());
+        JsonNode body = json(details);
+        assertEquals(name, body.get("name").asText());
+        assertEquals("2026-10-05T14:30:00", body.get("startTime").asText());
+        assertEquals("2026-10-05T16:00:00", body.get("estimatedEndTime").asText());
+        assertEquals("Harbor 7", body.get("address").asText());
+        assertEquals("PLANNED", body.get("state").asText());
+        assertEquals("Bring access card", body.get("notes").asText());
+        assertTrue(body.get("cost").isNull());
+        assertEquals(2, body.get("resourceRequirements").size());
+        assertEquals("REQUIRED", body.get("resourceRequirements").get(0).get("mode").asText());
+        assertEquals("RECOMMENDED", body.get("resourceRequirements").get(1).get("mode").asText());
+    }
+
+    @Test
+    void employeeCannotOpenAnotherEmployeesAssignmentDetails() throws Exception {
+        TokenUser mine = tokenUserFor("USER", TENANT);
+        long otherEmployee = employeeId(TENANT);
+        HttpResponse<String> created = send("POST", "/api/assignment", adminToken, "{\"name\":\"" + unique("Other")
+                + "\",\"assignedEmployeeId\":" + otherEmployee + "}");
+        assertEquals(201, created.statusCode());
+
+        assertEquals(404, send("GET", "/api/assignment/" + json(created).get("id").asLong(), mine.token(), null).statusCode());
     }
 
     // ---- activate
@@ -411,6 +456,15 @@ class AssignmentApiIntegrationTest {
                 tenantId, true, Set.of("USER"))).getId();
     }
 
+    private static long productId(long tenantId, String numberPrefix) {
+        Product product = Product.builder()
+                .tenantId(tenantId)
+                .productNumber(numberPrefix + "-" + UUID.randomUUID())
+                .name(numberPrefix + " resource")
+                .build();
+        return new ProductDAO(emf).save(product).getId();
+    }
+
     private static Long dbEmployee(long id) {
         try (EntityManager em = emf.createEntityManager()) {
             Number value = (Number) em.createNativeQuery("SELECT assigned_employee_id FROM assignments WHERE id = :id")
@@ -443,13 +497,17 @@ class AssignmentApiIntegrationTest {
     }
 
     private static String tokenFor(String role, long tenantId) throws Exception {
+        return tokenUserFor(role, tenantId).token();
+    }
+
+    private static TokenUser tokenUserFor(String role, long tenantId) throws Exception {
         String email = UUID.randomUUID() + "@example.com";
-        new UserDAO(emf).create(new User(null, email, PASSWORD, null, tenantId, true, Set.of(role)));
+        User user = new UserDAO(emf).create(new User(null, email, PASSWORD, null, tenantId, true, Set.of(role)));
 
         HttpResponse<String> login = send("POST", "/api/auth/login", null,
                 "{\"email\":\"" + email + "\",\"password\":\"" + PASSWORD + "\"}");
         assertEquals(200, login.statusCode());
-        return json(login).get("token").asText();
+        return new TokenUser(json(login).get("token").asText(), user.getId());
     }
 
     private static HttpResponse<String> send(String method, String path, String token, String body) throws Exception {

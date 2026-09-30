@@ -27,7 +27,7 @@ public class AssignmentController {
 
     public void getById(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.getById(id, callerTenantId(ctx), !isAdmin(ctx)));
+        ctx.json(assignmentService.getEmployeeDetails(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx)));
     }
 
     public void create(Context ctx) {
@@ -91,6 +91,11 @@ public class AssignmentController {
         UserDTO caller = ctx.attribute("user");
         return caller != null && caller.getRoles() != null
                 && caller.getRoles().stream().anyMatch("ADMIN"::equalsIgnoreCase);
+    }
+
+    private static Long callerId(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        return caller == null ? null : caller.getId();
     }
 
     private static String callerSource(Context ctx) {

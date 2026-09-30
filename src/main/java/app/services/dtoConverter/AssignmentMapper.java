@@ -1,8 +1,10 @@
 package app.services.dtoConverter;
 
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentResourceRequirementDTO;
 import app.dto.AssignmentStateHistoryDTO;
 import app.entities.Assignment;
+import app.entities.AssignmentResourceRequirement;
 import app.entities.AssignmentStateHistory;
 
 public class AssignmentMapper {
@@ -16,6 +18,7 @@ public class AssignmentMapper {
                 entity.isActive()
         );
         dto.setAddress(entity.getAddress());
+        dto.setNotes(entity.getNotes());
         dto.setEstimatedMinutes(entity.getEstimatedMinutes());
         dto.setCost(entity.getCost());
         dto.setStartTime(entity.getStartTime());
@@ -25,6 +28,9 @@ public class AssignmentMapper {
         dto.setCheckOutAt(entity.getCheckOutAt());
         dto.setAssignedEmployeeId(entity.getAssignedEmployeeId());
         dto.setProductIds(entity.getProductIds());
+        dto.setResourceRequirements(entity.getResourceRequirements().stream()
+                .map(this::toDto)
+                .toList());
         return dto;
     }
 
@@ -38,5 +44,9 @@ public class AssignmentMapper {
                 entity.getSource(),
                 entity.getChangedAt()
         );
+    }
+
+    private AssignmentResourceRequirementDTO toDto(AssignmentResourceRequirement entity) {
+        return new AssignmentResourceRequirementDTO(entity.getProductId(), entity.getMode());
     }
 }

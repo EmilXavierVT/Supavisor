@@ -25,6 +25,7 @@ public class AssignmentDTO {
     private Long tenantId;
     private Boolean isActive;
     private String address;
+    private String notes;
     private Integer estimatedMinutes;
     private BigDecimal cost;
     private LocalDateTime startTime;
@@ -36,6 +37,9 @@ public class AssignmentDTO {
     @Setter(AccessLevel.NONE)
     @Builder.Default
     private List<Long> productIds = new ArrayList<>();
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private List<AssignmentResourceRequirementDTO> resourceRequirements = new ArrayList<>();
 
     public AssignmentDTO(Long id, String name, Long tenantId, Boolean isActive) {
         this.id = id;
@@ -46,5 +50,9 @@ public class AssignmentDTO {
 
     public void setProductIds(List<Long> productIds) {
         this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
+    }
+
+    public void setResourceRequirements(List<AssignmentResourceRequirementDTO> resourceRequirements) {
+        this.resourceRequirements = resourceRequirements == null ? new ArrayList<>() : new ArrayList<>(resourceRequirements);
     }
 }

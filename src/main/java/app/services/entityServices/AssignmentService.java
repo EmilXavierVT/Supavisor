@@ -4,8 +4,11 @@ import app.dao.AssignmentDAO;
 import app.dao.ProductDAO;
 import app.dao.UserDAO;
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentResourceRequirementDTO;
 import app.dto.AssignmentStateHistoryDTO;
 import app.entities.Assignment;
+import app.entities.AssignmentResourceMode;
+import app.entities.AssignmentResourceRequirement;
 import app.entities.AssignmentState;
 import app.entities.AssignmentStateHistory;
 import app.entities.Product;
@@ -27,6 +30,7 @@ public class AssignmentService {
 
     private static final int MAX_NAME_LENGTH = 100;
     private static final int MAX_ADDRESS_LENGTH = 255;
+    private static final int MAX_NOTES_LENGTH = 1000;
     private static final int MAX_ESTIMATED_MINUTES = 525_600; // one year
     private static final BigDecimal MAX_COST = new BigDecimal("9999999999.99"); // fits numeric(12,2)
 
@@ -62,6 +66,20 @@ public class AssignmentService {
             throw notFound();
         }
         return mapper.toDto(assignment);
+    }
+
+    public AssignmentDTO getEmployeeDetails(Long id, Long tenantId, Long employeeId, boolean admin) {
+        Assignment assignment = find(id, tenantId);
+        if (!admin) {
+            if (!assignment.isActive() || employeeId == null || !employeeId.equals(assignment.getAssignedEmployeeId())) {
+                throw notFound();
+            }
+        }
+        AssignmentDTO dto = mapper.toDto(assignment);
+        if (!admin) {
+            dto.setCost(null);
+        }
+        return dto;
     }
 
     public AssignmentDTO create(AssignmentDTO dto, Long tenantId) {
@@ -215,20 +233,24 @@ public class AssignmentService {
 
     private void applyDetails(Assignment assignment, AssignmentDTO dto, Long tenantId) {
         String address = validAddress(dto.getAddress());
+        String notes = validNotes(dto.getNotes());
         Integer estimatedMinutes = validEstimatedMinutes(dto.getEstimatedMinutes());
         BigDecimal cost = validCost(dto.getCost());
         var startTime = dto.getStartTime();
         var estimatedEndTime = validEstimatedEndTime(startTime, dto.getEstimatedEndTime());
         Long employeeId = validEmployee(dto.getAssignedEmployeeId(), assignment.getAssignedEmployeeId(), tenantId);
         List<Long> productIds = validProductIds(dto.getProductIds(), tenantId);
+        List<AssignmentResourceRequirement> resources = validResourceRequirements(dto.getResourceRequirements(), tenantId);
 
         assignment.setAddress(address);
+        assignment.setNotes(notes);
         assignment.setEstimatedMinutes(estimatedMinutes);
         assignment.setCost(cost);
         assignment.setStartTime(startTime);
         assignment.setEstimatedEndTime(estimatedEndTime);
         assignment.setAssignedEmployeeId(employeeId);
         assignment.setProductIds(productIds);
+        assignment.setResourceRequirements(resources);
     }
 
     private static java.time.LocalDateTime validEstimatedEndTime(
@@ -264,6 +286,20 @@ public class AssignmentService {
         }
         if (trimmed.chars().anyMatch(Character::isISOControl)) {
             throw new ApiException(400, "Address contains invalid characters");
+        }
+        return trimmed;
+    }
+
+    private static String validNotes(String notes) {
+        String trimmed = notes == null ? "" : notes.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+        if (trimmed.length() > MAX_NOTES_LENGTH) {
+            throw new ApiException(400, "Notes must be at most " + MAX_NOTES_LENGTH + " characters");
+        }
+        if (trimmed.chars().anyMatch(Character::isISOControl)) {
+            throw new ApiException(400, "Notes contains invalid characters");
         }
         return trimmed;
     }
@@ -324,6 +360,35 @@ public class AssignmentService {
             }
         }
         return List.copyOf(uniqueIds);
+    }
+
+    private List<AssignmentResourceRequirement> validResourceRequirements(
+            List<AssignmentResourceRequirementDTO> resourceRequirements,
+            Long tenantId) {
+        if (resourceRequirements == null || resourceRequirements.isEmpty()) {
+            return List.of();
+        }
+        LinkedHashSet<Long> uniqueIds = new LinkedHashSet<>();
+        java.util.ArrayList<AssignmentResourceRequirement> valid = new java.util.ArrayList<>();
+        for (AssignmentResourceRequirementDTO resource : resourceRequirements) {
+            Long productId = resource == null ? null : resource.getProductId();
+            AssignmentResourceMode mode = resource == null ? null : resource.getMode();
+            if (productId == null) {
+                throw new ApiException(400, "Resource product id is required");
+            }
+            if (mode == null) {
+                throw new ApiException(400, "Resource mode is required");
+            }
+            if (!uniqueIds.add(productId)) {
+                throw new ApiException(400, "Resource product id cannot be repeated");
+            }
+            Product product = productDAO.findById(productId);
+            if (product == null || !tenantId.equals(product.getTenantId())) {
+                throw new ApiException(400, "Resource not found, it may not belong to you");
+            }
+            valid.add(new AssignmentResourceRequirement(productId, mode));
+        }
+        return List.copyOf(valid);
     }
 
 
