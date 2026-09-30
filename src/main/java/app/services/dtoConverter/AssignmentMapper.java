@@ -4,6 +4,7 @@ import app.dto.AssignmentDTO;
 import app.dto.AssignmentStateHistoryDTO;
 import app.entities.Assignment;
 import app.entities.AssignmentStateHistory;
+import app.entities.User;
 
 public class AssignmentMapper {
 
@@ -23,7 +24,9 @@ public class AssignmentMapper {
         dto.setState(entity.getState());
         dto.setCheckInAt(entity.getCheckInAt());
         dto.setCheckOutAt(entity.getCheckOutAt());
-        dto.setAssignedEmployeeId(entity.getAssignedEmployeeId());
+        User employee = entity.getAssignedEmployee();
+        dto.setAssignedEmployeeId(employee == null ? null : employee.getId());
+        dto.setAssignedEmployeeName(employee == null ? null : employee.getName());
         dto.setProductIds(entity.getProductIds());
         return dto;
     }

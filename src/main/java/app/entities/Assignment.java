@@ -71,8 +71,9 @@ public class Assignment {
     private Instant checkOutAt;
 
     // the employee (user) this assignment is linked to; cleared when that user is deleted
-    @Column(name = "assigned_employee_id")
-    private Long assignedEmployeeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_employee_id")
+    private User assignedEmployee;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "assignment_products", joinColumns = @JoinColumn(name = "assignment_id"))
@@ -90,6 +91,10 @@ public class Assignment {
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+
+    public Long getAssignedEmployeeId() {
+        return assignedEmployee == null ? null : assignedEmployee.getId();
+    }
 
     public void setProductIds(List<Long> productIds) {
         this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);

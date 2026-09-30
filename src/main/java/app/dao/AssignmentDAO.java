@@ -6,6 +6,7 @@ import app.exceptions.AssignmentInUseException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import org.hibernate.Hibernate;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -24,7 +25,7 @@ public class AssignmentDAO {
 
     public List<Assignment> getAll(Long tenantId, boolean activeOnly) {
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "SELECT a FROM Assignment a WHERE a.tenantId = :tenantId"
+            String jpql = "SELECT a FROM Assignment a LEFT JOIN FETCH a.assignedEmployee WHERE a.tenantId = :tenantId"
                     + (activeOnly ? " AND a.isActive = true" : "")
                     + " ORDER BY LOWER(a.name), a.id";
             return em.createQuery(jpql, Assignment.class)
@@ -35,7 +36,13 @@ public class AssignmentDAO {
 
     public Assignment getById(Long id) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.find(Assignment.class, id);
+            return em.createQuery(
+                            "SELECT a FROM Assignment a LEFT JOIN FETCH a.assignedEmployee WHERE a.id = :id",
+                            Assignment.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
         }
     }
 
@@ -78,6 +85,7 @@ public class AssignmentDAO {
             EntityTransaction tx = em.getTransaction();
             tx.begin();
             Assignment updated = em.merge(assignment);
+            Hibernate.initialize(updated.getAssignedEmployee());
             if (stateHistory != null) {
                 em.persist(stateHistory);
             }

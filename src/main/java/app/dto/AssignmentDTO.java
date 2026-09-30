@@ -1,5 +1,7 @@
 package app.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -33,6 +35,8 @@ public class AssignmentDTO {
     private Instant checkInAt;
     private Instant checkOutAt;
     private Long assignedEmployeeId;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String assignedEmployeeName;
     @Setter(AccessLevel.NONE)
     @Builder.Default
     private List<Long> productIds = new ArrayList<>();
