@@ -384,6 +384,23 @@ class AssignmentApiIntegrationTest {
         assertTrue(json(updated).get("checkOutAt").isNull());
     }
 
+    @Test
+    void secondActiveCheckInForSameEmployeeIsRejectedUntilTheFirstIsCheckedOut() throws Exception {
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        long first = assignedAssignment(employee.userId(), unique("First attendance"));
+        long second = assignedAssignment(employee.userId(), unique("Second attendance"));
+
+        assertEquals(200, send("PATCH", "/api/assignment/" + first + "/check-in", employee.token(), null).statusCode());
+        HttpResponse<String> rejected = send("PATCH", "/api/assignment/" + second + "/check-in", employee.token(), null);
+
+        assertEquals(409, rejected.statusCode());
+        assertTrue(rejected.body().contains("active attendance record"));
+        assertTrue(json(send("GET", "/api/assignment/" + second, adminToken, null)).get("checkInAt").isNull());
+
+        assertEquals(200, send("PATCH", "/api/assignment/" + first + "/check-out", employee.token(), null).statusCode());
+        assertEquals(200, send("PATCH", "/api/assignment/" + second + "/check-in", employee.token(), null).statusCode());
+    }
+
     // ---- role permissions
 
     @Test
@@ -488,6 +505,13 @@ class AssignmentApiIntegrationTest {
 
     private static long create(String token, String name) throws Exception {
         HttpResponse<String> response = send("POST", "/api/assignment", token, "{\"name\":\"" + name + "\"}");
+        assertEquals(201, response.statusCode());
+        return json(response).get("id").asLong();
+    }
+
+    private static long assignedAssignment(long employeeId, String name) throws Exception {
+        HttpResponse<String> response = send("POST", "/api/assignment", adminToken,
+                "{\"name\":\"" + name + "\",\"assignedEmployeeId\":" + employeeId + "}");
         assertEquals(201, response.statusCode());
         return json(response).get("id").asLong();
     }
