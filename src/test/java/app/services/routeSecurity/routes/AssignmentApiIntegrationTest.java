@@ -368,13 +368,22 @@ class AssignmentApiIntegrationTest {
         assertEquals(checkInAt, Instant.parse(readAfterCheckOut.get("checkInAt").asText()));
         assertEquals(checkOutAt, Instant.parse(readAfterCheckOut.get("checkOutAt").asText()));
         assertEquals("COMPLETED", readAfterCheckOut.get("state").asText());
+
+        HttpResponse<String> duplicateCheckout = send("PATCH", "/api/assignment/" + id + "/check-out", employee.token(), null);
+        assertEquals(409, duplicateCheckout.statusCode());
+        assertTrue(duplicateCheckout.body().contains("already checked out"));
+        assertEquals(checkOutAt, Instant.parse(json(send("GET", "/api/assignment/" + id, adminToken, null))
+                .get("checkOutAt").asText()));
     }
 
     @Test
     void checkOutRequiresCheckInAndAttendanceTimestampsCannotBeSetThroughUpdate() throws Exception {
-        long id = create(adminToken, unique("Protected attendance"));
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        long id = assignedAssignment(employee.userId(), unique("Protected attendance"));
 
-        assertEquals(409, send("PATCH", "/api/assignment/" + id + "/check-out", userToken, null).statusCode());
+        HttpResponse<String> noActiveCheckIn = send("PATCH", "/api/assignment/" + id + "/check-out", employee.token(), null);
+        assertEquals(409, noActiveCheckIn.statusCode());
+        assertTrue(noActiveCheckIn.body().contains("no active check-in"));
 
         HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken,
                 "{\"name\":\"Protected attendance renamed\",\"checkInAt\":\"2001-01-01T00:00:00Z\",\"checkOutAt\":\"2001-01-01T01:00:00Z\"}");
@@ -382,6 +391,18 @@ class AssignmentApiIntegrationTest {
         assertEquals(200, updated.statusCode());
         assertTrue(json(updated).get("checkInAt").isNull());
         assertTrue(json(updated).get("checkOutAt").isNull());
+    }
+
+    @Test
+    void onlyAssignedEmployeeCanCheckOut() throws Exception {
+        TokenUser employee = tokenUserFor("USER", TENANT);
+        TokenUser otherEmployee = tokenUserFor("USER", TENANT);
+        long assigned = assignedAssignment(employee.userId(), unique("Checkout owner"));
+        assertEquals(200, send("PATCH", "/api/assignment/" + assigned + "/check-in", employee.token(), null).statusCode());
+
+        assertEquals(404, send("PATCH", "/api/assignment/" + assigned + "/check-out", otherEmployee.token(), null).statusCode());
+        assertTrue(json(send("GET", "/api/assignment/" + assigned, adminToken, null)).get("checkOutAt").isNull());
+        assertEquals(200, send("PATCH", "/api/assignment/" + assigned + "/check-out", employee.token(), null).statusCode());
     }
 
     @Test

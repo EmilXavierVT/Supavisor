@@ -165,7 +165,7 @@ public class AssignmentService {
         Assignment existing = find(id, tenantId);
         attendanceEmployeeId(existing, callerId, admin);
         if (existing.getCheckInAt() == null) {
-            throw new ApiException(409, "Assignment must be checked in before checkout");
+            throw new ApiException(409, "Assignment has no active check-in");
         }
         if (existing.getCheckOutAt() != null) {
             throw new ApiException(409, "Assignment is already checked out");
