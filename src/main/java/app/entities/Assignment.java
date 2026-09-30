@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,17 @@ public class Assignment {
 
     @Column(name = "estimated_end_time")
     private LocalDateTime estimatedEndTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar(255) default 'PLANNED'")
+    @Builder.Default
+    private AssignmentState state = AssignmentState.PLANNED;
+
+    @Column(name = "check_in_at")
+    private Instant checkInAt;
+
+    @Column(name = "check_out_at")
+    private Instant checkOutAt;
 
     // the employee (user) this assignment is linked to; cleared when that user is deleted
     @Column(name = "assigned_employee_id")

@@ -10,6 +10,10 @@ public final class TestEntityManagerFactory {
     }
 
     public static EntityManagerFactory create(PostgreSQLContainer<?> postgres) {
+        System.setProperty("ISSUER", "supavisor-test");
+        System.setProperty("TOKEN_EXPIRE_TIME", "3600000");
+        System.setProperty("SECRET_KEY", "supavisor-test-secret-key-32-bytes");
+
         Properties props = HibernateBaseProperties.createBase();
         props.put("hibernate.hbm2ddl.auto", "create-drop");
         props.put("hibernate.connection.url", postgres.getJdbcUrl());

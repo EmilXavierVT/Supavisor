@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.entities.Assignment;
+import app.entities.AssignmentStateHistory;
 import app.exceptions.AssignmentInUseException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -51,22 +52,47 @@ public class AssignmentDAO {
     }
 
     public Assignment create(Assignment assignment) {
+        return create(assignment, null);
+    }
+
+    public Assignment create(Assignment assignment, AssignmentStateHistory stateHistory) {
         try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction tx = em.getTransaction();
             tx.begin();
             em.persist(assignment);
+            if (stateHistory != null) {
+                stateHistory.setAssignmentId(assignment.getId());
+                em.persist(stateHistory);
+            }
             tx.commit();
             return assignment;
         }
     }
 
     public Assignment update(Assignment assignment) {
+        return update(assignment, null);
+    }
+
+    public Assignment update(Assignment assignment, AssignmentStateHistory stateHistory) {
         try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction tx = em.getTransaction();
             tx.begin();
             Assignment updated = em.merge(assignment);
+            if (stateHistory != null) {
+                em.persist(stateHistory);
+            }
             tx.commit();
             return updated;
+        }
+    }
+
+    public List<AssignmentStateHistory> getStateHistory(Long assignmentId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT h FROM AssignmentStateHistory h WHERE h.assignmentId = :assignmentId ORDER BY h.changedAt DESC, h.id DESC",
+                            AssignmentStateHistory.class)
+                    .setParameter("assignmentId", assignmentId)
+                    .getResultList();
         }
     }
 

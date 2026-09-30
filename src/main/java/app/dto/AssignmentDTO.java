@@ -1,9 +1,11 @@
 package app.dto;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import app.entities.AssignmentState;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +29,9 @@ public class AssignmentDTO {
     private BigDecimal cost;
     private LocalDateTime startTime;
     private LocalDateTime estimatedEndTime;
+    private AssignmentState state;
+    private Instant checkInAt;
+    private Instant checkOutAt;
     private Long assignedEmployeeId;
     @Setter(AccessLevel.NONE)
     @Builder.Default
