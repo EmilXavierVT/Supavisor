@@ -1,7 +1,18 @@
 package app.entities;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A template for a recurring piece of work, e.g. "Cleaning at Main Street 1", that an administrator
@@ -11,6 +22,11 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "assignments",
         uniqueConstraints = @UniqueConstraint(columnNames = {"tenant_id", "name"}))
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Assignment {
 
     @Id
@@ -24,12 +40,23 @@ public class Assignment {
     private Long tenantId;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private boolean isActive = true;
 
     @Column(name = "is_flagged", nullable = false)
-    private boolean isFlagged;
+    @Builder.Default
+    private boolean isFlagged = false;
+
+    @Column(name = "missing_employee_count", nullable = false)
+    @Builder.Default
+    private int missingEmployeeCount = 0;
 
     private String address;
+
+    @Column(length = 1000)
+    private String notes;
 
     @Column(name = "estimated_minutes")
     private Integer estimatedMinutes;
@@ -37,56 +64,60 @@ public class Assignment {
     @Column(precision = 12, scale = 2)
     private BigDecimal cost;
 
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
+    @Column(name = "estimated_end_time")
+    private LocalDateTime estimatedEndTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar(255) default 'PLANNED'")
+    @Builder.Default
+    private AssignmentState state = AssignmentState.PLANNED;
+
+    @Column(name = "check_in_at")
+    private Instant checkInAt;
+
+    @Column(name = "check_out_at")
+    private Instant checkOutAt;
+
     // the employee (user) this assignment is linked to; cleared when that user is deleted
-    @Column(name = "assigned_employee_id")
-    private Long assignedEmployeeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_employee_id")
+    private User assignedEmployee;
 
-    // Counter that tracks removed employees waiting for replacement
-    @Column(name = "missing_employee_count", nullable = false)
-    private int missingEmployeeCount = 0;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "assignment_products", joinColumns = @JoinColumn(name = "assignment_id"))
+    @OrderColumn(name = "product_order")
+    @Column(name = "product_id", nullable = false)
+    @Setter(AccessLevel.NONE)
+    private List<Long> productIds = new ArrayList<>();
 
-    public Assignment() {
-        this.isActive = true;
-        this.isFlagged = false;
-        this.missingEmployeeCount = 0;
-    }
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "assignment_resource_requirements", joinColumns = @JoinColumn(name = "assignment_id"))
+    @OrderColumn(name = "resource_order")
+    @Setter(AccessLevel.NONE)
+    private List<AssignmentResourceRequirement> resourceRequirements = new ArrayList<>();
 
     public Assignment(Long id, String name, Long tenantId, boolean isActive) {
         this.id = id;
         this.name = name;
         this.tenantId = tenantId;
         this.isActive = isActive;
-        this.isFlagged = false;
-        this.missingEmployeeCount = 0;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public Long getTenantId() { return tenantId; }
-    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
 
-    public boolean isFlagged() { return isFlagged; }
-    public void setFlagged(boolean flagged) { isFlagged = flagged; }
+    public Long getAssignedEmployeeId() {
+        return assignedEmployee == null ? null : assignedEmployee.getId();
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public void setProductIds(List<Long> productIds) {
+        this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
+    }
 
-    public Integer getEstimatedMinutes() { return estimatedMinutes; }
-    public void setEstimatedMinutes(Integer estimatedMinutes) { this.estimatedMinutes = estimatedMinutes; }
-
-    public BigDecimal getCost() { return cost; }
-    public void setCost(BigDecimal cost) { this.cost = cost; }
-
-    public Long getAssignedEmployeeId() { return assignedEmployeeId; }
-    public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
-
-    public int getMissingEmployeeCount() { return missingEmployeeCount; }
-    public void setMissingEmployeeCount(int missingEmployeeCount) { this.missingEmployeeCount = missingEmployeeCount; }
+    public void setResourceRequirements(List<AssignmentResourceRequirement> resourceRequirements) {
+        this.resourceRequirements = resourceRequirements == null ? new ArrayList<>() : new ArrayList<>(resourceRequirements);
+    }
 }

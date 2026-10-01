@@ -1,8 +1,25 @@
 package app.dto;
 
-import app.entities.Assignment;
-import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import app.entities.AssignmentState;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AssignmentDTO {
 
     private Long id;
@@ -10,13 +27,26 @@ public class AssignmentDTO {
     private Long tenantId;
     private Boolean isActive;
     private Boolean isFlagged;
+    private Integer missingEmployeeCount;
     private String address;
+    private String notes;
     private Integer estimatedMinutes;
     private BigDecimal cost;
+    private LocalDateTime startTime;
+    private LocalDateTime estimatedEndTime;
+    private AssignmentState state;
+    private Instant checkInAt;
+    private Instant checkOutAt;
+    private String overrideReason;
     private Long assignedEmployeeId;
-    private Integer missingEmployeeCount;
-
-    public AssignmentDTO() {}
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String assignedEmployeeName;
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private List<Long> productIds = new ArrayList<>();
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private List<AssignmentResourceRequirementDTO> resourceRequirements = new ArrayList<>();
 
     public AssignmentDTO(Long id, String name, Long tenantId, Boolean isActive) {
         this.id = id;
@@ -25,64 +55,11 @@ public class AssignmentDTO {
         this.isActive = isActive;
     }
 
-
-    public AssignmentDTO(Assignment entity) {
-        if (entity != null) {
-            this.id = entity.getId();
-            this.name = entity.getName();
-            this.tenantId = entity.getTenantId();
-            this.isActive = entity.isActive(); // or entity.getIsActive() depending on your entity
-            this.isFlagged = entity.isFlagged();
-            this.address = entity.getAddress();
-            this.estimatedMinutes = entity.getEstimatedMinutes();
-            this.cost = entity.getCost();
-            this.assignedEmployeeId = entity.getAssignedEmployeeId();
-            this.missingEmployeeCount = entity.getMissingEmployeeCount();
-        }
+    public void setProductIds(List<Long> productIds) {
+        this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
     }
 
-    public Assignment toEntity() {
-        Assignment entity = new Assignment();
-        entity.setId(this.id);
-        entity.setName(this.name);
-        entity.setTenantId(this.tenantId);
-        entity.setActive(this.isActive != null ? this.isActive : true);
-        entity.setFlagged(this.isFlagged != null ? this.isFlagged : false);
-        entity.setAddress(this.address);
-        entity.setEstimatedMinutes(this.estimatedMinutes);
-        entity.setCost(this.cost);
-        entity.setAssignedEmployeeId(this.assignedEmployeeId);
-        return entity;
+    public void setResourceRequirements(List<AssignmentResourceRequirementDTO> resourceRequirements) {
+        this.resourceRequirements = resourceRequirements == null ? new ArrayList<>() : new ArrayList<>(resourceRequirements);
     }
-
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public Long getTenantId() { return tenantId; }
-    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
-
-    public Boolean getIsActive() { return isActive; }
-    public void setIsActive(Boolean active) { isActive = active; }
-
-    public Boolean getIsFlagged() { return isFlagged; }
-    public void setIsFlagged(Boolean flagged) { isFlagged = flagged; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public Integer getEstimatedMinutes() { return estimatedMinutes; }
-    public void setEstimatedMinutes(Integer estimatedMinutes) { this.estimatedMinutes = estimatedMinutes; }
-
-    public BigDecimal getCost() { return cost; }
-    public void setCost(BigDecimal cost) { this.cost = cost; }
-
-    public Long getAssignedEmployeeId() { return assignedEmployeeId; }
-    public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
-
-    public Integer getMissingEmployeeCount() { return missingEmployeeCount; }
-    public void setMissingEmployeeCount(Integer missingEmployeeCount) { this.missingEmployeeCount = missingEmployeeCount; }
 }

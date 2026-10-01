@@ -10,6 +10,14 @@ public class SystemController {
         ctx.status(200).json(Map.of("status", "ok"));
     }
 
+    public void hello(Context ctx) {
+        ctx.json(Map.of("msg", "Hello World"));
+    }
+
+    public void echo(Context ctx) {
+        ctx.result(ctx.body());
+    }
+
 //    public static void addRoutes(io.javalin.Javalin app) {
 //        app.get("/", ctx -> ctx.render("/index"));
 //    }

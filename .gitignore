@@ -4,8 +4,13 @@
 config.*
 
 # IDE/user-local files
+.idea
 .idea/
 .DS_Store
-
+idea/
 # Build and test output
 target/
+build/
+*.log
+*.out
+*.err*.iml

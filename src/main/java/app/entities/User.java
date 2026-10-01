@@ -1,6 +1,12 @@
 package app.entities;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +14,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,27 +34,29 @@ public class User {
 
     private String phoneNumber;
 
+    @Column(name = "primary_category")
+    private String primaryCategory;
+
     @Column(name = "tenant_id")
     private Long tenantId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role", nullable = false)
+    @Setter(AccessLevel.NONE)
     private Set<String> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_custom_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Setter(AccessLevel.NONE)
     private Set<Role> customRoles = new HashSet<>();
 
     @Column(name = "is_active")
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private boolean isActive;
-
-
-    public User() {
-
-    }
 
     public User(Long id, String email, String password, String phoneNumber, Long tenantId, Set<String> roles) {
         this.id = id;
@@ -73,64 +86,8 @@ public class User {
         this(id, email, password, phoneNumber, null, roles);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Long getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
     public void setRoles(Set<String> roles) {
         this.roles = roles == null ? new HashSet<>() : new HashSet<>(roles);
-    }
-
-    public Set<Role> getCustomRoles() {
-        return customRoles;
     }
 
     public void setCustomRoles(Set<Role> customRoles) {

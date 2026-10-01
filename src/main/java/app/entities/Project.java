@@ -14,6 +14,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,6 +28,11 @@ import java.util.List;
 @Entity
 @Table(name = "projects",
         uniqueConstraints = @UniqueConstraint(columnNames = {"tenant_id", "name"}))
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Project {
 
     @Id
@@ -37,15 +48,20 @@ public class Project {
     @Column(length = 1000)
     private String description;
 
+    @Column(name = "customer_id")
+    private Long customerId;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "project_assignments", joinColumns = @JoinColumn(name = "project_id"))
     @OrderColumn(name = "assignment_order")
     @Column(name = "assignment_id", nullable = false)
+    @Setter(AccessLevel.NONE)
     private List<Long> assignmentIds = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ProjectStatus status;
+    @Builder.Default
+    private ProjectStatus status = ProjectStatus.DRAFT;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -59,10 +75,6 @@ public class Project {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public Project() {
-        this.status = ProjectStatus.DRAFT;
-    }
-
     public Project(Long id, Long tenantId, String name, String description, List<Long> assignmentIds, ProjectStatus status) {
         this.id = id;
         this.tenantId = tenantId;
@@ -72,35 +84,7 @@ public class Project {
         this.status = status == null ? ProjectStatus.DRAFT : status;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getTenantId() { return tenantId; }
-    public void setTenantId(Long tenantId) { this.tenantId = tenantId; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public List<Long> getAssignmentIds() { return assignmentIds; }
     public void setAssignmentIds(List<Long> assignmentIds) {
         this.assignmentIds = assignmentIds == null ? new ArrayList<>() : new ArrayList<>(assignmentIds);
     }
-
-    public ProjectStatus getStatus() { return status; }
-    public void setStatus(ProjectStatus status) { this.status = status; }
-
-    public String getCreatedBy() { return createdBy; }
-    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
-
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
-
-    public String getUpdatedBy() { return updatedBy; }
-    public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
-
-    public Instant getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 }

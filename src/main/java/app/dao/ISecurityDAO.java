@@ -10,5 +10,9 @@ public interface ISecurityDAO {
 
     User getVerifiedUser(String email, String password) throws ValidationException;
 
+    User getById(Long id);
+
+    User getByEmail(String email);
+
     void changePassword(String email, String currentPassword, String newPassword) throws ValidationException;
 }

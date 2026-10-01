@@ -6,6 +6,7 @@ import app.exceptions.ValidationException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import javassist.NotFoundException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.HashSet;
@@ -127,6 +128,7 @@ public class UserDAO implements ISecurityDAO {
             existing.setName(user.getName());
         }
         existing.setPhoneNumber(user.getPhoneNumber());
+        existing.setPrimaryCategory(user.getPrimaryCategory());
         existing.setTenantId(user.getTenantId());
         if (user.getPassword() != null && !user.getPassword().isBlank()) {
             existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
@@ -143,16 +145,16 @@ public class UserDAO implements ISecurityDAO {
             if (user == null) return null;
 
             em.getTransaction().begin();
-
-            // Clear assigned user, flag it, and increment the missing count
-            em.createQuery("UPDATE Assignment a " +
-                            "SET a.assignedEmployeeId = null, " +
-                            "    a.isFlagged = true, " +
-                            "    a.missingEmployeeCount = a.missingEmployeeCount + 1 " +
-                            "WHERE a.assignedEmployeeId = :id")
+            // assignments linked to this user stay, but are flagged until a replacement is assigned
+            em.createQuery("""
+                            UPDATE Assignment a
+                            SET a.assignedEmployee = null,
+                                a.isFlagged = true,
+                                a.missingEmployeeCount = a.missingEmployeeCount + 1
+                            WHERE a.assignedEmployee.id = :id
+                            """)
                     .setParameter("id", id)
                     .executeUpdate();
-
             em.remove(user);
             em.getTransaction().commit();
             return user;
@@ -238,7 +240,7 @@ public class UserDAO implements ISecurityDAO {
         if (getByEmail(email) != null) {
             throw new ValidationException("User already exists");
         }
-        return create(new User(null, email, password, phoneNumber, tenantId, java.util.Set.of("USER")));
+        return create(new User(null, email, password, phoneNumber, tenantId, true, java.util.Set.of("USER")));
     }
 
     @Override
@@ -248,6 +250,9 @@ public class UserDAO implements ISecurityDAO {
                 .orElseThrow(() -> new ValidationException("Invalid email or password"));
         if (!BCrypt.checkpw(password, user.getPassword())) {
             throw new ValidationException("Invalid email or password");
+        }
+        if (!user.getIsActive()) {
+            throw new ValidationException("User is inactive");
         }
         return user;
     }
@@ -284,5 +289,22 @@ public class UserDAO implements ISecurityDAO {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    public long checkIfLastAdmin(Long tenantId) throws ValidationException {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT COUNT(DISTINCT u) " +
+                                    "FROM User u " +
+                                    "JOIN u.roles r " +
+                                    "WHERE u.tenantId = :tenantId " +
+                                    "AND UPPER(r) = 'ADMIN'",
+                            Long.class
+                    )
+                    .setParameter("tenantId", tenantId)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new ValidationException("Tenant id not found");
+        }
     }
 }

@@ -1,8 +1,0 @@
-app/dao/ProjectDAO.class
-app/dto/ProjectDTO.class
-app/services/dtoConverter/ProjectMapper.class
-app/entities/Project.class
-app/entities/Role$Builder.class
-app/entities/ProjectStatus.class
-app/services/routeSecurity/routes/ProjectRoutes.class
-app/services/entityServices/ProjectService.class
