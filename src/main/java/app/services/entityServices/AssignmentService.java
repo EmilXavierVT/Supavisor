@@ -1,16 +1,19 @@
 package app.services.entityServices;
 
 import app.dao.AssignmentDAO;
+import app.dao.AssignmentHistoryDAO;
 import app.dao.ProductDAO;
 import app.dao.UserDAO;
 import app.dto.AssignmentAuditHistoryDTO;
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentHistoryDTO;
 import app.dto.AssignmentOverlapDTO;
 import app.dto.AssignmentResourceRequirementDTO;
 import app.dto.AssignmentStateHistoryDTO;
 import app.dto.AttendanceCorrectionDTO;
 import app.entities.Assignment;
 import app.entities.AssignmentAuditHistory;
+import app.entities.AssignmentHistory;
 import app.entities.AssignmentResourceMode;
 import app.entities.AssignmentResourceRequirement;
 import app.entities.AssignmentState;
@@ -41,6 +44,7 @@ public class AssignmentService {
     private static final BigDecimal MAX_COST = new BigDecimal("9999999999.99"); // fits numeric(12,2)
 
     private final AssignmentDAO dao;
+    private final AssignmentHistoryDAO historyDAO;
     private final UserDAO userDAO;
     private final ProductDAO productDAO;
     private final AssignmentMapper mapper = new AssignmentMapper();
@@ -53,6 +57,7 @@ public class AssignmentService {
     AssignmentService(EntityManagerFactory emf, Clock clock) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.dao = new AssignmentDAO(emf);
+        this.historyDAO = new AssignmentHistoryDAO(emf);
         this.userDAO = new UserDAO(emf);
         this.productDAO = new ProductDAO(emf);
         this.clock = clock == null ? Clock.systemUTC() : clock;
@@ -133,6 +138,8 @@ public class AssignmentService {
                 overlapAudit.setAssignmentId(created.getId());
                 dao.update(created, overlapAudit);
             }
+            recordHistory(created.getId(), "CREATE", null, created.getAssignedEmployeeId(), actorSource,
+                    "Created assignment: " + created.getName());
             return mapper.toDto(created);
         } catch (PersistenceException e) {
 
@@ -141,13 +148,14 @@ public class AssignmentService {
         }
     }
 
-    
+
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId) {
         return update(id, dto, tenantId, null, "system");
     }
 
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId, Long actorUserId, String actorSource) {
         Assignment existing = find(id, tenantId);
+        Long previousEmployeeId = existing.getAssignedEmployeeId();
         String name = validName(dto.getName());
         rejectDuplicate(tenantId, name, id);
 
@@ -156,10 +164,16 @@ public class AssignmentService {
         if (dto.getIsActive() != null) {
             existing.setActive(dto.getIsActive());
         }
+        if (dto.getIsFlagged() != null) {
+            existing.setFlagged(dto.getIsFlagged());
+        }
         List<Assignment> conflicts = overlappingAssignments(existing, id);
         AssignmentAuditHistory overlapAudit = overlapAudit(dto.getOverrideReason(), conflicts, actorUserId, actorSource);
         try {
-            return mapper.toDto(dao.update(existing, overlapAudit));
+            Assignment updated = dao.update(existing, overlapAudit);
+            recordHistory(updated.getId(), "UPDATE", previousEmployeeId, updated.getAssignedEmployeeId(), actorSource,
+                    "Updated assignment: " + updated.getName());
+            return mapper.toDto(updated);
         } catch (PersistenceException e) {
             rejectDuplicate(tenantId, name, id);
             throw e;
@@ -168,30 +182,59 @@ public class AssignmentService {
 
 
     public AssignmentDTO setResponsible(Long id, Long employeeId, Long tenantId) {
+        return setResponsible(id, employeeId, tenantId, "system");
+    }
+
+    public AssignmentDTO setResponsible(Long id, Long employeeId, Long tenantId, String actorSource) {
         Assignment existing = find(id, tenantId);
         if (employeeId == null) {
             throw new ApiException(400, "Employee is required");
         }
-        existing.setAssignedEmployee(validEmployee(employeeId, existing.getAssignedEmployeeId(), tenantId));
-        return mapper.toDto(dao.update(existing));
+        Long previousEmployeeId = existing.getAssignedEmployeeId();
+        existing.setAssignedEmployee(validEmployee(employeeId, previousEmployeeId, tenantId));
+        existing.setFlagged(false);
+        if (existing.getMissingEmployeeCount() > 0 && !Objects.equals(previousEmployeeId, employeeId)) {
+            existing.setMissingEmployeeCount(existing.getMissingEmployeeCount() - 1);
+        }
+        Assignment updated = dao.update(existing);
+        recordHistory(id, "REASSIGN", previousEmployeeId, employeeId, actorSource,
+                "Assigned employee " + employeeId);
+        return mapper.toDto(updated);
     }
 
     public AssignmentDTO clearResponsible(Long id, Long tenantId) {
+        return clearResponsible(id, tenantId, "system");
+    }
+
+    public AssignmentDTO clearResponsible(Long id, Long tenantId, String actorSource) {
         Assignment existing = find(id, tenantId);
         if (existing.getAssignedEmployee() != null) {
+            Long previousEmployeeId = existing.getAssignedEmployeeId();
             existing.setAssignedEmployee(null);
+            existing.setFlagged(true);
+            existing.setMissingEmployeeCount(existing.getMissingEmployeeCount() + 1);
             existing = dao.update(existing);
+            recordHistory(id, "REMOVE_EMPLOYEE", previousEmployeeId, null, actorSource,
+                    "Removed employee " + previousEmployeeId);
         }
         return mapper.toDto(existing);
     }
 
 
     public AssignmentDTO deactivate(Long id, Long tenantId) {
-        return setActive(id, tenantId, false);
+        return deactivate(id, tenantId, "system");
+    }
+
+    public AssignmentDTO deactivate(Long id, Long tenantId, String actorSource) {
+        return setActive(id, tenantId, false, actorSource);
     }
 
     public AssignmentDTO activate(Long id, Long tenantId) {
-        return setActive(id, tenantId, true);
+        return activate(id, tenantId, "system");
+    }
+
+    public AssignmentDTO activate(Long id, Long tenantId, String actorSource) {
+        return setActive(id, tenantId, true, actorSource);
     }
 
     public AssignmentDTO changeState(Long id, AssignmentState nextState, Long tenantId, String source) {
@@ -214,7 +257,7 @@ public class AssignmentService {
         }
         Instant now = Instant.now(clock);
         if (existing.getAssignedEmployeeId() == null) {
-            existing.setAssignedEmployeeId(employeeId);
+            existing.setAssignedEmployee(validEmployee(employeeId, null, tenantId));
         }
         existing.setCheckInAt(now);
         if (existing.getState() != AssignmentState.IN_PROGRESS) {
@@ -291,19 +334,36 @@ public class AssignmentService {
 
 
     public void delete(Long id, Long tenantId) {
-        find(id, tenantId);
+        delete(id, tenantId, "system");
+    }
+
+    public void delete(Long id, Long tenantId, String actorSource) {
+        Assignment existing = find(id, tenantId);
+        Long previousEmployeeId = existing.getAssignedEmployeeId();
         try {
             dao.delete(id);
+            recordHistory(id, "DELETE", previousEmployeeId, null, actorSource,
+                    "Deleted assignment: " + existing.getName());
         } catch (AssignmentInUseException e) {
             throw new ApiException(409, "This assignment is in use and cannot be deleted. Deactivate it instead");
         }
     }
 
-    private AssignmentDTO setActive(Long id, Long tenantId, boolean active) {
+    public List<AssignmentHistoryDTO> getHistory(Long id, Long tenantId) {
+        Assignment assignment = find(id, tenantId);
+        return historyDAO.findByAssignmentId(assignment.getId()).stream()
+                .map(AssignmentHistoryDTO::new)
+                .toList();
+    }
+
+    private AssignmentDTO setActive(Long id, Long tenantId, boolean active, String actorSource) {
         Assignment existing = find(id, tenantId);
         if (existing.isActive() != active) {
             existing.setActive(active);
             existing = dao.update(existing);
+            recordHistory(id, active ? "ACTIVATE" : "DEACTIVATE", existing.getAssignedEmployeeId(),
+                    existing.getAssignedEmployeeId(), actorSource,
+                    active ? "Activated assignment" : "Deactivated assignment");
         }
         return mapper.toDto(existing);
     }
@@ -358,6 +418,18 @@ public class AssignmentService {
     private static String validSource(String source) {
         String trimmed = source == null ? "" : source.trim();
         return trimmed.isEmpty() ? "system" : trimmed;
+    }
+
+    private void recordHistory(Long assignmentId, String action, Long previousEmployeeId,
+                               Long newEmployeeId, String actorSource, String details) {
+        historyDAO.create(new AssignmentHistory(
+                assignmentId,
+                action,
+                previousEmployeeId,
+                newEmployeeId,
+                validSource(actorSource),
+                Instant.now(clock),
+                details));
     }
 
 
@@ -547,7 +619,7 @@ public class AssignmentService {
         return cost.setScale(2);
     }
 
-    
+
     private User validEmployee(Long employeeId, Long currentEmployeeId, Long tenantId) {
         if (employeeId == null) {
             return null;

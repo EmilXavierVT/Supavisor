@@ -62,22 +62,22 @@ public class AssignmentController {
     public void setResponsible(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         AssignmentDTO dto = ctx.bodyValidator(AssignmentDTO.class).get();
-        ctx.json(assignmentService.setResponsible(id, dto.getAssignedEmployeeId(), callerTenantId(ctx)));
+        ctx.json(assignmentService.setResponsible(id, dto.getAssignedEmployeeId(), callerTenantId(ctx), callerSource(ctx)));
     }
 
     public void clearResponsible(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.clearResponsible(id, callerTenantId(ctx)));
+        ctx.json(assignmentService.clearResponsible(id, callerTenantId(ctx), callerSource(ctx)));
     }
 
     public void deactivate(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.deactivate(id, callerTenantId(ctx)));
+        ctx.json(assignmentService.deactivate(id, callerTenantId(ctx), callerSource(ctx)));
     }
 
     public void activate(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.activate(id, callerTenantId(ctx)));
+        ctx.json(assignmentService.activate(id, callerTenantId(ctx), callerSource(ctx)));
     }
 
     public void changeState(Context ctx) {
@@ -101,6 +101,11 @@ public class AssignmentController {
         ctx.json(assignmentService.getStateHistory(id, callerTenantId(ctx)));
     }
 
+    public void getHistory(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(assignmentService.getHistory(id, callerTenantId(ctx)));
+    }
+
     public void correctAttendance(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         AttendanceCorrectionDTO dto = ctx.bodyValidator(AttendanceCorrectionDTO.class).get();
@@ -114,7 +119,7 @@ public class AssignmentController {
 
     public void delete(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        assignmentService.delete(id, callerTenantId(ctx));
+        assignmentService.delete(id, callerTenantId(ctx), callerSource(ctx));
         ctx.status(204);
     }
 

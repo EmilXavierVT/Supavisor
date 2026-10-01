@@ -21,6 +21,8 @@ public class AssignmentMapper {
                 entity.isActive()
         );
         dto.setAddress(entity.getAddress());
+        dto.setIsFlagged(entity.isFlagged());
+        dto.setMissingEmployeeCount(entity.getMissingEmployeeCount());
         dto.setNotes(entity.getNotes());
         dto.setEstimatedMinutes(entity.getEstimatedMinutes());
         dto.setCost(entity.getCost());

@@ -45,6 +45,14 @@ public class Assignment {
     @Builder.Default
     private boolean isActive = true;
 
+    @Column(name = "is_flagged", nullable = false)
+    @Builder.Default
+    private boolean isFlagged = false;
+
+    @Column(name = "missing_employee_count", nullable = false)
+    @Builder.Default
+    private int missingEmployeeCount = 0;
+
     private String address;
 
     @Column(length = 1000)

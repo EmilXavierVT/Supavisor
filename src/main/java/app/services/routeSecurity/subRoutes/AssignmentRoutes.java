@@ -34,6 +34,7 @@ public class AssignmentRoutes {
             patch("/{id}/check-out", assignmentController::checkOut, Role.ADMIN, Role.USER);
             patch("/{id}/attendance-correction", assignmentController::correctAttendance, Role.ADMIN);
             get("/{id}/attendance-history", assignmentController::getAttendanceHistory, Role.ADMIN, Role.USER);
+            get("/{id}/history", assignmentController::getHistory, Role.ADMIN);
             get("/{id}/state-history", assignmentController::getStateHistory, Role.ADMIN, Role.USER);
             delete("/{id}", assignmentController::delete, Role.ADMIN);
         });

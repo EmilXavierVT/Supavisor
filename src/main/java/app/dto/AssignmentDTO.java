@@ -26,6 +26,8 @@ public class AssignmentDTO {
     private String name;
     private Long tenantId;
     private Boolean isActive;
+    private Boolean isFlagged;
+    private Integer missingEmployeeCount;
     private String address;
     private String notes;
     private Integer estimatedMinutes;

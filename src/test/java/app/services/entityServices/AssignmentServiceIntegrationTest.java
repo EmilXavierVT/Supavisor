@@ -407,7 +407,30 @@ class AssignmentServiceIntegrationTest {
         AssignmentDTO after = service.getById(created.getId(), tenant, false);
         assertEquals("Cleaning", after.getName());
         assertNull(after.getAssignedEmployeeId());
+        assertTrue(after.getIsFlagged());
+        assertEquals(1, after.getMissingEmployeeCount());
         assertNull(dbDetails(created.getId())[3]);
+    }
+
+    @Test
+    void changingTheResponsibleEmployeeUpdatesTheFlagAndHistory() {
+        Long tenant = newTenantId();
+        User first = newEmployee(tenant, true);
+        User second = newEmployee(tenant, true);
+        AssignmentDTO created = service.create(details("Cleaning", null, null, null, first.getId()), tenant);
+
+        AssignmentDTO unassigned = service.clearResponsible(created.getId(), tenant, "admin@example.com");
+        assertNull(unassigned.getAssignedEmployeeId());
+        assertTrue(unassigned.getIsFlagged());
+        assertEquals(1, unassigned.getMissingEmployeeCount());
+
+        AssignmentDTO reassigned = service.setResponsible(
+                created.getId(), second.getId(), tenant, "admin@example.com");
+        assertEquals(second.getId(), reassigned.getAssignedEmployeeId());
+        assertFalse(reassigned.getIsFlagged());
+        assertEquals(0, reassigned.getMissingEmployeeCount());
+        assertEquals(List.of("CREATE", "REMOVE_EMPLOYEE", "REASSIGN"),
+                service.getHistory(created.getId(), tenant).stream().map(history -> history.getAction()).toList());
     }
 
     @Test
