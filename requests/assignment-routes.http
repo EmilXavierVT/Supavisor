@@ -149,7 +149,7 @@ Authorization: Bearer {{admin_token}}
 GET {{baseUrl}}/assignment/all
 Authorization: Bearer {{admin_token}}
 
-### 7. Read one                                               -> 200, with address, estimatedMinutes, cost, assignedEmployeeId
+### 7. Read one                                               -> 200, with address, estimatedMinutes, cost, assignedEmployeeId, assignedEmployeeName
 GET {{baseUrl}}/assignment/{{assignment_id}}
 Authorization: Bearer {{admin_token}}
 
@@ -201,6 +201,35 @@ Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
 { "name": "Nope" }
+
+
+### ---------------------------------------------------------------- RESPONSIBLE PERSON
+# Unlike PUT /assignment/{id}, these two only touch the responsible person: address, time, cost and products stay.
+
+### 12a. Remove the responsible person                         -> 200, assignedEmployeeId and assignedEmployeeName null
+DELETE {{baseUrl}}/assignment/{{assignment_id}}/responsible
+Authorization: Bearer {{admin_token}}
+
+### 12b. Set (or replace) the responsible person               -> 200, assignedEmployeeName "Assignment Tester", address still "Second Street 2"
+PUT {{baseUrl}}/assignment/{{assignment_id}}/responsible
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "assignedEmployeeId": {{user_id}} }
+
+### 12c. Employee that does not exist, is deactivated or is in another company -> 400
+PUT {{baseUrl}}/assignment/{{assignment_id}}/responsible
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "assignedEmployeeId": 999999 }
+
+### 12d. Normal user tries to set the responsible person       -> 403
+PUT {{baseUrl}}/assignment/{{assignment_id}}/responsible
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{ "assignedEmployeeId": {{user_id}} }
 
 
 ### ---------------------------------------------------------------- DEACTIVATE

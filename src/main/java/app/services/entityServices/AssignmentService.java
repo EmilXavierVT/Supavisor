@@ -106,6 +106,25 @@ public class AssignmentService {
     }
 
 
+    public AssignmentDTO setResponsible(Long id, Long employeeId, Long tenantId) {
+        Assignment existing = find(id, tenantId);
+        if (employeeId == null) {
+            throw new ApiException(400, "Employee is required");
+        }
+        existing.setAssignedEmployee(validEmployee(employeeId, existing.getAssignedEmployeeId(), tenantId));
+        return mapper.toDto(dao.update(existing));
+    }
+
+    public AssignmentDTO clearResponsible(Long id, Long tenantId) {
+        Assignment existing = find(id, tenantId);
+        if (existing.getAssignedEmployee() != null) {
+            existing.setAssignedEmployee(null);
+            existing = dao.update(existing);
+        }
+        return mapper.toDto(existing);
+    }
+
+
     public AssignmentDTO deactivate(Long id, Long tenantId) {
         return setActive(id, tenantId, false);
     }
@@ -219,7 +238,7 @@ public class AssignmentService {
         BigDecimal cost = validCost(dto.getCost());
         var startTime = dto.getStartTime();
         var estimatedEndTime = validEstimatedEndTime(startTime, dto.getEstimatedEndTime());
-        Long employeeId = validEmployee(dto.getAssignedEmployeeId(), assignment.getAssignedEmployeeId(), tenantId);
+        User employee = validEmployee(dto.getAssignedEmployeeId(), assignment.getAssignedEmployeeId(), tenantId);
         List<Long> productIds = validProductIds(dto.getProductIds(), tenantId);
 
         assignment.setAddress(address);
@@ -227,7 +246,7 @@ public class AssignmentService {
         assignment.setCost(cost);
         assignment.setStartTime(startTime);
         assignment.setEstimatedEndTime(estimatedEndTime);
-        assignment.setAssignedEmployeeId(employeeId);
+        assignment.setAssignedEmployee(employee);
         assignment.setProductIds(productIds);
     }
 
@@ -295,7 +314,7 @@ public class AssignmentService {
     }
 
     
-    private Long validEmployee(Long employeeId, Long currentEmployeeId, Long tenantId) {
+    private User validEmployee(Long employeeId, Long currentEmployeeId, Long tenantId) {
         if (employeeId == null) {
             return null;
         }
@@ -306,7 +325,7 @@ public class AssignmentService {
         if (!employee.getIsActive() && !employeeId.equals(currentEmployeeId)) {
             throw new ApiException(400, "Employee is deactivated and cannot be assigned");
         }
-        return employeeId;
+        return employee;
     }
 
     private List<Long> validProductIds(List<Long> productIds, Long tenantId) {

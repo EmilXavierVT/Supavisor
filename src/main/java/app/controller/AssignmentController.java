@@ -41,6 +41,17 @@ public class AssignmentController {
         ctx.json(assignmentService.update(id, dto, callerTenantId(ctx)));
     }
 
+    public void setResponsible(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        AssignmentDTO dto = ctx.bodyValidator(AssignmentDTO.class).get();
+        ctx.json(assignmentService.setResponsible(id, dto.getAssignedEmployeeId(), callerTenantId(ctx)));
+    }
+
+    public void clearResponsible(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(assignmentService.clearResponsible(id, callerTenantId(ctx)));
+    }
+
     public void deactivate(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         ctx.json(assignmentService.deactivate(id, callerTenantId(ctx)));
