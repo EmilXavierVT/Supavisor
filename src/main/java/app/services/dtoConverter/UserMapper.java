@@ -26,6 +26,7 @@ public class UserMapper {
                 new HashSet<>(user.getRoles())
         );
         dto.setName(user.getName());
+        dto.setPrimaryCategory(user.getPrimaryCategory());
         dto.setCustomRoles(user.getCustomRoles().stream()
                 .map(roleMapper::toDTO)
                 .collect(Collectors.toSet()));
@@ -44,6 +45,7 @@ public class UserMapper {
                 dto.getRoles() == null ? new HashSet<>() : new HashSet<>(dto.getRoles())
         );
         user.setName(dto.getName());
+        user.setPrimaryCategory(dto.getPrimaryCategory());
         return user;
     }
 }

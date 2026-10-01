@@ -21,6 +21,7 @@ public class AssignmentRoutes {
     public EndpointGroup getRoutes() {
         return () -> path("assignment", () -> {
             get("/all", assignmentController::getAll, Role.ADMIN, Role.USER);
+            post("/overlaps", assignmentController::previewOverlaps, Role.ADMIN);
             get("/{id}", assignmentController::getById, Role.ADMIN, Role.USER);
             post("/", assignmentController::create, Role.ADMIN);
             put("/{id}", assignmentController::update, Role.ADMIN);
@@ -31,6 +32,8 @@ public class AssignmentRoutes {
             patch("/{id}/state", assignmentController::changeState, Role.ADMIN);
             patch("/{id}/check-in", assignmentController::checkIn, Role.ADMIN, Role.USER);
             patch("/{id}/check-out", assignmentController::checkOut, Role.ADMIN, Role.USER);
+            patch("/{id}/attendance-correction", assignmentController::correctAttendance, Role.ADMIN);
+            get("/{id}/attendance-history", assignmentController::getAttendanceHistory, Role.ADMIN, Role.USER);
             get("/{id}/state-history", assignmentController::getStateHistory, Role.ADMIN, Role.USER);
             delete("/{id}", assignmentController::delete, Role.ADMIN);
         });

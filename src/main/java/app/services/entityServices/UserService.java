@@ -63,7 +63,7 @@ public class UserService {
      * The email has to be well formed and not already in use.
      */
     public CreatedUser createUserWithRole(String name, String email, String role, Long tenantId,
-                                          Set<Long> customRoleIds) throws ValidationException {
+                                          String primaryCategory, Set<Long> customRoleIds) throws ValidationException {
         String cleanName = name == null ? "" : name.trim();
         String cleanEmail = email == null ? "" : email.trim();
         String cleanRole = role == null ? "" : role.trim().toUpperCase(Locale.ROOT);
@@ -90,6 +90,7 @@ public class UserService {
         String temporaryPassword = generateTemporaryPassword();
         User user = new User(null, cleanEmail, temporaryPassword, null, tenantId, true, Set.of(cleanRole));
         user.setName(cleanName);
+        user.setPrimaryCategory(validCategory(primaryCategory));
         try {
             return new CreatedUser(userDAO.create(user, customRoleIds), temporaryPassword);
         } catch (PersistenceException e) {
@@ -99,6 +100,16 @@ public class UserService {
             }
             throw e;
         }
+    }
+
+    public CreatedUser createUserWithRole(String name, String email, String role, Long tenantId,
+                                          Set<Long> customRoleIds) throws ValidationException {
+        return createUserWithRole(name, email, role, tenantId, null, customRoleIds);
+    }
+
+    private static String validCategory(String category) {
+        String trimmed = category == null ? "" : category.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     private static String generateTemporaryPassword() {

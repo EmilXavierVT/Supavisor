@@ -4,6 +4,7 @@ package app.controller;
 
 import app.dto.AssignmentDTO;
 import app.dto.AssignmentStateUpdateDTO;
+import app.dto.AttendanceCorrectionDTO;
 import app.dto.UserDTO;
 import app.exceptions.ApiException;
 import app.services.entityServices.AssignmentService;
@@ -21,24 +22,41 @@ public class AssignmentController {
 
     /** Administrators see everything (or only the active ones with ?activeOnly=true); everyone else only the active ones. */
     public void getAll(Context ctx) {
-        boolean activeOnly = !isAdmin(ctx) || Boolean.parseBoolean(ctx.queryParam("activeOnly"));
-        ctx.json(assignmentService.getAll(callerTenantId(ctx), activeOnly));
+        boolean admin = isAdmin(ctx);
+        boolean activeOnly = !admin || Boolean.parseBoolean(ctx.queryParam("activeOnly"));
+        if (admin) {
+            ctx.json(assignmentService.getAll(callerTenantId(ctx), activeOnly));
+        } else {
+            ctx.json(assignmentService.getVisibleToUser(callerTenantId(ctx), callerId(ctx), activeOnly));
+        }
     }
 
     public void getById(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.getById(id, callerTenantId(ctx), !isAdmin(ctx)));
+        if (isAdmin(ctx)) {
+            ctx.json(assignmentService.getById(id, callerTenantId(ctx), false));
+        } else {
+            ctx.json(assignmentService.getVisibleById(id, callerTenantId(ctx), callerId(ctx)));
+        }
     }
 
     public void create(Context ctx) {
         AssignmentDTO dto = ctx.bodyValidator(AssignmentDTO.class).get();
-        ctx.status(201).json(assignmentService.create(dto, callerTenantId(ctx)));
+        ctx.status(201).json(assignmentService.create(dto, callerTenantId(ctx), callerId(ctx), callerSource(ctx)));
     }
 
     public void update(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         AssignmentDTO dto = ctx.bodyValidator(AssignmentDTO.class).get();
-        ctx.json(assignmentService.update(id, dto, callerTenantId(ctx)));
+        ctx.json(assignmentService.update(id, dto, callerTenantId(ctx), callerId(ctx), callerSource(ctx)));
+    }
+
+    public void previewOverlaps(Context ctx) {
+        AssignmentDTO dto = ctx.bodyValidator(AssignmentDTO.class).get();
+        Long ownId = ctx.queryParam("assignmentId") == null
+                ? null
+                : Long.valueOf(ctx.queryParam("assignmentId"));
+        ctx.json(assignmentService.previewOverlaps(dto, callerTenantId(ctx), ownId));
     }
 
     public void setResponsible(Context ctx) {
@@ -70,17 +88,28 @@ public class AssignmentController {
 
     public void checkIn(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.checkIn(id, callerTenantId(ctx), callerSource(ctx)));
+        ctx.json(assignmentService.checkIn(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx), callerSource(ctx)));
     }
 
     public void checkOut(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
-        ctx.json(assignmentService.checkOut(id, callerTenantId(ctx), callerSource(ctx)));
+        ctx.json(assignmentService.checkOut(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx), callerSource(ctx)));
     }
 
     public void getStateHistory(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         ctx.json(assignmentService.getStateHistory(id, callerTenantId(ctx)));
+    }
+
+    public void correctAttendance(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        AttendanceCorrectionDTO dto = ctx.bodyValidator(AttendanceCorrectionDTO.class).get();
+        ctx.json(assignmentService.correctAttendance(id, callerTenantId(ctx), callerId(ctx), callerSource(ctx), dto));
+    }
+
+    public void getAttendanceHistory(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(assignmentService.getAttendanceHistory(id, callerTenantId(ctx), callerId(ctx), isAdmin(ctx)));
     }
 
     public void delete(Context ctx) {
@@ -96,6 +125,14 @@ public class AssignmentController {
             throw new ApiException(401, "Not authenticated or tenantId missing from token");
         }
         return caller.getTenantId();
+    }
+
+    private static Long callerId(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        if (caller == null || caller.getId() == null) {
+            throw new ApiException(401, "Not authenticated or userId missing from token");
+        }
+        return caller.getId();
     }
 
     private static boolean isAdmin(Context ctx) {

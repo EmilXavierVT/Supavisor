@@ -47,6 +47,9 @@ public class Assignment {
 
     private String address;
 
+    @Column(length = 1000)
+    private String notes;
+
     @Column(name = "estimated_minutes")
     private Integer estimatedMinutes;
 
@@ -82,6 +85,12 @@ public class Assignment {
     @Setter(AccessLevel.NONE)
     private List<Long> productIds = new ArrayList<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "assignment_resource_requirements", joinColumns = @JoinColumn(name = "assignment_id"))
+    @OrderColumn(name = "resource_order")
+    @Setter(AccessLevel.NONE)
+    private List<AssignmentResourceRequirement> resourceRequirements = new ArrayList<>();
+
     public Assignment(Long id, String name, Long tenantId, boolean isActive) {
         this.id = id;
         this.name = name;
@@ -98,5 +107,9 @@ public class Assignment {
 
     public void setProductIds(List<Long> productIds) {
         this.productIds = productIds == null ? new ArrayList<>() : new ArrayList<>(productIds);
+    }
+
+    public void setResourceRequirements(List<AssignmentResourceRequirement> resourceRequirements) {
+        this.resourceRequirements = resourceRequirements == null ? new ArrayList<>() : new ArrayList<>(resourceRequirements);
     }
 }
