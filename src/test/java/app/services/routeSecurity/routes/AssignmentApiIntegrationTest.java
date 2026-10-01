@@ -712,14 +712,14 @@ class AssignmentApiIntegrationTest {
         user.setPrimaryCategory(primaryCategory);
         user = new UserDAO(emf).create(user);
 
-        return login(email);
+        return new TokenUser(login(email), user.getId());
     }
 
     private static String login(String email) throws Exception {
         HttpResponse<String> login = send("POST", "/api/auth/login", null,
                 "{\"email\":\"" + email + "\",\"password\":\"" + PASSWORD + "\"}");
         assertEquals(200, login.statusCode());
-        return new TokenUser(json(login).get("token").asText(), user.getId());
+        return json(login).get("token").asText();
     }
 
     private static HttpResponse<String> send(String method, String path, String token, String body) throws Exception {
