@@ -33,6 +33,7 @@ public class AssignmentDTO {
     private AssignmentState state;
     private Instant checkInAt;
     private Instant checkOutAt;
+    private String overrideReason;
     private Long assignedEmployeeId;
     @Setter(AccessLevel.NONE)
     @Builder.Default

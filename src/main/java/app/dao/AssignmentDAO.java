@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.entities.Assignment;
+import app.entities.AssignmentAuditHistory;
 import app.entities.AssignmentStateHistory;
 import app.exceptions.AssignmentInUseException;
 import jakarta.persistence.EntityManager;
@@ -70,16 +71,28 @@ public class AssignmentDAO {
     }
 
     public Assignment update(Assignment assignment) {
-        return update(assignment, null);
+        return update(assignment, (AssignmentStateHistory) null);
     }
 
     public Assignment update(Assignment assignment, AssignmentStateHistory stateHistory) {
+        return update(assignment, stateHistory, null);
+    }
+
+    public Assignment update(Assignment assignment, AssignmentAuditHistory auditHistory) {
+        return update(assignment, null, auditHistory);
+    }
+
+    public Assignment update(Assignment assignment, AssignmentStateHistory stateHistory, AssignmentAuditHistory auditHistory) {
         try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction tx = em.getTransaction();
             tx.begin();
             Assignment updated = em.merge(assignment);
             if (stateHistory != null) {
                 em.persist(stateHistory);
+            }
+            if (auditHistory != null) {
+                auditHistory.setAssignmentId(updated.getId());
+                em.persist(auditHistory);
             }
             tx.commit();
             return updated;
@@ -92,6 +105,73 @@ public class AssignmentDAO {
                             "SELECT h FROM AssignmentStateHistory h WHERE h.assignmentId = :assignmentId ORDER BY h.changedAt DESC, h.id DESC",
                             AssignmentStateHistory.class)
                     .setParameter("assignmentId", assignmentId)
+                    .getResultList();
+        }
+    }
+
+    public List<AssignmentAuditHistory> getAuditHistory(Long assignmentId, String auditType) {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT h FROM AssignmentAuditHistory h WHERE h.assignmentId = :assignmentId"
+                    + (auditType == null ? "" : " AND h.auditType = :auditType")
+                    + " ORDER BY h.createdAt DESC, h.id DESC";
+            var query = em.createQuery(jpql, AssignmentAuditHistory.class)
+                    .setParameter("assignmentId", assignmentId);
+            if (auditType != null) {
+                query.setParameter("auditType", auditType);
+            }
+            return query.getResultList();
+        }
+    }
+
+    public List<Assignment> findOverlappingAssignments(Long tenantId, Long assignedEmployeeId,
+                                                       java.time.LocalDateTime startTime,
+                                                       java.time.LocalDateTime estimatedEndTime,
+                                                       Long ownId) {
+        if (tenantId == null || assignedEmployeeId == null || startTime == null || estimatedEndTime == null) {
+            return List.of();
+        }
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("""
+                            SELECT a FROM Assignment a
+                            WHERE a.tenantId = :tenantId
+                              AND a.assignedEmployeeId = :assignedEmployeeId
+                              AND a.isActive = true
+                              AND (:ownId IS NULL OR a.id <> :ownId)
+                              AND a.startTime IS NOT NULL
+                              AND a.estimatedEndTime IS NOT NULL
+                              AND a.startTime < :estimatedEndTime
+                              AND a.estimatedEndTime > :startTime
+                            ORDER BY a.startTime, a.id
+                            """, Assignment.class)
+                    .setParameter("tenantId", tenantId)
+                    .setParameter("assignedEmployeeId", assignedEmployeeId)
+                    .setParameter("ownId", ownId)
+                    .setParameter("startTime", startTime)
+                    .setParameter("estimatedEndTime", estimatedEndTime)
+                    .getResultList();
+        }
+    }
+
+    public List<Assignment> getVisibleForCategory(Long tenantId, String primaryCategory, boolean activeOnly) {
+        if (tenantId == null || primaryCategory == null || primaryCategory.isBlank()) {
+            return List.of();
+        }
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = """
+                    SELECT a FROM Assignment a
+                    WHERE a.tenantId = :tenantId
+                      AND a.assignedEmployeeId IN (
+                        SELECT u.id FROM User u
+                        WHERE u.tenantId = :tenantId
+                          AND LOWER(u.primaryCategory) = LOWER(:primaryCategory)
+                          AND u.isActive = true
+                      )
+                    """
+                    + (activeOnly ? " AND a.isActive = true" : "")
+                    + " ORDER BY a.startTime, LOWER(a.name), a.id";
+            return em.createQuery(jpql, Assignment.class)
+                    .setParameter("tenantId", tenantId)
+                    .setParameter("primaryCategory", primaryCategory)
                     .getResultList();
         }
     }

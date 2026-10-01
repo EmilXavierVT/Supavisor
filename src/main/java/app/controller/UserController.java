@@ -84,7 +84,8 @@ public class UserController {
 
         try {
             UserService.CreatedUser created = userService.createUserWithRole(
-                    dto.getName(), dto.getEmail(), roles.iterator().next(), caller.getTenantId(), dto.getCustomRoleIds());
+                    dto.getName(), dto.getEmail(), roles.iterator().next(), caller.getTenantId(),
+                    dto.getPrimaryCategory(), dto.getCustomRoleIds());
             ctx.status(201).json(Map.of(
                     "user", userMapper.toDto(created.user()),
                     "temporaryPassword", created.temporaryPassword()));

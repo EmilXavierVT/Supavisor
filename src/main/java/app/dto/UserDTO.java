@@ -23,6 +23,7 @@ public class UserDTO {
     private String name;
     private String password;
     private String phoneNumber;
+    private String primaryCategory;
     private Long tenantId;
     @Setter(AccessLevel.NONE)
     @Builder.Default

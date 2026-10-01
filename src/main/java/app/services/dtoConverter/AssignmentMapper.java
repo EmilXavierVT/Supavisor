@@ -1,9 +1,11 @@
 package app.services.dtoConverter;
 
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentAuditHistoryDTO;
 import app.dto.AssignmentResourceRequirementDTO;
 import app.dto.AssignmentStateHistoryDTO;
 import app.entities.Assignment;
+import app.entities.AssignmentAuditHistory;
 import app.entities.AssignmentResourceRequirement;
 import app.entities.AssignmentStateHistory;
 
@@ -43,6 +45,20 @@ public class AssignmentMapper {
                 entity.getToState(),
                 entity.getSource(),
                 entity.getChangedAt()
+        );
+    }
+
+    public AssignmentAuditHistoryDTO toDto(AssignmentAuditHistory entity) {
+        if (entity == null) return null;
+        return new AssignmentAuditHistoryDTO(
+                entity.getId(),
+                entity.getAssignmentId(),
+                entity.getAuditType(),
+                entity.getActorUserId(),
+                entity.getActorSource(),
+                entity.getReason(),
+                entity.getDetails(),
+                entity.getCreatedAt()
         );
     }
 

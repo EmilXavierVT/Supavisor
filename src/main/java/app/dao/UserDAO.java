@@ -128,6 +128,7 @@ public class UserDAO implements ISecurityDAO {
             existing.setName(user.getName());
         }
         existing.setPhoneNumber(user.getPhoneNumber());
+        existing.setPrimaryCategory(user.getPrimaryCategory());
         existing.setTenantId(user.getTenantId());
         if (user.getPassword() != null && !user.getPassword().isBlank()) {
             existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
