@@ -3,6 +3,7 @@ package app.config;
 import app.exceptions.ApiException;
 import app.services.routeSecurity.ISecurityController;
 import app.controller.SecurityController;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.Javalin;
 import io.javalin.apibuilder.EndpointGroup;
 import io.javalin.config.JavalinConfig;
+import io.javalin.http.HttpResponseException;
 import io.javalin.json.JavalinJackson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,26 +80,27 @@ public class ApplicationConfig {
     }
 
     public ApplicationConfig apiExceptions() {
-        configSteps.add(config ->
+        configSteps.add(config -> {
                 config.routes.exception(ApiException.class, (e, ctx) -> {
                     int statusCode = e.getCode();
-                    ObjectNode body = jsonMapper.createObjectNode()
-                            .put("status", statusCode)
-                            .put("msg", e.getMessage());
-                    ctx.status(statusCode).json(body);
-                })
-        );
+                    ctx.status(statusCode).json(errorBody(statusCode, e.getMessage()));
+                });
+                config.routes.exception(HttpResponseException.class, (e, ctx) -> {
+                    int statusCode = e.getStatus();
+                    ctx.status(statusCode).json(errorBody(statusCode, e.getMessage()));
+                });
+                config.routes.exception(JsonProcessingException.class, (e, ctx) ->
+                        ctx.status(400).json(errorBody(400, "Request body contains invalid JSON"))
+                );
+        });
         return this;
     }
 
     public ApplicationConfig exceptions() {
         configSteps.add(config ->
                 config.routes.exception(Exception.class, (e, ctx) -> {
-                    ObjectNode body = jsonMapper.createObjectNode()
-                            .put("status", 500)
-                            .put("msg", "An unexpected error occurred");
                     logger.error("Unhandled exception", e);
-                    ctx.status(500).json(body);
+                    ctx.status(500).json(errorBody(500, "An unexpected error occurred"));
                 })
         );
         return this;
@@ -107,9 +110,7 @@ public class ApplicationConfig {
         configSteps.add(config ->
                 config.routes.error(404, ctx -> {
                     String message = ctx.attribute("msg");
-                    ObjectNode body = jsonMapper.createObjectNode()
-                            .put("msg", message == null ? "Not found" : message);
-                    ctx.json(body);
+                    ctx.json(errorBody(404, message == null ? "Not found" : message));
                 })
         );
         return this;
@@ -171,6 +172,12 @@ public class ApplicationConfig {
             );
         }));
 
+    }
+
+    private ObjectNode errorBody(int statusCode, String message) {
+        return jsonMapper.createObjectNode()
+                .put("status", statusCode)
+                .put("msg", message == null || message.isBlank() ? "Request failed" : message);
     }
 
 

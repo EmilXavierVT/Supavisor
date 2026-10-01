@@ -145,7 +145,11 @@ class UserRolesApiIntegrationTest {
         String userToken = tokenFor("USER", tenant.getId());
         User employee = employee(tenant.getId());
 
-        assertEquals(403, sendRoles(employee.getId(), userToken, Set.of(kitchen.getId())).statusCode());
+        HttpResponse<String> response = sendRoles(employee.getId(), userToken, Set.of(kitchen.getId()));
+
+        assertEquals(403, response.statusCode());
+        assertEquals(403, json(response).get("status").asInt());
+        assertTrue(json(response).get("msg").asText().contains("Needed roles are"));
         assertTrue(dbRoleNames(employee.getId()).isEmpty());
     }
 
