@@ -13,4 +13,4 @@ target/
 build/
 *.log
 *.out
-*.err
+*.err*.iml

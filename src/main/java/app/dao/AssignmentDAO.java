@@ -176,6 +176,27 @@ public class AssignmentDAO {
         }
     }
 
+    public Assignment findActiveCheckInForEmployee(Long tenantId, Long employeeId, Long excludedAssignmentId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("""
+                            SELECT a FROM Assignment a
+                            WHERE a.tenantId = :tenantId
+                            AND a.assignedEmployeeId = :employeeId
+                            AND a.checkInAt IS NOT NULL
+                            AND a.checkOutAt IS NULL
+                            AND (:excludedAssignmentId IS NULL OR a.id <> :excludedAssignmentId)
+                            ORDER BY a.checkInAt DESC, a.id DESC
+                            """, Assignment.class)
+                    .setParameter("tenantId", tenantId)
+                    .setParameter("employeeId", employeeId)
+                    .setParameter("excludedAssignmentId", excludedAssignmentId)
+                    .setMaxResults(1)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
     /**
      * @throws AssignmentInUseException when a foreign key from another table still points at the assignment
      */

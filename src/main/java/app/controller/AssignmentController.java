@@ -116,18 +116,18 @@ public class AssignmentController {
         return caller.getTenantId();
     }
 
-    private static boolean isAdmin(Context ctx) {
-        UserDTO caller = ctx.attribute("user");
-        return caller != null && caller.getRoles() != null
-                && caller.getRoles().stream().anyMatch("ADMIN"::equalsIgnoreCase);
-    }
-
     private static Long callerId(Context ctx) {
         UserDTO caller = ctx.attribute("user");
         if (caller == null || caller.getId() == null) {
             throw new ApiException(401, "Not authenticated or userId missing from token");
         }
         return caller.getId();
+    }
+
+    private static boolean isAdmin(Context ctx) {
+        UserDTO caller = ctx.attribute("user");
+        return caller != null && caller.getRoles() != null
+                && caller.getRoles().stream().anyMatch("ADMIN"::equalsIgnoreCase);
     }
 
     private static String callerSource(Context ctx) {
