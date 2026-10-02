@@ -103,6 +103,45 @@ class ApplicationConfigIntegrationTest {
         assertEquals("{\"msg\":\"Token is valid\"}", response.body());
     }
 
+    @Test
+    void missingAuthenticationReturnsConsistentJsonError() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/protected")).GET().build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        JsonNode body = objectMapper.readTree(response.body());
+        assertEquals(401, response.statusCode());
+        assertEquals(401, body.get("status").asInt());
+        assertEquals("Authorization header is missing", body.get("msg").asText());
+    }
+
+    @Test
+    void malformedJsonReturnsConsistentValidationError() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/login"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString("{"))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        JsonNode body = objectMapper.readTree(response.body());
+        assertEquals(400, response.statusCode());
+        assertEquals(400, body.get("status").asInt());
+        assertEquals("Request body contains invalid JSON", body.get("msg").asText());
+    }
+
+    @Test
+    void notFoundReturnsConsistentJsonError() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/does-not-exist")).GET().build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        JsonNode body = objectMapper.readTree(response.body());
+        assertEquals(404, response.statusCode());
+        assertEquals(404, body.get("status").asInt());
+        assertEquals("Not found", body.get("msg").asText());
+    }
+
     private static void register(String email, String password) throws Exception {
         HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/register"))
                 .header("Content-Type", "application/json")
