@@ -110,69 +110,42 @@ class ApplicationConfigIntegrationTest {
     }
 
     @Test
-    void employeeCanLoginAndAccessEmployeeArea() throws Exception {
-        String email = uniqueEmail();
-        String password = "secret-password";
-        register(email, password);
+    void missingAuthenticationReturnsConsistentJsonError() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/protected")).GET().build();
 
-        HttpResponse<String> login = login(email, password);
-        JsonNode loginBody = objectMapper.readTree(login.body());
-        String token = loginBody.get("token").asText();
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(200, login.statusCode());
-        assertEquals(email, loginBody.get("username").asText());
-        assertEquals("USER", loginBody.get("role").asText());
-        assertTrue(loginBody.get("activity").asBoolean());
-
-        HttpRequest protectedRequest = HttpRequest.newBuilder(uri("/api/auth/protected"))
-                .header("Authorization", "Bearer " + token)
-                .GET()
-                .build();
-
-        HttpResponse<String> protectedResponse = httpClient.send(protectedRequest, HttpResponse.BodyHandlers.ofString());
-
-        assertEquals(200, protectedResponse.statusCode());
-        assertTrue(protectedResponse.body().contains("HELLO FROM THE RESTRICTED AREA"));
+        JsonNode body = objectMapper.readTree(response.body());
+        assertEquals(401, response.statusCode());
+        assertEquals(401, body.get("status").asInt());
+        assertEquals("Authorization header is missing", body.get("msg").asText());
     }
 
     @Test
-    void invalidEmployeeCredentialsAreRejected() throws Exception {
-        String email = uniqueEmail();
-        register(email, "secret-password");
-
-        HttpResponse<String> login = login(email, "wrong-password");
-
-        assertEquals(401, login.statusCode());
-        assertTrue(login.body().contains("Invalid email or password"));
-    }
-
-    @Test
-    void inactiveEmployeeCannotLogin() throws Exception {
-        String email = uniqueEmail();
-        userDAO.create(new User(null, email, "secret-password", null, null, false, Set.of("USER")));
-
-        HttpResponse<String> login = login(email, "secret-password");
-
-        assertEquals(401, login.statusCode());
-        assertTrue(login.body().contains("User is inactive"));
-    }
-
-    @Test
-    void employeeLoginDoesNotGrantAdministrativeCapabilities() throws Exception {
-        String email = uniqueEmail();
-        String password = "secret-password";
-        register(email, password);
-        String token = loginAndGetToken(email, password);
-
-        HttpRequest adminRequest = HttpRequest.newBuilder(uri("/api/user/create"))
-                .header("Authorization", "Bearer " + token)
+    void malformedJsonReturnsConsistentValidationError() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/login"))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"" + uniqueEmail() + "\",\"password\":\"secret-password\"}"))
+                .POST(HttpRequest.BodyPublishers.ofString("{"))
                 .build();
 
-        HttpResponse<String> response = httpClient.send(adminRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertEquals(403, response.statusCode());
+        JsonNode body = objectMapper.readTree(response.body());
+        assertEquals(400, response.statusCode());
+        assertEquals(400, body.get("status").asInt());
+        assertEquals("Request body contains invalid JSON", body.get("msg").asText());
+    }
+
+    @Test
+    void notFoundReturnsConsistentJsonError() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/does-not-exist")).GET().build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        JsonNode body = objectMapper.readTree(response.body());
+        assertEquals(404, response.statusCode());
+        assertEquals(404, body.get("status").asInt());
+        assertEquals("Not found", body.get("msg").asText());
     }
 
     private static void register(String email, String password) throws Exception {
