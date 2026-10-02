@@ -1,5 +1,7 @@
 package app.config;
 
+import app.dao.UserDAO;
+import app.entities.User;
 import app.services.routeSecurity.RoutePackage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +18,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,6 +37,7 @@ class ApplicationConfigIntegrationTest {
     private static Javalin app;
     private static HttpClient httpClient;
     private static ObjectMapper objectMapper;
+    private static UserDAO userDAO;
 
     @BeforeAll
     static void setUp() {
@@ -49,6 +54,7 @@ class ApplicationConfigIntegrationTest {
                 .start(0);
         httpClient = HttpClient.newHttpClient();
         objectMapper = new ObjectMapper();
+        userDAO = new UserDAO(emf);
     }
 
     @AfterAll
@@ -154,16 +160,24 @@ class ApplicationConfigIntegrationTest {
     }
 
     private static String loginAndGetToken(String email, String password) throws Exception {
+        HttpResponse<String> response = login(email, password);
+
+        assertEquals(200, response.statusCode());
+        JsonNode body = objectMapper.readTree(response.body());
+        return body.get("token").asText();
+    }
+
+    private static HttpResponse<String> login(String email, String password) throws Exception {
         HttpRequest request = HttpRequest.newBuilder(uri("/api/auth/login"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString("{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}"))
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    }
 
-        assertEquals(200, response.statusCode());
-        JsonNode body = objectMapper.readTree(response.body());
-        return body.get("token").asText();
+    private static String uniqueEmail() {
+        return UUID.randomUUID() + "@example.com";
     }
 
     private static URI uri(String path) {
