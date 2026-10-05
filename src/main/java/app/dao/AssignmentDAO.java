@@ -142,7 +142,7 @@ public class AssignmentDAO {
             return em.createQuery("""
                             SELECT a FROM Assignment a
                             WHERE a.tenantId = :tenantId
-                              AND a.assignedEmployeeId = :assignedEmployeeId
+                              AND a.assignedEmployee.id = :assignedEmployeeId
                               AND a.isActive = true
                               AND (:ownId IS NULL OR a.id <> :ownId)
                               AND a.startTime IS NOT NULL
@@ -168,7 +168,7 @@ public class AssignmentDAO {
             String jpql = """
                     SELECT a FROM Assignment a
                     WHERE a.tenantId = :tenantId
-                      AND a.assignedEmployeeId IN (
+                      AND a.assignedEmployee.id IN (
                         SELECT u.id FROM User u
                         WHERE u.tenantId = :tenantId
                           AND LOWER(u.primaryCategory) = LOWER(:primaryCategory)
@@ -189,7 +189,7 @@ public class AssignmentDAO {
             return em.createQuery("""
                             SELECT a FROM Assignment a
                             WHERE a.tenantId = :tenantId
-                            AND a.assignedEmployeeId = :employeeId
+                            AND a.assignedEmployee.id = :employeeId
                             AND a.checkInAt IS NOT NULL
                             AND a.checkOutAt IS NULL
                             AND (:excludedAssignmentId IS NULL OR a.id <> :excludedAssignmentId)
