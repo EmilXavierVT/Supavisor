@@ -167,6 +167,7 @@ public class AssignmentDAO {
         try (EntityManager em = emf.createEntityManager()) {
             String jpql = """
                     SELECT a FROM Assignment a
+                    JOIN FETCH a.assignedEmployee
                     WHERE a.tenantId = :tenantId
                       AND a.assignedEmployee.id IN (
                         SELECT u.id FROM User u
