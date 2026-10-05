@@ -64,7 +64,10 @@ class AssignmentAutoAcceptanceServiceIntegrationTest {
         request.setName("Kitchen preparation");
         request.setAssignedEmployeeId(employee.getId());
         request.setStartTime(LocalDateTime.ofInstant(NOW, ZoneOffset.UTC));
-        AssignmentDTO assignment = new AssignmentService(entityManagerFactory).create(request, tenantId);
+        AssignmentDTO assignment = new AssignmentService(
+                entityManagerFactory,
+                Clock.fixed(NOW.minusSeconds(60), ZoneOffset.UTC)
+        ).create(request, tenantId);
         AssignmentAutoAcceptanceService service = new AssignmentAutoAcceptanceService(
                 entityManagerFactory,
                 Clock.fixed(NOW, ZoneOffset.UTC)
