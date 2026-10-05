@@ -64,7 +64,10 @@ class AssignmentAcknowledgementServiceIntegrationTest {
         request.setName("Kitchen preparation");
         request.setAssignedEmployeeId(employee.getId());
         request.setStartTime(LocalDateTime.ofInstant(NOW.plusSeconds(3600), ZoneOffset.UTC));
-        AssignmentDTO assignment = new AssignmentService(entityManagerFactory).create(request, tenantId);
+        AssignmentDTO assignment = new AssignmentService(
+                entityManagerFactory,
+                Clock.fixed(NOW.minusSeconds(60), ZoneOffset.UTC)
+        ).create(request, tenantId);
 
         AssignmentDTO acknowledged = new AssignmentAcknowledgementService(
                 entityManagerFactory,
