@@ -98,6 +98,7 @@ class AssignmentApiIntegrationTest {
         JsonNode body = json(created);
         long id = body.get("id").asLong();
         assertEquals("Cleaning", body.get("name").asText());
+        assertEquals(0, body.get("version").asLong());
         assertTrue(body.get("isActive").asBoolean());
         assertEquals(TENANT, body.get("tenantId").asLong());
         assertEquals("Cleaning", dbName(id));
@@ -107,14 +108,46 @@ class AssignmentApiIntegrationTest {
         assertEquals("Cleaning", json(read).get("name").asText());
 
         HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken,
-                "{\"name\":\"Deep cleaning\",\"isActive\":true}");
+                "{\"name\":\"Deep cleaning\",\"isActive\":true,\"version\":0}");
         assertEquals(200, updated.statusCode());
         assertEquals("Deep cleaning", json(updated).get("name").asText());
+        assertEquals(1, json(updated).get("version").asLong());
         assertEquals("Deep cleaning", dbName(id));
 
         assertEquals(204, send("DELETE", "/api/assignment/" + id, adminToken, null).statusCode());
         assertEquals(0, dbCount(id));
         assertEquals(404, send("GET", "/api/assignment/" + id, adminToken, null).statusCode());
+    }
+
+    @Test
+    void staleScheduleUpdateIsRejectedWithoutOverwritingNewerData() throws Exception {
+        String originalName = unique("Versioned assignment");
+        long id = create(adminToken, originalName);
+
+        HttpResponse<String> firstUpdate = send("PUT", "/api/assignment/" + id, adminToken,
+                "{\"name\":\"First accepted update\",\"version\":0}");
+        assertEquals(200, firstUpdate.statusCode());
+        assertEquals(1, json(firstUpdate).get("version").asLong());
+
+        HttpResponse<String> staleUpdate = send("PUT", "/api/assignment/" + id, adminToken,
+                "{\"name\":\"Stale overwrite\",\"version\":0}");
+
+        assertEquals(409, staleUpdate.statusCode());
+        assertTrue(staleUpdate.body().contains("Reload it and try again"));
+        JsonNode current = json(send("GET", "/api/assignment/" + id, adminToken, null));
+        assertEquals("First accepted update", current.get("name").asText());
+        assertEquals(1, current.get("version").asLong());
+    }
+
+    @Test
+    void updateRequiresTheVersionOriginallyLoaded() throws Exception {
+        long id = create(adminToken, unique("Missing version"));
+
+        HttpResponse<String> response = send("PUT", "/api/assignment/" + id, adminToken,
+                "{\"name\":\"No version\"}");
+
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().contains("version is required"));
     }
 
     @Test
@@ -188,7 +221,7 @@ class AssignmentApiIntegrationTest {
 
         HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name
                 + "\",\"address\":\"Second Street 2\",\"startTime\":\"2026-10-06T09:15:00\",\"estimatedEndTime\":\"2026-10-06T11:15:00\",\"estimatedMinutes\":120,\"cost\":99,\"assignedEmployeeId\":"
-                + second + "}");
+                + second + ",\"version\":0}");
         assertEquals(200, updated.statusCode());
         assertEquals("Second Street 2", json(updated).get("address").asText());
         assertEquals("2026-10-06T09:15:00", json(updated).get("startTime").asText());
@@ -198,7 +231,8 @@ class AssignmentApiIntegrationTest {
         assertEquals(LocalDateTime.of(2026, 10, 6, 11, 15), dbDateTime(id, "estimated_end_time"));
         assertEquals(second, dbEmployee(id));
 
-        HttpResponse<String> cleared = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name + "\"}");
+        HttpResponse<String> cleared = send("PUT", "/api/assignment/" + id, adminToken,
+                "{\"name\":\"" + name + "\",\"version\":1}");
         assertEquals(200, cleared.statusCode());
         assertTrue(json(cleared).get("address").isNull());
         assertTrue(json(cleared).get("startTime").isNull());
@@ -386,7 +420,7 @@ class AssignmentApiIntegrationTest {
         assertTrue(noActiveCheckIn.body().contains("no active check-in"));
 
         HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken,
-                "{\"name\":\"Protected attendance renamed\",\"checkInAt\":\"2001-01-01T00:00:00Z\",\"checkOutAt\":\"2001-01-01T01:00:00Z\"}");
+                "{\"name\":\"Protected attendance renamed\",\"checkInAt\":\"2001-01-01T00:00:00Z\",\"checkOutAt\":\"2001-01-01T01:00:00Z\",\"version\":0}");
 
         assertEquals(200, updated.statusCode());
         assertTrue(json(updated).get("checkInAt").isNull());
@@ -481,7 +515,7 @@ class AssignmentApiIntegrationTest {
         long hidden = timedAssignment(cleaning, unique("Cleaning round"), "2026-10-07T09:00:00", "2026-10-07T11:00:00");
         send("PUT", "/api/assignment/" + visible, adminToken,
                 "{\"name\":\"Kitchen prep updated\",\"assignedEmployeeId\":" + otherKitchen
-                        + ",\"startTime\":\"2026-10-07T09:00:00\",\"estimatedEndTime\":\"2026-10-07T11:00:00\",\"cost\":99}");
+                        + ",\"startTime\":\"2026-10-07T09:00:00\",\"estimatedEndTime\":\"2026-10-07T11:00:00\",\"cost\":99,\"version\":0}");
 
         HttpResponse<String> list = send("GET", "/api/assignment/all", kitchenUser.token(), null);
 

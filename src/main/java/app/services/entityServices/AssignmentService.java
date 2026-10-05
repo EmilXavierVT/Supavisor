@@ -150,11 +150,17 @@ public class AssignmentService {
 
 
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId) {
-        return update(id, dto, tenantId, null, "system");
+        return update(id, dto, tenantId, null, "system", false);
     }
 
     public AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId, Long actorUserId, String actorSource) {
+        return update(id, dto, tenantId, actorUserId, actorSource, true);
+    }
+
+    private AssignmentDTO update(Long id, AssignmentDTO dto, Long tenantId, Long actorUserId,
+                                 String actorSource, boolean requireVersion) {
         Assignment existing = find(id, tenantId);
+        validateVersion(dto.getVersion(), existing.getVersion(), requireVersion);
         Long previousEmployeeId = existing.getAssignedEmployeeId();
         String name = validName(dto.getName());
         rejectDuplicate(tenantId, name, id);
@@ -175,6 +181,9 @@ public class AssignmentService {
                     "Updated assignment: " + updated.getName());
             return mapper.toDto(updated);
         } catch (PersistenceException e) {
+            if (isOptimisticLockFailure(e)) {
+                throw versionConflict();
+            }
             rejectDuplicate(tenantId, name, id);
             throw e;
         }
@@ -687,5 +696,30 @@ public class AssignmentService {
         if (taken) {
             throw new ApiException(409, "An assignment with this name already exists");
         }
+    }
+
+    private static void validateVersion(Long submittedVersion, long storedVersion, boolean requireVersion) {
+        if (submittedVersion == null) {
+            if (requireVersion) {
+                throw new ApiException(400, "Assignment version is required");
+            }
+            return;
+        }
+        if (submittedVersion != storedVersion) {
+            throw versionConflict();
+        }
+    }
+
+    private static boolean isOptimisticLockFailure(Throwable error) {
+        for (Throwable cause = error; cause != null && cause.getCause() != cause; cause = cause.getCause()) {
+            if (cause instanceof jakarta.persistence.OptimisticLockException) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static ApiException versionConflict() {
+        return new ApiException(409, "Assignment changed after it was loaded. Reload it and try again");
     }
 }

@@ -20,6 +20,7 @@ public class AssignmentMapper {
                 entity.getTenantId(),
                 entity.isActive()
         );
+        dto.setVersion(entity.getVersion());
         dto.setAddress(entity.getAddress());
         dto.setIsFlagged(entity.isFlagged());
         dto.setMissingEmployeeCount(entity.getMissingEmployeeCount());
