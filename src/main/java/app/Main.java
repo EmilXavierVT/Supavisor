@@ -1,14 +1,19 @@
 package app;
 
 import app.config.ApplicationConfig;
+import app.config.HibernateConfig;
+import app.services.entityServices.AssignmentAutoAcceptanceService;
 import app.services.routeSecurity.RoutePackage;
+import app.services.scheduling.AssignmentAutoAcceptanceJob;
+import jakarta.persistence.EntityManagerFactory;
 
 public class Main {
     public static void main(String[] args) {
         int port = resolvePort(args);
-        RoutePackage routes = new RoutePackage();
+        EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactory();
+        RoutePackage routes = new RoutePackage(entityManagerFactory);
 
-        new ApplicationConfig()
+        new ApplicationConfig(entityManagerFactory)
                 .cors()
                 .apiExceptions()
                 .exceptions()
@@ -16,6 +21,12 @@ public class Main {
                 .security()
                 .route(routes.getRoutes())
                 .start(port);
+
+        AssignmentAutoAcceptanceJob autoAcceptanceJob = new AssignmentAutoAcceptanceJob(
+                new AssignmentAutoAcceptanceService(entityManagerFactory)
+        );
+        autoAcceptanceJob.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(autoAcceptanceJob::close));
     }
 
     private static int resolvePort(String[] args) {
