@@ -12,15 +12,18 @@ import jakarta.persistence.EntityManagerFactory;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class AssignmentAcknowledgementService {
+
+    private static final ZoneId BUSINESS_TIME_ZONE = ZoneId.of("Europe/Copenhagen");
 
     private final AssignmentDAO assignmentDAO;
     private final AssignmentMapper assignmentMapper = new AssignmentMapper();
     private final Clock clock;
 
     public AssignmentAcknowledgementService(EntityManagerFactory entityManagerFactory) {
-        this(entityManagerFactory, Clock.systemUTC());
+        this(entityManagerFactory, Clock.system(BUSINESS_TIME_ZONE));
     }
 
     AssignmentAcknowledgementService(EntityManagerFactory entityManagerFactory, Clock clock) {
@@ -28,7 +31,7 @@ public class AssignmentAcknowledgementService {
             throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         }
         this.assignmentDAO = new AssignmentDAO(entityManagerFactory);
-        this.clock = clock == null ? Clock.systemUTC() : clock;
+        this.clock = clock == null ? Clock.system(BUSINESS_TIME_ZONE) : clock;
     }
 
     public AssignmentDTO acknowledge(Long assignmentId, Long tenantId, Long employeeId) {
