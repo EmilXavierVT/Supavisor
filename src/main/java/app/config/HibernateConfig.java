@@ -3,9 +3,17 @@ package app.config;
 import app.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public final class HibernateConfig {
+
+    private static final String SCHEMA_ACTION = "hibernate.hbm2ddl.auto";
+    private static final Set<String> DEVELOPMENT_SCHEMA_ACTIONS = Set.of(
+            "none", "validate", "update", "create", "create-drop"
+    );
 
     private static volatile EntityManagerFactory emf;
 
@@ -15,34 +23,31 @@ public final class HibernateConfig {
         if (emf == null) {
             synchronized (HibernateConfig.class) {
                 if (emf == null) {
-                    emf = HibernateEmfBuilder.build(buildProps());
+                    emf = HibernateEmfBuilder.build(buildProperties(System.getenv()));
                 }
             }
         }
         return emf;
     }
 
-    private static Properties buildProps() {
+    static Properties buildProperties(Map<String, String> environment) {
         Properties props = HibernateBaseProperties.createBase();
+        boolean isProduction = isDeployed(environment);
+        props.setProperty(SCHEMA_ACTION, resolveSchemaAction(environment, isProduction));
 
-        // Teaching-friendly default - change to update in production
-        //props.put("hibernate.hbm2ddl.auto", "update");
-        props.put("hibernate.hbm2ddl.auto", "update");
-        //props.put("hibernate.hbm2ddl.auto", "drop-and-create");
-
-        if (isDeployed()) {
-            setDeployedProperties(props);
+        if (isProduction) {
+            setDeployedProperties(props, environment);
         } else {
             setDevProperties(props);
         }
         return props;
     }
 
-    private static void setDeployedProperties(Properties props) {
-        String dbName = requireEnv("DB_NAME");
-        props.setProperty("hibernate.connection.url", requireEnv("CONNECTION_STR") + dbName);
-        props.setProperty("hibernate.connection.username", requireEnv("DB_USERNAME"));
-        props.setProperty("hibernate.connection.password", requireEnv("DB_PASSWORD"));
+    private static void setDeployedProperties(Properties props, Map<String, String> environment) {
+        String dbName = requireEnvironmentValue(environment, "DB_NAME");
+        props.setProperty("hibernate.connection.url", requireEnvironmentValue(environment, "CONNECTION_STR") + dbName);
+        props.setProperty("hibernate.connection.username", requireEnvironmentValue(environment, "DB_USERNAME"));
+        props.setProperty("hibernate.connection.password", requireEnvironmentValue(environment, "DB_PASSWORD"));
     }
 
     private static void setDevProperties(Properties props) {
@@ -56,15 +61,39 @@ public final class HibernateConfig {
         props.put("hibernate.connection.password", password);
     }
 
-    private static boolean isDeployed() {
-        return System.getenv("DEPLOYED") != null || System.getenv("CONNECTION_STR") != null;
+    static boolean isDeployed(Map<String, String> environment) {
+        String deployed = environment.get("DEPLOYED");
+        if (hasText(deployed)) {
+            return Boolean.parseBoolean(deployed.trim());
+        }
+        return hasText(environment.get("CONNECTION_STR"));
     }
 
-    private static String requireEnv(String key) {
-        String value = System.getenv(key);
+    static String resolveSchemaAction(Map<String, String> environment, boolean isProduction) {
+        if (isProduction) {
+            return "validate";
+        }
+
+        String configuredAction = environment.getOrDefault("HIBERNATE_HBM2DDL_AUTO", "update")
+                .trim()
+                .toLowerCase(Locale.ROOT);
+        if (!DEVELOPMENT_SCHEMA_ACTIONS.contains(configuredAction)) {
+            throw new IllegalStateException(
+                    "HIBERNATE_HBM2DDL_AUTO must be one of: " + String.join(", ", DEVELOPMENT_SCHEMA_ACTIONS)
+            );
+        }
+        return configuredAction;
+    }
+
+    private static String requireEnvironmentValue(Map<String, String> environment, String key) {
+        String value = environment.get(key);
         if (value == null || value.isBlank()) {
             throw new IllegalStateException(key + " must be configured in the container environment");
         }
         return value.trim();
+    }
+
+    private static boolean hasText(String value) {
+        return value != null && !value.isBlank();
     }
 }
