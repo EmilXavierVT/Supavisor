@@ -31,12 +31,18 @@ public class UserDTO {
     @Setter(AccessLevel.NONE)
     @Builder.Default
     private Set<RoleDTO> customRoles = new HashSet<>();
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private Set<QualificationDTO> qualifications = new HashSet<>();
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private boolean isActive;
     // null = leave assignments untouched, empty set = clear them all
     @Setter(AccessLevel.NONE)
     private Set<Long> customRoleIds;
+    // null = leave assignments untouched, empty set = clear them all
+    @Setter(AccessLevel.NONE)
+    private Set<Long> qualificationIds;
 
     public UserDTO(Long id, String email, String password, String phoneNumber, Long tenantId, boolean isActive, Set<String> roles) {
         this.id = id;
@@ -68,6 +74,10 @@ public class UserDTO {
         this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
     }
 
+    public void setQualifications(Set<QualificationDTO> qualifications) {
+        this.qualifications = qualifications == null ? new HashSet<>() : new HashSet<>(qualifications);
+    }
+
     public boolean getIsActive() {
         return isActive;
     }
@@ -77,5 +87,9 @@ public class UserDTO {
 
     public void setCustomRoleIds(Set<Long> customRoleIds) {
         this.customRoleIds = customRoleIds == null ? null : new HashSet<>(customRoleIds);
+    }
+
+    public void setQualificationIds(Set<Long> qualificationIds) {
+        this.qualificationIds = qualificationIds == null ? null : new HashSet<>(qualificationIds);
     }
 }

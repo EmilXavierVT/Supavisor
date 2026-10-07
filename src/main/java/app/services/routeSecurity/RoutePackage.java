@@ -25,6 +25,7 @@ public class RoutePackage {
             new UserRoutes(emf).getRoutes().addEndpoints();
             new TenantRoutes(emf).getRoutes().addEndpoints();
             new RoleRoutes(emf).getRoutes().addEndpoints();
+            new QualificationRoutes(emf).getRoutes().addEndpoints();
             new ProjectRoutes(emf).getRoutes().addEndpoints();
             new AssignmentRoutes(emf).getRoutes().addEndpoints();
             new AssignmentAcknowledgementRoutes(emf).getRoutes().addEndpoints();

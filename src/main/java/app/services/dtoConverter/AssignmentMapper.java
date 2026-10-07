@@ -35,6 +35,9 @@ public class AssignmentMapper {
         User employee = entity.getAssignedEmployee();
         dto.setAssignedEmployeeId(employee == null ? null : employee.getId());
         dto.setAssignedEmployeeName(employee == null ? null : employee.getName());
+        dto.setAssignedEmployeeQualifications(employee == null ? java.util.Set.of() : employee.getQualifications().stream()
+                .map(new QualificationMapper()::toDTO)
+                .collect(java.util.stream.Collectors.toSet()));
         dto.setProductIds(entity.getProductIds());
         dto.setResourceRequirements(entity.getResourceRequirements().stream()
                 .map(this::toDto)
