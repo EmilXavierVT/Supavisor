@@ -18,6 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AssignmentAutoAcceptanceServiceIntegrationTest {
 
     private static final Instant NOW = Instant.parse("2026-10-05T12:00:00Z");
+    private static final ZoneId BUSINESS_TIME_ZONE = ZoneId.of("Europe/Copenhagen");
 
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -63,14 +65,14 @@ class AssignmentAutoAcceptanceServiceIntegrationTest {
         AssignmentDTO request = new AssignmentDTO();
         request.setName("Kitchen preparation");
         request.setAssignedEmployeeId(employee.getId());
-        request.setStartTime(LocalDateTime.ofInstant(NOW, ZoneOffset.UTC));
+        request.setStartTime(LocalDateTime.ofInstant(NOW, BUSINESS_TIME_ZONE));
         AssignmentDTO assignment = new AssignmentService(
                 entityManagerFactory,
                 Clock.fixed(NOW.minusSeconds(60), ZoneOffset.UTC)
         ).create(request, tenantId);
         AssignmentAutoAcceptanceService service = new AssignmentAutoAcceptanceService(
                 entityManagerFactory,
-                Clock.fixed(NOW, ZoneOffset.UTC)
+                Clock.fixed(NOW, BUSINESS_TIME_ZONE)
         );
 
         assertEquals(1, service.acceptDueAssignments());

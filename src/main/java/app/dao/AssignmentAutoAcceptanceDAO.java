@@ -34,10 +34,12 @@ public class AssignmentAutoAcceptanceDAO {
                                 SELECT assignment FROM Assignment assignment
                                 WHERE assignment.isActive = true
                                   AND assignment.assignedEmployee IS NOT NULL
+                                  AND assignment.state = :plannedState
                                   AND assignment.startTime IS NOT NULL
                                   AND assignment.startTime <= :currentDateTime
                                 ORDER BY assignment.startTime, assignment.id
                                 """, Assignment.class)
+                        .setParameter("plannedState", AssignmentState.PLANNED)
                         .setParameter("currentDateTime", currentDateTime)
                         .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                         .getResultList();
