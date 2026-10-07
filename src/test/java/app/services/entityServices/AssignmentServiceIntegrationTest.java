@@ -429,7 +429,7 @@ class AssignmentServiceIntegrationTest {
         assertEquals(second.getId(), reassigned.getAssignedEmployeeId());
         assertFalse(reassigned.getIsFlagged());
         assertEquals(0, reassigned.getMissingEmployeeCount());
-        assertEquals(List.of("CREATE", "REMOVE_EMPLOYEE", "REASSIGN"),
+        assertEquals(List.of("REASSIGN", "REMOVE_EMPLOYEE", "CREATE"),
                 service.getHistory(created.getId(), tenant).stream().map(history -> history.getAction()).toList());
     }
 

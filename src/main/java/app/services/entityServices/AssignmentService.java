@@ -29,6 +29,7 @@ import jakarta.persistence.PersistenceException;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -129,7 +130,7 @@ public class AssignmentService {
         applyDetails(assignment, dto, tenantId);
         List<Assignment> conflicts = overlappingAssignments(assignment, null);
         AssignmentAuditHistory overlapAudit = overlapAudit(dto.getOverrideReason(), conflicts, actorUserId, actorSource);
-        Instant now = Instant.now(clock);
+        Instant now = Instant.now(clock).truncatedTo(ChronoUnit.MICROS);
         AssignmentStateHistory history = new AssignmentStateHistory(
                 null, null, assignment.getState(), "system", now);
         try {
@@ -264,7 +265,7 @@ public class AssignmentService {
         if (existing.getCheckInAt() != null) {
             throw new ApiException(409, "Assignment is already checked in");
         }
-        Instant now = Instant.now(clock);
+        Instant now = Instant.now(clock).truncatedTo(ChronoUnit.MICROS);
         if (existing.getAssignedEmployeeId() == null) {
             existing.setAssignedEmployee(validEmployee(employeeId, null, tenantId));
         }
@@ -284,7 +285,7 @@ public class AssignmentService {
         if (existing.getCheckOutAt() != null) {
             throw new ApiException(409, "Assignment is already checked out");
         }
-        Instant now = Instant.now(clock);
+        Instant now = Instant.now(clock).truncatedTo(ChronoUnit.MICROS);
         existing.setCheckOutAt(now);
         if (existing.getState() != AssignmentState.COMPLETED) {
             return changeState(existing, AssignmentState.COMPLETED, source, now);

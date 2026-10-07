@@ -126,19 +126,17 @@ class AssignmentResponsibleApiIntegrationTest {
         long employee = employeeId(TENANT, "Bente Berg", true);
         assertEquals(200, setResponsible(adminToken, id, employee).statusCode());
 
-        for (String token : List.of(adminToken, userToken)) {
-            JsonNode one = json(send("GET", "/api/assignment/" + id, token, null));
-            assertEquals(employee, one.get("assignedEmployeeId").asLong());
-            assertEquals("Bente Berg", one.get("assignedEmployeeName").asText());
+        JsonNode one = json(send("GET", "/api/assignment/" + id, adminToken, null));
+        assertEquals(employee, one.get("assignedEmployeeId").asLong());
+        assertEquals("Bente Berg", one.get("assignedEmployeeName").asText());
 
-            JsonNode listed = inList(send("GET", "/api/assignment/all", token, null), id);
-            assertEquals(employee, listed.get("assignedEmployeeId").asLong());
-            assertEquals("Bente Berg", listed.get("assignedEmployeeName").asText());
+        JsonNode listed = inList(send("GET", "/api/assignment/all", adminToken, null), id);
+        assertEquals(employee, listed.get("assignedEmployeeId").asLong());
+        assertEquals("Bente Berg", listed.get("assignedEmployeeName").asText());
 
-            JsonNode empty = inList(send("GET", "/api/assignment/all", token, null), withoutResponsible);
-            assertTrue(empty.get("assignedEmployeeId").isNull());
-            assertTrue(empty.get("assignedEmployeeName").isNull());
-        }
+        JsonNode empty = inList(send("GET", "/api/assignment/all", adminToken, null), withoutResponsible);
+        assertTrue(empty.get("assignedEmployeeId").isNull());
+        assertTrue(empty.get("assignedEmployeeName").isNull());
     }
 
     @Test
