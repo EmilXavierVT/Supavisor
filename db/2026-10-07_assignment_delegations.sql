@@ -1,4 +1,4 @@
--- Brings an existing database up to date for assignment flags, version conflicts and delegations (user story 21).
+-- Brings an existing database up to date for assignment flags, version conflicts and delegations.
 -- Hibernate's "update" cannot add NOT NULL columns to a table that already has rows, so run this once.
 -- Safe to run more than once.
 
