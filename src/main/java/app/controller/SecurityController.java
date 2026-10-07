@@ -135,25 +135,21 @@ public class SecurityController implements ISecurityController {
             String SECRET_KEY = getConfigValue("SECRET_KEY");
             return tokenSecurity.createToken(user, ISSUER, TOKEN_EXPIRE_TIME, SECRET_KEY);
         } catch (Exception e) {
-//            logger.error("Could not create token", e);
             throw new ApiException(500, "Could not create token");
         }
     }
     @Override
     public void authenticate(Context ctx) {
-        // This is a preflight request => no need for authentication
         if (ctx.method().toString().equals("OPTIONS")) {
             ctx.status(200);
             return;
         }
-        // If the endpoint is not protected with roles or is open to ANYONE role, then skip
         Set<String> allowedRoles = ctx.routeRoles().stream().map(role -> role.toString().toUpperCase()).collect(Collectors.toSet());
         if (isOpenEndpoint(allowedRoles))
             return;
 
-        // If there is no token we do not allow entry
         UserDTO verifiedTokenUser = validateAndGetUserFromToken(ctx);
-        ctx.attribute("user", verifiedTokenUser); // -> ctx.attribute("user") in ApplicationConfig beforeMatched filter
+        ctx.attribute("user", verifiedTokenUser);
     }
 
     @Override
@@ -163,15 +159,12 @@ public class SecurityController implements ISecurityController {
                 .map(role -> role.toString().toUpperCase())
                 .collect(Collectors.toSet());
 
-        // 1. Check if the endpoint is open to all (either by not having any roles or having the ANYONE role set
         if (isOpenEndpoint(allowedRoles))
             return;
-        // 2. Get user and ensure it is not null
         UserDTO user = ctx.attribute("user");
         if (user == null) {
             throw new ForbiddenResponse("No user was added from the token");
         }
-        // 3. See if any role matches
         if (!userHasAllowedRole(user, allowedRoles))
             throw new ForbiddenResponse("User was not authorized with roles: " + user.getRoles() + ". Needed roles are: " + allowedRoles);
     }
@@ -186,13 +179,11 @@ public class SecurityController implements ISecurityController {
     private static String getToken(Context ctx) {
         String header = ctx.header("Authorization");
         if (header == null) {
-            throw new UnauthorizedResponse("Authorization header is missing"); // UnauthorizedResponse is javalin 6 specific but response is not json!
+            throw new UnauthorizedResponse("Authorization header is missing");
         }
-
-        // If the Authorization Header was malformed, then no entry
         String[] parts = header.split(" ", 2);
         if (parts.length != 2 || !parts[0].equalsIgnoreCase("Bearer") || parts[1].isBlank()) {
-            throw new UnauthorizedResponse("Authorization header is malformed"); // UnauthorizedResponse is javalin 6 specific but response is not json!
+            throw new UnauthorizedResponse("Authorization header is malformed");
         }
         return parts[1];
     }
@@ -200,11 +191,9 @@ public class SecurityController implements ISecurityController {
 
 
     private boolean isOpenEndpoint(Set<String> allowedRoles) {
-        // If the endpoint is not protected with any roles:
         if (allowedRoles.isEmpty())
             return true;
 
-        // 1. Get permitted roles and Check if the endpoint is open to all with the ANYONE role
         if (allowedRoles.contains("ANYONE")) {
             return true;
         }
@@ -214,7 +203,7 @@ public class SecurityController implements ISecurityController {
         String token = getToken(ctx);
         UserDTO verifiedTokenUser = verifyToken(token, ctx);
         if (verifiedTokenUser == null) {
-            throw new UnauthorizedResponse("Invalid user or token"); // UnauthorizedResponse is javalin 6 specific but response is not json!
+            throw new UnauthorizedResponse("Invalid user or token");
         }
         return verifiedTokenUser;
     }
@@ -242,7 +231,6 @@ public class SecurityController implements ISecurityController {
 
             throw new ApiException(403, "Token is expired");
         } catch (ParseException | ApiException e) {
-//            logger.error("Could not create token", e);
             throw new ApiException(HttpStatus.UNAUTHORIZED.getCode(), "Unauthorized. Could not verify token");
         } catch (TokenVerificationException e) {
             throw new RuntimeException(e);

@@ -36,7 +36,6 @@ public class RoleController {
 
     public void deleteRole(Context ctx) {
         Long roleId = Long.parseLong(ctx.pathParam("id"));
-        // the tenant comes from the token, never from the request, so one company cannot delete another's roles
         roleService.deleteRole(roleId, callerTenantId(ctx));
         ctx.status(204);
     }

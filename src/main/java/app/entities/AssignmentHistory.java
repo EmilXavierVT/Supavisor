@@ -34,7 +34,7 @@ public class AssignmentHistory {
 
     public AssignmentHistory() {}
 
-    // 7-parameter constructor matching saveAudit
+
     public AssignmentHistory(Long assignmentId, String action, Long previousEmployeeId, Long newEmployeeId, String changedBy, Instant changedAt, String details) {
         this.assignmentId = assignmentId;
         this.action = action;
@@ -45,7 +45,7 @@ public class AssignmentHistory {
         this.details = details;
     }
 
-    // Getters and Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -20,7 +20,6 @@ public class AssignmentController {
         this.assignmentService = new AssignmentService(emf);
     }
 
-    /** Administrators see everything (or only the active ones with ?activeOnly=true); everyone else only the active ones. */
     public void getAll(Context ctx) {
         boolean admin = isAdmin(ctx);
         boolean activeOnly = !admin || Boolean.parseBoolean(ctx.queryParam("activeOnly"));

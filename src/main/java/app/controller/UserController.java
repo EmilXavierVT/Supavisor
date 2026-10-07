@@ -65,12 +65,6 @@ public class UserController {
         ctx.status(201).json(userMapper.toDto(created));
     }
 
-    /**
-     * Admin-only creation of a user with a name, a unique email, exactly one system role
-     * (ADMIN or USER) and optionally some of the company's custom roles (customRoleIds).
-     * The user always lands in the calling administrator's tenant, whatever the body says,
-     * and custom roles from any other tenant are refused.
-     */
     public void createUser(Context ctx) {
         UserDTO caller = ctx.attribute("user");
         if (caller == null) {
@@ -120,11 +114,6 @@ public class UserController {
         ctx.json(userMapper.toDto(updated));
     }
 
-    /**
-     * Admin-only: replaces a user's company-defined (custom) roles - e.g. Kitchen, Cleaning - with the
-     * given set. This is a full replace, not an addition: a role the user had before that is not in
-     * customRoleIds (e.g. Kitchen, when the new set is just Cleaning) is removed.
-     */
     public void updateUserRoles(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         UserDTO caller = ctx.attribute("user");
@@ -251,7 +240,6 @@ public class UserController {
     private static final String SELF_DEMOTION_MESSAGE =
             "You cannot remove administrative privileges from your own account";
 
-    /** True when the authenticated caller is the given user. Prefers the id in the token, falls back to email for older tokens. */
     private boolean isCaller(Context ctx, User target) {
         UserDTO caller = ctx.attribute("user");
         if (caller == null || target == null) return false;
@@ -263,7 +251,6 @@ public class UserController {
         return roles != null && roles.stream().anyMatch("ADMIN"::equalsIgnoreCase);
     }
 
-    /** For the endpoints that replace a user's role: an admin may not swap their own ADMIN role for another one. */
     private void rejectSelfDemotion(Context ctx, Long targetId) {
         User target = userService.getById(targetId);
         if (target != null && isCaller(ctx, target) && hasAdminRole(target.getRoles())) {
