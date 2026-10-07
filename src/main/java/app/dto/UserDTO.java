@@ -34,7 +34,6 @@ public class UserDTO {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private boolean isActive;
-    // null = leave assignments untouched, empty set = clear them all
     @Setter(AccessLevel.NONE)
     private Set<Long> customRoleIds;
 

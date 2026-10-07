@@ -14,11 +14,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A template for a recurring piece of work, e.g. "Cleaning at Main Street 1", that an administrator
- * defines for their company: where it is, how long it should take, what it costs and who it is linked to.
- * Names are unique per tenant. Deactivating keeps the row so anything that references it keeps working.
- */
 @Entity
 @Table(name = "assignments",
         uniqueConstraints = @UniqueConstraint(columnNames = {"tenant_id", "name"}))
@@ -85,7 +80,6 @@ public class Assignment {
     @Column(name = "check_out_at")
     private Instant checkOutAt;
 
-    // the employee (user) this assignment is linked to; cleared when that user is deleted
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_employee_id")
     private User assignedEmployee;

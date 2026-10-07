@@ -14,16 +14,12 @@ public class ApiFetcher {
 
         try {
             JsonNode node = objectMapper.readTree(new URI(url).toURL());
-//            System.out.println(node.toPrettyString());
             return node;
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
-
 
     public  static String getApiData(String url) {
         HttpClient client = HttpClient.newHttpClient();
@@ -38,15 +34,12 @@ public class ApiFetcher {
                     .build();
             HttpResponse<String> response =  client.send(request, HttpResponse.BodyHandlers.ofString());
 
-
-
             if(response.statusCode() == 200) {
 
                 String bodytext = response.body();
                 System.out.println(bodytext);
 
                 result = bodytext;
-
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

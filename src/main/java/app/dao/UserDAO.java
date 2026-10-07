@@ -62,11 +62,6 @@ public class UserDAO implements ISecurityDAO {
         }
     }
 
-    /**
-     * Like {@link #create(User)}, but also assigns the given custom roles, which must all
-     * belong to the user's tenant. The user and the assignments are saved together, so a
-     * bad role id leaves nothing behind.
-     */
     public User create(User user, Set<Long> customRoleIds) throws ValidationException {
         try (EntityManager em = emf.createEntityManager()) {
             Set<Role> resolved = resolveRoles(em, customRoleIds, user.getTenantId());
@@ -98,11 +93,6 @@ public class UserDAO implements ISecurityDAO {
         }
     }
 
-    /**
-     * Like {@link #update(User)}, but also replaces the user's custom roles when
-     * {@code customRoleIds} is non-null. {@code null} leaves the assignments untouched,
-     * an empty set clears them.
-     */
     public User update(User user, Set<Long> customRoleIds) throws ValidationException {
         try (EntityManager em = emf.createEntityManager()) {
             User existing = em.find(User.class, user.getId());
@@ -133,7 +123,6 @@ public class UserDAO implements ISecurityDAO {
         if (user.getPassword() != null && !user.getPassword().isBlank()) {
             existing.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         }
-        // an update that carries no roles keeps the current ones - a user must always have at least one
         if (user.getRoles() != null && !user.getRoles().isEmpty()) {
             existing.setRoles(user.getRoles());
         }
@@ -145,7 +134,6 @@ public class UserDAO implements ISecurityDAO {
             if (user == null) return null;
 
             em.getTransaction().begin();
-            // assignments linked to this user stay, but are flagged until a replacement is assigned
             em.createQuery("""
                             UPDATE Assignment a
                             SET a.assignedEmployee = null,

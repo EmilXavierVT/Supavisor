@@ -15,19 +15,14 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 public class UserService {
-    /** The system roles: what a user may do in the app. Company-specific roles (kitchen, cleaning ...) are custom roles. */
     public static final Set<String> SYSTEM_ROLES = Set.of("ADMIN", "USER");
-
-    private static final Pattern EMAIL_PATTERN =
-            Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$");
     private static final int MAX_NAME_LENGTH = 255;
     private static final int MAX_EMAIL_LENGTH = 254;
-    // no 0/O, 1/l/I - the password is read off a screen and typed in by hand
     private static final String PASSWORD_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
     private static final int TEMPORARY_PASSWORD_LENGTH = 12;
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    /** A freshly created user together with the one-time password to hand to them. */
     public record CreatedUser(User user, String temporaryPassword) {
     }
 
@@ -57,11 +52,7 @@ public class UserService {
         return userDAO.create(user);
     }
 
-    /**
-     * Creates an active user in the given tenant with one system role, any number of the
-     * tenant's custom roles (null or empty for none) and a generated temporary password.
-     * The email has to be well formed and not already in use.
-     */
+
     public CreatedUser createUserWithRole(String name, String email, String role, Long tenantId,
                                           String primaryCategory, Set<Long> customRoleIds) throws ValidationException {
         String cleanName = name == null ? "" : name.trim();
@@ -94,7 +85,6 @@ public class UserService {
         try {
             return new CreatedUser(userDAO.create(user, customRoleIds), temporaryPassword);
         } catch (PersistenceException e) {
-            // lost a race against another request creating the same email
             if (userDAO.getByEmail(cleanEmail) != null) {
                 throw new DuplicateUserException("A user with this email already exists");
             }

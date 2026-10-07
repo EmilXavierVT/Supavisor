@@ -47,7 +47,7 @@ public class RoleService {
             throw new ApiException(400, "Your company (tenant " + tenantId + ") does not exist");
         }
 
-        // Check uniqueness
+
         boolean exists = roleDAO.findByTenantId(tenantId).stream()
                 .anyMatch(r -> r.getRoleName().equalsIgnoreCase(roleName));
         
