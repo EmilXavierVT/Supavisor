@@ -20,6 +20,7 @@ public class UserService {
     private static final int MAX_NAME_LENGTH = 255;
     private static final int MAX_EMAIL_LENGTH = 254;
     private static final String PASSWORD_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+        // no 0/O, 1/l/I - the password is read off a screen and typed in by hand
     private static final int TEMPORARY_PASSWORD_LENGTH = 12;
     private static final SecureRandom RANDOM = new SecureRandom();
 
