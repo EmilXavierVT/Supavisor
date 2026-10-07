@@ -30,14 +30,14 @@ Accept: application/json
   "password": "{{password}}"
 }
 
-> {% client.global.set("auth_token", response.body.token); %}
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### Protected auth route
 GET {{baseUrl}}/auth/protected
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{jwt}}
 
 ### List users
 GET {{baseUrl}}/user/all
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{jwt}}

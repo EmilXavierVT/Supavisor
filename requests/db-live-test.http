@@ -89,23 +89,35 @@ Accept: application/json
   "password": "1234"
 }
 
-> {% client.global.set("db_live_token", response.body.token); %}
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
+
+### 3. Login and store USER token
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "frededv@test.dk",
+  "password": "DerErEtYndigtLand"
+}
+
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### 4. Read the inserted user by generated id
 GET {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
-Authorization: Bearer {{db_live_token}}
+Authorization: Bearer {{jwt}}
 
 ### 5. List users to verify the row exists in the database
 GET {{baseUrl}}/user/all
 Accept: application/json
-Authorization: Bearer {{db_live_token}}
+Authorization: Bearer {{jwt}}
 
 ### 6. Update persisted fields and promote this test user to ADMIN
 PUT {{baseUrl}}/user/4
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "email": "{{email}}",
@@ -124,23 +136,23 @@ Accept: application/json
   "password": "{{password}}"
 }
 
-> {% client.global.set("db_live_admin_token", response.body.token); %}
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### 8. Verify ADMIN-only role endpoint writes to user_roles
 PUT {{baseUrl}}/user/{{db_live_user_id}}/employee
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 9. Promote back to ADMIN for cleanup
-PUT {{baseUrl}}/user/{{db_live_user_id}}/admin
+PUT {{baseUrl}}/user/2/admin
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 10. Change password and verify auth data persisted
 PUT {{baseUrl}}/auth/change-password
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "currentPassword": "{{password}}",
@@ -157,13 +169,13 @@ Accept: application/json
   "password": "{{newPassword}}"
 }
 
-> {% client.global.set("db_live_admin_token", response.body.token); %}
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### 11a. Create a tenant to attach the test user to
 POST {{baseUrl}}/tenant/
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "name": "db-live-tenant-{{$timestamp}}"
@@ -175,7 +187,7 @@ Authorization: Bearer {{db_live_admin_token}}
 PUT {{baseUrl}}/user/{{db_live_user_id}}
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "email": "{{email}}",
@@ -194,13 +206,13 @@ Accept: application/json
   "password": "{{newPassword}}"
 }
 
-> {% client.global.set("db_live_admin_token", response.body.token); %}
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### 11d. Create custom role "Cleaning"
 POST {{baseUrl}}/role/
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "roleName": "Cleaning"
@@ -212,7 +224,7 @@ Authorization: Bearer {{db_live_admin_token}}
 POST {{baseUrl}}/role/
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "roleName": "Kitchen"
@@ -224,7 +236,7 @@ Authorization: Bearer {{db_live_admin_token}}
 PUT {{baseUrl}}/user/{{db_live_user_id}}/custom-roles
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "customRoleIds": [{{db_live_role_cleaning_id}}, {{db_live_role_kitchen_id}}]
@@ -233,13 +245,13 @@ Authorization: Bearer {{db_live_admin_token}}
 ### 11g. Read back: customRoles lists both, roles still ["ADMIN"]
 GET {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 11h. PUT without customRoleIds must leave assignments unchanged
 PUT {{baseUrl}}/user/{{db_live_user_id}}
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "email": "{{email}}",
@@ -250,36 +262,36 @@ Authorization: Bearer {{db_live_admin_token}}
 
 ### 11i. Delete the Cleaning role, expect 204 (unassigns it from the user first)
 DELETE {{baseUrl}}/role/{{db_live_role_cleaning_id}}?tenantId={{db_live_tenant_id}}
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 11j. Read back: only Kitchen remains
 GET {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 11k. Unassign Kitchen, then re-add it
 DELETE {{baseUrl}}/user/{{db_live_user_id}}/custom-roles/{{db_live_role_kitchen_id}}
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ###
 POST {{baseUrl}}/user/{{db_live_user_id}}/custom-roles/{{db_live_role_kitchen_id}}
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 12. Delete the live-test row
 DELETE {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 13. Confirm row is gone, expect 404
 GET {{baseUrl}}/user/{{db_live_user_id}}
 Accept: application/json
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 ###
 PUT {{baseUrl}}/user/deactivate/2
-Authorization: Bearer {{db_live_admin_token}}
+Authorization: Bearer {{jwt}}
 
 
 

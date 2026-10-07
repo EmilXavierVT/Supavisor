@@ -18,24 +18,17 @@ Content-Type: application/json
 
 { "email": "{{adminEmail}}", "password": "{{adminPassword}}" }
 
-> {% client.global.set("admin_token", response.body.token); %}
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### 0b. Create a normal (non-admin) user in the same company   -> 201, temporary password saved
 POST {{baseUrl}}/user/create
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Assignment Tester", "email": "{{userEmail}}", "roles": ["USER"] }
 
 > {% client.global.set("user_password", response.body.temporaryPassword); client.global.set("user_id", response.body.user.id); %}
 
-### 0c. Login as that user                                     -> 200, token saved
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{ "email": "{{userEmail}}", "password": "{{user_password}}" }
-
-> {% client.global.set("user_token", response.body.token); %}
 
 
 ### ---------------------------------------------------------------- CREATE
@@ -44,7 +37,7 @@ Content-Type: application/json
 # An assignment is a template: name + optional address, estimatedMinutes, cost and one assigned employee.
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "name": "Cleaning at Main Street 1",
@@ -59,7 +52,7 @@ Authorization: Bearer {{admin_token}}
 ### 2. Create "Kitchen"                                        -> 201, id saved
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Kitchen" }
 
@@ -68,77 +61,77 @@ Authorization: Bearer {{admin_token}}
 ### 3. Same name again                                         -> 409 "already exists"
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Cleaning at Main Street 1" }
 
 ### 4. Same name, different case and spaces                    -> 409
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "  cLEANING AT main street 1  " }
 
 ### 5a. Missing name                                           -> 400 "name is required"
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { }
 
 ### 5b. Blank name                                             -> 400
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "    " }
 
 ### 5c. Name over 100 characters                               -> 400
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }
 
 ### 5d. The tenant in the body is ignored (uses the token's)   -> 201, tenantId = your own company
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Tenant in body is ignored", "tenantId": 999999 }
 
 ### 5e. Negative cost                                          -> 400
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Bad cost", "cost": -5 }
 
 ### 5f. Cost with more than 2 decimals                         -> 400
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Bad cost", "cost": 10.005 }
 
 ### 5g. Estimated time of 0 minutes                            -> 400
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Bad time", "estimatedMinutes": 0 }
 
 ### 5h. Employee that does not exist (or is in another company) -> 400 "Employee not found"
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Bad employee", "assignedEmployeeId": 999999 }
 
 ### 5i. Only the name is required                              -> 201, other fields null
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Just a name" }
 
@@ -147,15 +140,15 @@ Authorization: Bearer {{admin_token}}
 
 ### 6. List all as admin                                       -> 200, includes active AND inactive
 GET {{baseUrl}}/assignment/all
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 7. Read one                                               -> 200, with address, estimatedMinutes, cost, assignedEmployeeId, assignedEmployeeName
 GET {{baseUrl}}/assignment/{{assignment_id}}
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 8. Read one that does not exist                           -> 404
 GET {{baseUrl}}/assignment/999999
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 
 ### ---------------------------------------------------------------- UPDATE
@@ -164,7 +157,7 @@ Authorization: Bearer {{admin_token}}
 # PUT replaces ALL details: a detail you leave out or set to null is cleared (see 9b).
 PUT {{baseUrl}}/assignment/{{assignment_id}}
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "name": "Deep cleaning at Main Street 1",
@@ -177,28 +170,28 @@ Authorization: Bearer {{admin_token}}
 ### 9b. Send only the name                                     -> 200, address/time/cost/employee are now null
 PUT {{baseUrl}}/assignment/{{kitchen_id}}
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Kitchen" }
 
 ### 10. Rename to a name that is taken                         -> 409
 PUT {{baseUrl}}/assignment/{{assignment_id}}
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "kitchen", "address": "Second Street 2" }
 
 ### 11. Rename to blank                                        -> 400
 PUT {{baseUrl}}/assignment/{{assignment_id}}
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "" }
 
 ### 12. Update one that does not exist                         -> 404
 PUT {{baseUrl}}/assignment/999999
 Content-Type: application/json
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Nope" }
 
@@ -236,19 +229,19 @@ Authorization: Bearer {{user_token}}
 
 ### 13. Deactivate "Deep cleaning"                            -> 200, isActive false
 PATCH {{baseUrl}}/assignment/{{assignment_id}}/deactivate
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 14. Admin list, active only (what a picker should use)    -> 200, "Deep cleaning" is NOT in it
 GET {{baseUrl}}/assignment/all?activeOnly=true
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 15. Admin list, everything                                -> 200, "Deep cleaning" still there (isActive false)
 GET {{baseUrl}}/assignment/all
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 16. Activate again                                        -> 200, isActive true (details untouched)
 PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 
 ### ---------------------------------------------------------------- PERMISSIONS
@@ -260,50 +253,66 @@ GET {{baseUrl}}/assignment/all
 GET {{baseUrl}}/assignment/all
 Authorization: Bearer not-a-real-token
 
+### 18b. Login as the normal user from 0b (jwt is now USER)   -> 200, token saved
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "{{userEmail}}", "password": "{{user_password}}" }
+
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
+
 ### 19. Normal user may read, but only active ones            -> 200 (deactivate something first to see the difference)
 GET {{baseUrl}}/assignment/all
-Authorization: Bearer {{user_token}}
+Authorization: Bearer {{jwt}}
 
 ### 20a. Normal user tries to create                          -> 403
 POST {{baseUrl}}/assignment
 Content-Type: application/json
-Authorization: Bearer {{user_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Sneaky" }
 
 ### 20b. Normal user tries to update                          -> 403
 PUT {{baseUrl}}/assignment/{{assignment_id}}
 Content-Type: application/json
-Authorization: Bearer {{user_token}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Sneaky" }
 
 ### 20c. Normal user tries to deactivate                      -> 403
 PATCH {{baseUrl}}/assignment/{{assignment_id}}/deactivate
-Authorization: Bearer {{user_token}}
+Authorization: Bearer {{jwt}}
 
 ### 20c2. Normal user tries to activate                       -> 403
 PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
-Authorization: Bearer {{user_token}}
+Authorization: Bearer {{jwt}}
 
 ### 20d. Normal user tries to delete                          -> 403
 DELETE {{baseUrl}}/assignment/{{assignment_id}}
-Authorization: Bearer {{user_token}}
+Authorization: Bearer {{jwt}}
 
 
 ### ---------------------------------------------------------------- DELETE
 
+### 20e. Login as admin again (jwt is ADMIN again)          -> 200, token saved
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "{{adminEmail}}", "password": "{{adminPassword}}" }
+
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
+
 ### 21. Delete "Kitchen"                                      -> 204
 DELETE {{baseUrl}}/assignment/{{kitchen_id}}
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 22. Read it again                                         -> 404
 GET {{baseUrl}}/assignment/{{kitchen_id}}
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 ### 23. Delete it again                                       -> 404
 DELETE {{baseUrl}}/assignment/{{kitchen_id}}
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}
 
 # Deleting an assignment that other records still point at returns 409 "in use ... Deactivate it instead".
 # Nothing references assignments yet, so that case is covered by the automated test
@@ -311,35 +320,52 @@ Authorization: Bearer {{admin_token}}
 
 
 ### ---------------------------------------------------------------- OTHER COMPANY
-# Log in as an ADMIN of a DIFFERENT tenant and put its token here, then run these:
-@otherTenantAdminToken = paste-a-token-from-another-tenant-here
+# Fill in an ADMIN of a DIFFERENT tenant, log in with 23b, then run these:
+@otherAdminEmail = admin-of-another-tenant@example.com
+@otherAdminPassword = change-me
+
+### 23b. Login as the other company's admin (jwt is now theirs) -> 200, token saved
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "{{otherAdminEmail}}", "password": "{{otherAdminPassword}}" }
+
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### 24. Other company's list does not contain your assignments -> 200, no "Deep cleaning"
 GET {{baseUrl}}/assignment/all
-Authorization: Bearer {{otherTenantAdminToken}}
+Authorization: Bearer {{jwt}}
 
 ### 25. Other company reads/changes yours                      -> 404 for each of these three
 GET {{baseUrl}}/assignment/{{assignment_id}}
-Authorization: Bearer {{otherTenantAdminToken}}
+Authorization: Bearer {{jwt}}
 
 ###
 PUT {{baseUrl}}/assignment/{{assignment_id}}
 Content-Type: application/json
-Authorization: Bearer {{otherTenantAdminToken}}
+Authorization: Bearer {{jwt}}
 
 { "name": "Hacked" }
 
 ###
 PATCH {{baseUrl}}/assignment/{{assignment_id}}/activate
-Authorization: Bearer {{otherTenantAdminToken}}
+Authorization: Bearer {{jwt}}
 
 ###
 DELETE {{baseUrl}}/assignment/{{assignment_id}}
-Authorization: Bearer {{otherTenantAdminToken}}
+Authorization: Bearer {{jwt}}
 
 
 ### ---------------------------------------------------------------- CLEAN UP
 
+### 25b. Login as your own admin again                       -> 200, token saved
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{ "email": "{{adminEmail}}", "password": "{{adminPassword}}" }
+
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
+
 ### 26. Delete "Deep cleaning" (and the "Tenant in body is ignored" row from 5d, by its id from the list)
 DELETE {{baseUrl}}/assignment/{{assignment_id}}
-Authorization: Bearer {{admin_token}}
+Authorization: Bearer {{jwt}}

@@ -25,28 +25,28 @@ Accept: application/json
   "password": "{{password}}"
 }
 
-> {% client.global.set("auth_token", response.body.token); %}
+> {% if (response.status === 200) client.global.set("jwt", response.body.token); %}
 
 ### Get all users
 GET {{baseUrl}}/user/all
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{jwt}}
 
 ### Get user by id
 GET {{baseUrl}}/user/{{userId}}
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{jwt}}
 
 ### Get users by tenant id
 GET {{baseUrl}}/user/tenant/{{tenantId}}
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{jwt}}
 
 ### Update user
 PUT {{baseUrl}}/user/{{userId}}
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "email": "{{email}}",
@@ -59,7 +59,7 @@ Authorization: Bearer {{auth_token}}
 PUT {{baseUrl}}/auth/change-password
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Bearer {{jwt}}
 
 {
   "currentPassword": "{{password}}",
