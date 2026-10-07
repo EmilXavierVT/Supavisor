@@ -11,9 +11,11 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 public class UserRoutes {
 
     private final UserController userController;
+    private final app.controller.QualificationController qualificationController;
 
     public UserRoutes(EntityManagerFactory emf) {
         this.userController = new UserController(emf);
+        this.qualificationController = new app.controller.QualificationController(emf);
     }
 
     public EndpointGroup getRoutes() {
@@ -33,6 +35,9 @@ public class UserRoutes {
             put("/{id}/custom-roles", userController::setCustomRoles, Role.ADMIN);
             post("/{id}/custom-roles/{roleId}", userController::addCustomRole, Role.ADMIN);
             delete("/{id}/custom-roles/{roleId}", userController::removeCustomRole, Role.ADMIN);
+            put("/{id}/qualifications", qualificationController::replaceUserQualifications, Role.ADMIN);
+            post("/{id}/qualifications/{qualificationId}", qualificationController::addUserQualification, Role.ADMIN);
+            delete("/{id}/qualifications/{qualificationId}", qualificationController::removeUserQualification, Role.ADMIN);
         });
     }
 }

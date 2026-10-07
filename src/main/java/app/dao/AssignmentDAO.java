@@ -14,7 +14,6 @@ import java.util.List;
 
 public class AssignmentDAO {
 
-    // PostgreSQL SQLSTATE for foreign_key_violation
     private static final String FOREIGN_KEY_VIOLATION = "23503";
 
     private final EntityManagerFactory emf;
@@ -47,7 +46,7 @@ public class AssignmentDAO {
         }
     }
 
-    /** Assignments of the tenant whose name matches, ignoring case. */
+
     public List<Assignment> findByName(Long tenantId, String name) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery(
@@ -233,9 +232,6 @@ public class AssignmentDAO {
         }
     }
 
-    /**
-     * @throws AssignmentInUseException when a foreign key from another table still points at the assignment
-     */
     public void delete(Long id) {
         try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction tx = em.getTransaction();

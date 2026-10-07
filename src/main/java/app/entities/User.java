@@ -53,6 +53,15 @@ public class User {
     @Setter(AccessLevel.NONE)
     private Set<Role> customRoles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_qualifications",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "qualification_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "qualification_id"}))
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private Set<Qualification> qualifications = new HashSet<>();
+
     @Column(name = "is_active")
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -94,12 +103,20 @@ public class User {
         this.customRoles = customRoles == null ? new HashSet<>() : new HashSet<>(customRoles);
     }
 
+    public void setQualifications(Set<Qualification> qualifications) {
+        this.qualifications = qualifications == null ? new HashSet<>() : new HashSet<>(qualifications);
+    }
+
     public void addCustomRole(Role role) {
         customRoles.add(role);
     }
 
     public void removeCustomRole(Role role) {
         customRoles.remove(role);
+    }
+
+    public void addQualification(Qualification qualification) {
+        qualifications.add(qualification);
     }
 
     public Set<String> getRolesAsStrings() {

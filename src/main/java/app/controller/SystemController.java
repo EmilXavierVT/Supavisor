@@ -18,7 +18,4 @@ public class SystemController {
         ctx.result(ctx.body());
     }
 
-//    public static void addRoutes(io.javalin.Javalin app) {
-//        app.get("/", ctx -> ctx.render("/index"));
-//    }
 }
