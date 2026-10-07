@@ -141,7 +141,11 @@ public class AssignmentDAO {
             return em.createQuery("""
                             SELECT a FROM Assignment a
                             WHERE a.tenantId = :tenantId
-                              AND a.assignedEmployee.id = :assignedEmployeeId
+                              AND (a.assignedEmployee.id = :assignedEmployeeId
+                                   OR a.id IN (
+                                     SELECT d.assignment.id FROM AssignmentDelegation d
+                                     WHERE d.employee.id = :assignedEmployeeId
+                                   ))
                               AND a.isActive = true
                               AND (:ownId IS NULL OR a.id <> :ownId)
                               AND a.startTime IS NOT NULL
@@ -184,6 +188,29 @@ public class AssignmentDAO {
         }
     }
 
+    public List<Assignment> getDelegatedToEmployee(Long tenantId, Long employeeId, boolean activeOnly) {
+        if (tenantId == null || employeeId == null) {
+            return List.of();
+        }
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = """
+                    SELECT a FROM Assignment a
+                    LEFT JOIN FETCH a.assignedEmployee
+                    WHERE a.tenantId = :tenantId
+                      AND a.id IN (
+                        SELECT d.assignment.id FROM AssignmentDelegation d
+                        WHERE d.employee.id = :employeeId
+                      )
+                    """
+                    + (activeOnly ? " AND a.isActive = true" : "")
+                    + " ORDER BY a.startTime, LOWER(a.name), a.id";
+            return em.createQuery(jpql, Assignment.class)
+                    .setParameter("tenantId", tenantId)
+                    .setParameter("employeeId", employeeId)
+                    .getResultList();
+        }
+    }
+
     public Assignment findActiveCheckInForEmployee(Long tenantId, Long employeeId, Long excludedAssignmentId) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("""
@@ -211,6 +238,9 @@ public class AssignmentDAO {
             tx.begin();
             Assignment entity = em.find(Assignment.class, id);
             if (entity != null) {
+                em.createQuery("DELETE FROM AssignmentDelegation d WHERE d.assignment.id = :id")
+                        .setParameter("id", id)
+                        .executeUpdate();
                 em.remove(entity);
             }
             tx.commit();

@@ -1,4 +1,4 @@
-### Assignment routes - manual test script (user story 11)
+### Assignment routes - manual test script 
 #
 # Run the requests top to bottom against a local server (http://localhost:7070).
 # Each request says what to expect. Assignments belong to the tenant in the caller's token, so
@@ -336,6 +336,42 @@ Authorization: Bearer {{otherTenantAdminToken}}
 ###
 DELETE {{baseUrl}}/assignment/{{assignment_id}}
 Authorization: Bearer {{otherTenantAdminToken}}
+
+
+### ---------------------------------------------------------------- DELEGATION (user story 21)
+
+### D1. Delegate the assignment to the normal user             -> 204, no body
+POST {{baseUrl}}/assignment/{{assignment_id}}/delegations
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "employeeId": {{user_id}} }
+
+### D2. Delegate the same user again                           -> 409, already assigned
+POST {{baseUrl}}/assignment/{{assignment_id}}/delegations
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{ "employeeId": {{user_id}} }
+
+### D3. List delegations                                       -> 200, shows delegatedBy and delegatedAt
+GET {{baseUrl}}/assignment/{{assignment_id}}/delegations
+Authorization: Bearer {{admin_token}}
+
+### D4. The user now sees it in their schedule                 -> 200, contains the assignment
+GET {{baseUrl}}/assignment/all
+Authorization: Bearer {{user_token}}
+
+### D5. Normal user tries to delegate                          -> 403
+POST {{baseUrl}}/assignment/{{assignment_id}}/delegations
+Content-Type: application/json
+Authorization: Bearer {{user_token}}
+
+{ "employeeId": {{user_id}} }
+
+### D6. Remove the delegation                                  -> 204
+DELETE {{baseUrl}}/assignment/{{assignment_id}}/delegations/{{user_id}}
+Authorization: Bearer {{admin_token}}
 
 
 ### ---------------------------------------------------------------- CLEAN UP

@@ -27,6 +27,9 @@ public class AssignmentRoutes {
             put("/{id}", assignmentController::update, Role.ADMIN);
             put("/{id}/responsible", assignmentController::setResponsible, Role.ADMIN);
             delete("/{id}/responsible", assignmentController::clearResponsible, Role.ADMIN);
+            get("/{id}/delegations", assignmentController::getDelegations, Role.ADMIN);
+            post("/{id}/delegations", assignmentController::delegate, Role.ADMIN);
+            delete("/{id}/delegations/{employeeId}", assignmentController::undelegate, Role.ADMIN);
             patch("/{id}/deactivate", assignmentController::deactivate, Role.ADMIN);
             patch("/{id}/activate", assignmentController::activate, Role.ADMIN);
             patch("/{id}/state", assignmentController::changeState, Role.ADMIN);

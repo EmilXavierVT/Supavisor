@@ -3,10 +3,12 @@ package app.controller;
 
 
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentDelegationRequestDTO;
 import app.dto.AssignmentStateUpdateDTO;
 import app.dto.AttendanceCorrectionDTO;
 import app.dto.UserDTO;
 import app.exceptions.ApiException;
+import app.services.entityServices.AssignmentDelegationService;
 import app.services.entityServices.AssignmentService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
@@ -14,10 +16,12 @@ import jakarta.persistence.EntityManagerFactory;
 public class AssignmentController {
 
     private final AssignmentService assignmentService;
+    private final AssignmentDelegationService delegationService;
 
     public AssignmentController(EntityManagerFactory emf) {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.assignmentService = new AssignmentService(emf);
+        this.delegationService = new AssignmentDelegationService(emf);
     }
 
     public void getAll(Context ctx) {
@@ -67,6 +71,25 @@ public class AssignmentController {
     public void clearResponsible(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).get();
         ctx.json(assignmentService.clearResponsible(id, callerTenantId(ctx), callerSource(ctx)));
+    }
+
+    public void getDelegations(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        ctx.json(delegationService.getDelegations(id, callerTenantId(ctx)));
+    }
+
+    public void delegate(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        AssignmentDelegationRequestDTO dto = ctx.bodyValidator(AssignmentDelegationRequestDTO.class).get();
+        delegationService.delegate(id, dto.getEmployeeId(), callerTenantId(ctx), callerId(ctx), callerSource(ctx));
+        ctx.status(204);
+    }
+
+    public void undelegate(Context ctx) {
+        Long id = ctx.pathParamAsClass("id", Long.class).get();
+        Long employeeId = ctx.pathParamAsClass("employeeId", Long.class).get();
+        delegationService.undelegate(id, employeeId, callerTenantId(ctx), callerSource(ctx));
+        ctx.status(204);
     }
 
     public void deactivate(Context ctx) {

@@ -14,6 +14,7 @@ final class EntityRegistry {
         configuration.addAnnotatedClass(AssignmentHistory.class);
         configuration.addAnnotatedClass(AssignmentAuditHistory.class);
         configuration.addAnnotatedClass(AssignmentStateHistory.class);
+        configuration.addAnnotatedClass(AssignmentDelegation.class);
         configuration.addAnnotatedClass(Project.class);
         configuration.addAnnotatedClass(ProjectStatusHistory.class);
         configuration.addAnnotatedClass(Role.class);

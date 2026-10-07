@@ -143,6 +143,9 @@ public class UserDAO implements ISecurityDAO {
                             """)
                     .setParameter("id", id)
                     .executeUpdate();
+            em.createQuery("DELETE FROM AssignmentDelegation d WHERE d.employee.id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
             em.remove(user);
             em.getTransaction().commit();
             return user;
