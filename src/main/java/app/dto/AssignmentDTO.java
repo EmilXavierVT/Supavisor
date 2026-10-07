@@ -23,6 +23,7 @@ import lombok.Setter;
 public class AssignmentDTO {
 
     private Long id;
+    private Long version;
     private String name;
     private Long tenantId;
     private Boolean isActive;

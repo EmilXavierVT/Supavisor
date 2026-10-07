@@ -258,13 +258,14 @@ class AssignmentResponsibleApiIntegrationTest {
 
         HttpResponse<String> updated = send("PUT", "/api/assignment/" + id, adminToken,
                 "{\"name\":\"" + name + "\",\"address\":\"Main Street 1\",\"assignedEmployeeId\":" + employee
-                        + ",\"assignedEmployeeName\":\"Forged Name\"}");
+                        + ",\"assignedEmployeeName\":\"Forged Name\",\"version\":0}");
         assertEquals(200, updated.statusCode());
         assertEquals("Main Street 1", json(updated).get("address").asText());
         assertEquals(employee, json(updated).get("assignedEmployeeId").asLong());
         assertEquals("Freja Frost", json(updated).get("assignedEmployeeName").asText());
 
-        HttpResponse<String> cleared = send("PUT", "/api/assignment/" + id, adminToken, "{\"name\":\"" + name + "\"}");
+        HttpResponse<String> cleared = send("PUT", "/api/assignment/" + id, adminToken,
+                "{\"name\":\"" + name + "\",\"version\":1}");
         assertEquals(200, cleared.statusCode());
         assertTrue(json(cleared).get("assignedEmployeeId").isNull());
         assertTrue(json(cleared).get("assignedEmployeeName").isNull());
