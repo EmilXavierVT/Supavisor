@@ -48,6 +48,10 @@ public class AssignmentDTO {
     @Setter(AccessLevel.NONE)
     @Builder.Default
     private List<AssignmentResourceRequirementDTO> resourceRequirements = new ArrayList<>();
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private List<AssignmentDelegationDTO> assignedEmployees = new ArrayList<>();
 
     public AssignmentDTO(Long id, String name, Long tenantId, Boolean isActive) {
         this.id = id;
@@ -62,5 +66,9 @@ public class AssignmentDTO {
 
     public void setResourceRequirements(List<AssignmentResourceRequirementDTO> resourceRequirements) {
         this.resourceRequirements = resourceRequirements == null ? new ArrayList<>() : new ArrayList<>(resourceRequirements);
+    }
+
+    public void setAssignedEmployees(List<AssignmentDelegationDTO> assignedEmployees) {
+        this.assignedEmployees = assignedEmployees == null ? new ArrayList<>() : new ArrayList<>(assignedEmployees);
     }
 }

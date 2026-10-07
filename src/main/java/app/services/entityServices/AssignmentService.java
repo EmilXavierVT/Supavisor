@@ -1,11 +1,13 @@
 package app.services.entityServices;
 
 import app.dao.AssignmentDAO;
+import app.dao.AssignmentDelegationDAO;
 import app.dao.AssignmentHistoryDAO;
 import app.dao.ProductDAO;
 import app.dao.UserDAO;
 import app.dto.AssignmentAuditHistoryDTO;
 import app.dto.AssignmentDTO;
+import app.dto.AssignmentDelegationDTO;
 import app.dto.AssignmentHistoryDTO;
 import app.dto.AssignmentOverlapDTO;
 import app.dto.AssignmentResourceRequirementDTO;
@@ -30,8 +32,11 @@ import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -43,9 +48,14 @@ public class AssignmentService {
     private static final int MAX_NOTES_LENGTH = 1000;
     private static final int MAX_ESTIMATED_MINUTES = 525_600; // one year
     private static final BigDecimal MAX_COST = new BigDecimal("9999999999.99"); // fits numeric(12,2)
+    private static final Comparator<Assignment> SCHEDULE_ORDER = Comparator
+            .comparing(Assignment::getStartTime, Comparator.nullsLast(Comparator.naturalOrder()))
+            .thenComparing(assignment -> assignment.getName().toLowerCase())
+            .thenComparing(Assignment::getId);
 
     private final AssignmentDAO dao;
     private final AssignmentHistoryDAO historyDAO;
+    private final AssignmentDelegationDAO delegationDAO;
     private final UserDAO userDAO;
     private final ProductDAO productDAO;
     private final AssignmentMapper mapper = new AssignmentMapper();
@@ -59,6 +69,7 @@ public class AssignmentService {
         if (emf == null) throw new IllegalArgumentException("EntityManagerFactory cannot be null");
         this.dao = new AssignmentDAO(emf);
         this.historyDAO = new AssignmentHistoryDAO(emf);
+        this.delegationDAO = new AssignmentDelegationDAO(emf);
         this.userDAO = new UserDAO(emf);
         this.productDAO = new ProductDAO(emf);
         this.clock = clock == null ? Clock.systemUTC() : clock;
@@ -66,8 +77,15 @@ public class AssignmentService {
 
 
     public List<AssignmentDTO> getAll(Long tenantId, boolean activeOnly) {
-        return dao.getAll(tenantId, activeOnly).stream()
+        Map<Long, List<AssignmentDelegationDTO>> assignedEmployees = delegationDAO.findByTenantId(tenantId).stream()
                 .map(mapper::toDto)
+                .collect(Collectors.groupingBy(AssignmentDelegationDTO::getAssignmentId));
+        return dao.getAll(tenantId, activeOnly).stream()
+                .map(assignment -> {
+                    AssignmentDTO dto = mapper.toDto(assignment);
+                    dto.setAssignedEmployees(assignedEmployees.get(assignment.getId()));
+                    return dto;
+                })
                 .toList();
     }
 
@@ -77,7 +95,13 @@ public class AssignmentService {
             throw notFound();
         }
         String category = caller.getPrimaryCategory();
-        return dao.getVisibleForCategory(tenantId, category, activeOnly).stream()
+        LinkedHashMap<Long, Assignment> visible = new LinkedHashMap<>();
+        dao.getVisibleForCategory(tenantId, category, activeOnly)
+                .forEach(assignment -> visible.put(assignment.getId(), assignment));
+        dao.getDelegatedToEmployee(tenantId, callerId, activeOnly)
+                .forEach(assignment -> visible.putIfAbsent(assignment.getId(), assignment));
+        return visible.values().stream()
+                .sorted(SCHEDULE_ORDER)
                 .map(this::toCategoryScheduleDto)
                 .toList();
     }
@@ -88,7 +112,11 @@ public class AssignmentService {
         if (activeOnly && !assignment.isActive()) {
             throw notFound();
         }
-        return mapper.toDto(assignment);
+        AssignmentDTO dto = mapper.toDto(assignment);
+        dto.setAssignedEmployees(delegationDAO.findByAssignmentId(assignment.getId()).stream()
+                .map(mapper::toDto)
+                .toList());
+        return dto;
     }
 
     public AssignmentDTO getVisibleById(Long id, Long tenantId, Long callerId) {
@@ -97,16 +125,18 @@ public class AssignmentService {
             throw notFound();
         }
         User caller = userDAO.getById(callerId);
-        User assigned = assignment.getAssignedEmployeeId() == null ? null : userDAO.getById(assignment.getAssignedEmployeeId());
-        if (caller == null || assigned == null
-                || !Objects.equals(caller.getTenantId(), tenantId)
-                || !Objects.equals(assigned.getTenantId(), tenantId)) {
+        if (caller == null || !Objects.equals(caller.getTenantId(), tenantId)) {
             throw notFound();
         }
-        if (Objects.equals(callerId, assignment.getAssignedEmployeeId())) {
+        if (Objects.equals(callerId, assignment.getAssignedEmployeeId())
+                || delegationDAO.isDelegated(assignment.getId(), callerId)) {
             AssignmentDTO dto = mapper.toDto(assignment);
             dto.setCost(null);
             return dto;
+        }
+        User assigned = assignment.getAssignedEmployeeId() == null ? null : userDAO.getById(assignment.getAssignedEmployeeId());
+        if (assigned == null || !Objects.equals(assigned.getTenantId(), tenantId)) {
+            throw notFound();
         }
         if (!sameCategory(caller.getPrimaryCategory(), assigned.getPrimaryCategory())) {
             throw notFound();
@@ -209,7 +239,15 @@ public class AssignmentService {
         Assignment updated = dao.update(existing);
         recordHistory(id, "REASSIGN", previousEmployeeId, employeeId, actorSource,
                 "Assigned employee " + employeeId);
-        return mapper.toDto(updated);
+        // an assigned employee who becomes responsible should not be listed twice
+        delegationDAO.delete(id, employeeId, new AssignmentHistory(id, "UNDELEGATE", employeeId, null,
+                validSource(actorSource), Instant.now(clock),
+                "Employee " + employeeId + " became responsible"));
+        AssignmentDTO dto = mapper.toDto(updated);
+        dto.setAssignedEmployees(delegationDAO.findByAssignmentId(id).stream()
+                .map(mapper::toDto)
+                .toList());
+        return dto;
     }
 
     public AssignmentDTO clearResponsible(Long id, Long tenantId) {
