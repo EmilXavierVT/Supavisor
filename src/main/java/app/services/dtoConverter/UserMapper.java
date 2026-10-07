@@ -13,6 +13,7 @@ public class UserMapper {
     }
 
     private final RoleMapper roleMapper = new RoleMapper();
+    private final QualificationMapper qualificationMapper = new QualificationMapper();
 
     public UserDTO toDto(User user) {
         if (user == null) return null;
@@ -29,6 +30,9 @@ public class UserMapper {
         dto.setPrimaryCategory(user.getPrimaryCategory());
         dto.setCustomRoles(user.getCustomRoles().stream()
                 .map(roleMapper::toDTO)
+                .collect(Collectors.toSet()));
+        dto.setQualifications(user.getQualifications().stream()
+                .map(qualificationMapper::toDTO)
                 .collect(Collectors.toSet()));
         return dto;
     }

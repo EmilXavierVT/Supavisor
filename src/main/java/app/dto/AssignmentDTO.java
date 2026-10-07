@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import app.entities.AssignmentState;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,6 +44,10 @@ public class AssignmentDTO {
     private Long assignedEmployeeId;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String assignedEmployeeName;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Setter(AccessLevel.NONE)
+    @Builder.Default
+    private Set<QualificationDTO> assignedEmployeeQualifications = new HashSet<>();
     @Setter(AccessLevel.NONE)
     @Builder.Default
     private List<Long> productIds = new ArrayList<>();
@@ -62,5 +68,9 @@ public class AssignmentDTO {
 
     public void setResourceRequirements(List<AssignmentResourceRequirementDTO> resourceRequirements) {
         this.resourceRequirements = resourceRequirements == null ? new ArrayList<>() : new ArrayList<>(resourceRequirements);
+    }
+
+    public void setAssignedEmployeeQualifications(Set<QualificationDTO> assignedEmployeeQualifications) {
+        this.assignedEmployeeQualifications = assignedEmployeeQualifications == null ? new HashSet<>() : new HashSet<>(assignedEmployeeQualifications);
     }
 }
