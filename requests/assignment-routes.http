@@ -1,4 +1,4 @@
-### Assignment routes - manual test script (user story 11)
+### Assignment routes - manual test script 
 #
 # Run the requests top to bottom against a local server (http://localhost:7070).
 # Each request says what to expect. Assignments belong to the tenant in the caller's token, so
